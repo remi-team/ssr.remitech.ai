@@ -61,6 +61,6 @@ server.log
 worklog.md
 *.pid
 
-# project uses bun; ignore other package manager lockfiles
-pnpm-lock.yaml
+# project uses pnpm; ignore other package manager lockfiles
+bun.lock
 package-lock.json

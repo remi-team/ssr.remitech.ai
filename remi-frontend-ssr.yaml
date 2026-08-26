@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remi-frontend-ssr
+  namespace: sit-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: remi-frontend-ssr
+  template:
+    metadata:
+      labels:
+        app: remi-frontend-ssr
+    spec:
+      containers:
+        - name: remi-frontend-ssr
+          image: {{FULL_IMAGE_NAME}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3212
+          # 运行时配置：Jenkins 将运维注入的 .env 转为 ConfigMap，再由 K8s 注入环境变量
+          # 需包含：UPSTREAM_API_HOST / UPSTREAM_API_VERSION / UPSTREAM_SERVER_URL
+          envFrom:
+            - configMapRef:
+                name: remi-frontend-ssr-configmap
+      imagePullSecrets:
+        - name: registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: remi-frontend-ssr-svc
+  namespace: sit-website
+spec:
+  selector:
+    app: remi-frontend-ssr
+  ports:
+    - port: 80
+      targetPort: 3212
+  type: ClusterIP
