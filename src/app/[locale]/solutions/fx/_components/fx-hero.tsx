@@ -1,0 +1,71 @@
+"use client";
+
+import * as React from "react";
+
+/**
+ * FxHero — dark hero for the FX & Treasury solution page.
+ *
+ * Migrated from legacy Vue `FX.vue` hero section.
+ * Features:
+ *  • Full-bleed dark hero with responsive <picture> background
+ *  • Title: "FX & Treasury"
+ *  • Two description paragraphs
+ */
+
+export function FxHero() {
+  return (
+    <section className="relative w-full min-h-[480px] overflow-hidden sm:min-h-[540px] md:h-[560px] lg:h-[610px]">
+      {/* Grid overlay fallback */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute left-1/2 top-1/2 h-[30rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FF6900]/15 blur-[140px]"
+        aria-hidden="true"
+      />
+
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <picture>
+          <source
+            media="(min-width:1536px)"
+            srcSet="/images/solution_1536x.jpg"
+          />
+          <img
+            src="/images/solution_768x.webp"
+            alt=""
+            className="h-full w-full object-cover"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
+          />
+        </picture>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 flex h-full pt-[140px] pb-[48px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px]">
+        <div className="mx-auto w-full max-w-[1536px] px-[24px] sm:px-[48px] lg:px-[120px]">
+          <h1 className="mb-[16px] text-[32px] uppercase leading-[1.08] tracking-[-0.03em] text-white sm:mb-[20px] sm:text-[36px] md:mb-[24px] md:text-[42px] lg:text-[48px]">
+            FX & Treasury
+          </h1>
+          <div className="max-w-[940px] space-y-[12px] sm:space-y-[14px] md:space-y-[16px]">
+            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+              Every cross-border transaction touches a currency conversion —
+              and the capital that sits behind it.
+            </p>
+            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+              Capture the full FX spread and unlock treasury-grade capital
+              markets, 24/7.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

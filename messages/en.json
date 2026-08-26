@@ -1,0 +1,250 @@
+{
+  "Meta": {
+    "title": "Remi — Regulated Stablecoin Infrastructure for Financial Institutions",
+    "titleTemplate": "%s | Remi",
+    "description": "Remi provides regulated stablecoin infrastructure for financial institutions — orchestrating the future of cross-border payment, FX & treasury, RegTech and tokenized trade finance.",
+    "keywords": "Remi, stablecoin, cross-border payment, FX, RegTech, tokenized letter of credit, digital finance, financial infrastructure"
+  },
+  "Nav": {
+    "home": "Home",
+    "solutions": {
+      "label": "Solutions",
+      "crossBorder": "Cross-border Payment",
+      "fx": "FX & Treasury",
+      "stablecoin": "Stablecoin Issuance",
+      "regtech": "RegTech",
+      "lc": "Tokenized Letter of Credit",
+      "cheque": "E-Cheque"
+    },
+    "membership": "Membership",
+    "about": "About Us",
+    "news": "News & Events",
+    "resources": "Resources",
+    "compliance": "Compliance",
+    "cta": "Contact Us"
+  },
+  "Theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Lang": {
+    "switch": "Switch language",
+    "zh": "简体中文",
+    "en": "English"
+  },
+  "User": {
+    "login": "Log in",
+    "logout": "Log out",
+    "greeting": "Hi, {name}"
+  },
+  "Auth": {
+    "login": {
+      "title": "Log in",
+      "emailLabel": "Email*",
+      "emailPlaceholder": "Enter email address",
+      "passwordLabel": "Password*",
+      "passwordPlaceholder": "Enter password",
+      "submit": "Log in now",
+      "submitting": "Logging in...",
+      "forgot": "Forgot your password?",
+      "welcomeTitle": "Welcome to REMI",
+      "welcomeNotMember": "Not a member yet?",
+      "welcomeRegister": "Register now",
+      "success": "Login successful!"
+    },
+    "register": {
+      "title": "Register with your email",
+      "firstname": "First name*",
+      "firstnamePlaceholder": "First name",
+      "lastname": "Last name*",
+      "lastnamePlaceholder": "Last name",
+      "email": "Email*",
+      "emailPlaceholder": "Enter email address",
+      "contact": "Contact number",
+      "contactPlaceholder": "Contact number",
+      "password": "Password*",
+      "passwordPlaceholder": "Enter password",
+      "repeatPassword": "Repeat password*",
+      "repeatPasswordPlaceholder": "Repeat password",
+      "companyName": "Company name*",
+      "companyNamePlaceholder": "Company name",
+      "companyType": "Company type",
+      "companyTypePlaceholder": "Select Company type",
+      "companyTypePlaceholderMobile": "Company type",
+      "country": "Your Primary Place of Business (Country)",
+      "countryPlaceholder": "Your country",
+      "authorities": "Is your business regulated by relevant authorities?",
+      "authoritiesPlaceholder": "Enter name of relevant authorities or skip",
+      "submit": "Become a member",
+      "submitting": "Submitting...",
+      "backToLogin": "Back to login",
+      "companyTypes": {
+        "bank": "Licensed Bank",
+        "nonBank": "Regulated traditional non-bank financial institution",
+        "blockchain": "Regulated Non-Bank Financial Institutions Engaged in Blockchain Business",
+        "others": "Others"
+      }
+    },
+    "forgot": {
+      "title": "Enter your email to reset password",
+      "emailLabel": "Email*",
+      "emailPlaceholder": "Enter email address",
+      "submit": "Reset Password",
+      "submitting": "Sending...",
+      "backToLogin": "Back to Log in"
+    },
+    "callback": {
+      "regTitle": "Registration Confirmation",
+      "resetTitle": "Reset feedback",
+      "regMessage": "Verification email will be sent to your registration email",
+      "resetMessage": "An email for resetting the password will be sent to",
+      "spamNote": "Please check your spam folder if it is not in your inbox. Thanks!",
+      "backToLogin": "Back to Log in"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordWeak": "Password must be 8-20 characters, including uppercase, lowercase letters and numbers",
+      "repeatRequired": "Please confirm your password",
+      "repeatMismatch": "Passwords do not match"
+    },
+    "activation": {
+      "regSuccess": "Account activated successfully. You can now log in.",
+      "regFail": "Activation failed. The link may be invalid or expired.",
+      "reviewSuccess": "Resource review approved.",
+      "reviewPending": "Resource review is pending.",
+      "reviewFail": "Resource review failed. The link may be invalid or expired."
+    }
+  },
+  "Hero": {
+    "eyebrow": "The network where every participant becomes more powerful from each other — compounding in strength as we grow",
+    "title": "Orchestrating the Future of Digital Finance",
+    "titleAccent": "Regulated Stablecoin Infrastructure for Financial Institutions",
+    "subtitle": "Regulated Stablecoin Infrastructure for Financial Institutions",
+    "quote": "A bank-consortium-governed blockchain settlement infrastructure, enabling real-time interbank settlement using regulated payment stablecoins.",
+    "primaryCta": "Explore solutions",
+    "secondaryCta": "Contact Us",
+    "scroll": "Scroll down"
+  },
+  "Stats": {
+    "title": "Scale & reliability",
+    "subtitle": "Trusted infrastructure, measured in numbers",
+    "volume": "Cleared volume",
+    "institutions": "Institutions onboarded",
+    "countries": "Countries served",
+    "uptime": "System uptime"
+  },
+  "Solutions": {
+    "eyebrow": "Solutions",
+    "title": "One interoperable infrastructure, six product lines",
+    "subtitle": "From cross-border clearing to tokenized trade finance, Remi weaves settlement, compliance and treasury into every regulated transaction journey.",
+    "crossBorder": {
+      "title": "Cross-border Payment",
+      "desc": "Remi Interbank Cross-border Clearing and Settlement System for secure, real-time payment flows."
+    },
+    "fx": {
+      "title": "FX & Treasury",
+      "desc": "Execute foreign exchange and cross-border payment in a single real-time institutional workflow."
+    },
+    "stablecoin": {
+      "title": "Stablecoin Issuance",
+      "desc": "Launch regulated stablecoin programs with end-to-end issuance, control and distribution rails."
+    },
+    "regtech": {
+      "title": "RegTech",
+      "desc": "Embed programmable compliance, monitoring and reporting into every regulated transaction journey."
+    },
+    "lc": {
+      "title": "Tokenized Letter of Credit",
+      "desc": "Digitize letters of credit and trade finance processes for banks and enterprise-grade counterparties."
+    },
+    "cheque": {
+      "title": "E-Cheque",
+      "desc": "Transform traditional checks into digital, trackable and compliant payment instruments."
+    },
+    "learnMore": "Learn more"
+  },
+  "About": {
+    "eyebrow": "About Remi",
+    "title": "Reinventing institutional finance with regulated programmability",
+    "paragraph1": "Remi is regulated stablecoin infrastructure built for financial institutions. We believe the future of digital finance must be interoperable, auditable and compliant — so we built an orchestration layer that unifies settlement, compliance and treasury for banks.",
+    "paragraph2": "Today Remi serves more than 200 banks and financial institutions across 60+ countries. Our infrastructure carries billions of dollars in real transactions every day, running 24/7 with 99.99% availability.",
+    "values": {
+      "title": "What we stand for"
+    },
+    "value1": {
+      "title": "Compliance first",
+      "desc": "Programmable compliance baked into every transaction journey — regulation as a default capability, not an afterthought."
+    },
+    "value2": {
+      "title": "Institutional-grade reliability",
+      "desc": "99.99% availability and end-to-end auditability, carrying real-world financial flow."
+    },
+    "value3": {
+      "title": "Open interoperability",
+      "desc": "Open standards that connect existing payment, clearing and custody systems — not another silo."
+    },
+    "value4": {
+      "title": "Long-termism",
+      "desc": "Building a sustainable digital finance foundation with regulators, banks and ecosystem partners."
+    }
+  },
+  "News": {
+    "eyebrow": "News & Events",
+    "title": "Remi moments",
+    "subtitle": "The latest on our progress, industry perspectives and compliance practice.",
+    "readMore": "Read more",
+    "items": {
+      "0": {
+        "title": "Remi interbank clearing network expands to 60 countries",
+        "date": "2025-03-18",
+        "tag": "Product",
+        "summary": "Remi announces its cross-border clearing network now spans 60+ countries with 200+ onboarded institutions, hitting new daily clearing highs."
+      },
+      "1": {
+        "title": "Remi signs RegTech MoU with a regional regulator",
+        "date": "2025-02-26",
+        "tag": "Partnership",
+        "summary": "The two parties will explore programmable compliance in cross-border payment and stablecoin issuance scenarios."
+      },
+      "2": {
+        "title": "Remi closes strategic round to accelerate global expansion",
+        "date": "2025-01-15",
+        "tag": "Capital markets",
+        "summary": "Led by international financial institutions, proceeds will fund infrastructure scale-out and emerging-market compliance build-out."
+      }
+    }
+  },
+  "Clients": {
+    "eyebrow": "Partners",
+    "title": "Working alongside the world's leading financial institutions",
+    "subtitle": "We provide long-term infrastructure to banks, payment institutions and fintechs."
+  },
+  "Cta": {
+    "title": "Ready to orchestrate the future of digital finance with Remi?",
+    "subtitle": "Whether you're seeking a stablecoin issuance partner, cross-border clearing access, or a RegTech solution — we'd love to hear from you.",
+    "primary": "Request a meeting",
+    "secondary": "Join Remi"
+  },
+  "Footer": {
+    "tagline": "Orchestrating the future of digital finance for institutions.",
+    "col": {
+      "navigation": "Navigation",
+      "contact": "Contact Us"
+    },
+    "contact": {
+      "bd": "Business Development",
+      "compliance": "Compliance",
+      "pr": "Media & PR"
+    },
+    "rights": "© {year} Remi Network. All Rights Reserved."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for may have been moved or removed.",
+    "back": "Back to home"
+  }
+}

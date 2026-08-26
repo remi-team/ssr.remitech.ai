@@ -1,0 +1,250 @@
+{
+  "Meta": {
+    "title": "Remi — 受监管的稳定币基础设施",
+    "titleTemplate": "%s | Remi",
+    "description": "Remi 为金融机构提供受监管的稳定币基础设施，编排跨境支付、外汇与国库、合规科技与代币化贸易融资的未来。",
+    "keywords": "Remi, 稳定币, 跨境支付, 外汇, 合规科技, 代币化信用证, 数字金融, 金融基础设施"
+  },
+  "Nav": {
+    "home": "首页",
+    "solutions": {
+      "label": "解决方案",
+      "crossBorder": "跨境支付",
+      "fx": "外汇与国库",
+      "stablecoin": "稳定币发行",
+      "regtech": "合规科技",
+      "lc": "代币化信用证",
+      "cheque": "电子支票"
+    },
+    "membership": "会员",
+    "about": "关于我们",
+    "news": "新闻与活动",
+    "resources": "资源",
+    "compliance": "合规",
+    "cta": "联系我们"
+  },
+  "Theme": {
+    "toggle": "切换主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "Lang": {
+    "switch": "切换语言",
+    "zh": "简体中文",
+    "en": "English"
+  },
+  "User": {
+    "login": "登录",
+    "logout": "退出登录",
+    "greeting": "你好，{name}"
+  },
+  "Auth": {
+    "login": {
+      "title": "登录",
+      "emailLabel": "邮箱*",
+      "emailPlaceholder": "请输入邮箱地址",
+      "passwordLabel": "密码*",
+      "passwordPlaceholder": "请输入密码",
+      "submit": "立即登录",
+      "submitting": "登录中...",
+      "forgot": "忘记密码？",
+      "welcomeTitle": "欢迎来到 REMI",
+      "welcomeNotMember": "还不是会员？",
+      "welcomeRegister": "立即注册",
+      "success": "登录成功！"
+    },
+    "register": {
+      "title": "使用邮箱注册",
+      "firstname": "名*",
+      "firstnamePlaceholder": "名",
+      "lastname": "姓*",
+      "lastnamePlaceholder": "姓",
+      "email": "邮箱*",
+      "emailPlaceholder": "请输入邮箱地址",
+      "contact": "联系电话",
+      "contactPlaceholder": "联系电话",
+      "password": "密码*",
+      "passwordPlaceholder": "请输入密码",
+      "repeatPassword": "确认密码*",
+      "repeatPasswordPlaceholder": "请再次输入密码",
+      "companyName": "公司名称*",
+      "companyNamePlaceholder": "公司名称",
+      "companyType": "公司类型",
+      "companyTypePlaceholder": "请选择公司类型",
+      "companyTypePlaceholderMobile": "公司类型",
+      "country": "主要营业地（国家）",
+      "countryPlaceholder": "请输入国家",
+      "authorities": "您的业务是否受相关监管机构监管？",
+      "authoritiesPlaceholder": "请输入监管机构名称或跳过",
+      "submit": "成为会员",
+      "submitting": "提交中...",
+      "backToLogin": "返回登录",
+      "companyTypes": {
+        "bank": "持牌银行",
+        "nonBank": "受监管的传统非银行金融机构",
+        "blockchain": "从事区块链业务的受监管非银行金融机构",
+        "others": "其他"
+      }
+    },
+    "forgot": {
+      "title": "输入邮箱以重置密码",
+      "emailLabel": "邮箱*",
+      "emailPlaceholder": "请输入邮箱地址",
+      "submit": "重置密码",
+      "submitting": "发送中...",
+      "backToLogin": "返回登录"
+    },
+    "callback": {
+      "regTitle": "注册确认",
+      "resetTitle": "重置反馈",
+      "regMessage": "验证邮件将发送至您的注册邮箱",
+      "resetMessage": "重置密码的邮件将发送至",
+      "spamNote": "若未在收件箱中收到，请检查垃圾邮件文件夹。谢谢！",
+      "backToLogin": "返回登录"
+    },
+    "errors": {
+      "emailRequired": "请输入邮箱",
+      "emailInvalid": "请输入有效的邮箱地址",
+      "passwordRequired": "请输入密码",
+      "passwordWeak": "密码需为 8-20 位，包含大小写字母和数字",
+      "repeatRequired": "请确认密码",
+      "repeatMismatch": "两次输入的密码不一致"
+    },
+    "activation": {
+      "regSuccess": "账号已激活成功，您现在可以登录了。",
+      "regFail": "激活失败，链接可能已失效或过期。",
+      "reviewSuccess": "资源审核已通过。",
+      "reviewPending": "资源审核待处理。",
+      "reviewFail": "资源审核失败，链接可能已失效或过期。"
+    }
+  },
+  "Hero": {
+    "eyebrow": "网络中的每个参与者因彼此而更强大——随着我们的成长而不断增强",
+    "title": "编排数字金融的未来",
+    "titleAccent": "面向金融机构的受监管稳定币基础设施",
+    "subtitle": "面向金融机构的受监管稳定币基础设施",
+    "quote": "银行联盟治理的区块链结算基础设施，使用受监管的支付稳定币实现实时银行间结算。",
+    "primaryCta": "探索解决方案",
+    "secondaryCta": "联系我们",
+    "scroll": "向下滚动"
+  },
+  "Stats": {
+    "title": "规模与可靠性",
+    "subtitle": "受信任的基础设施，以数据见证",
+    "volume": "清算总量",
+    "institutions": "接入机构",
+    "countries": "覆盖国家",
+    "uptime": "系统可用性"
+  },
+  "Solutions": {
+    "eyebrow": "解决方案",
+    "title": "一套互操作的基础设施，六条产品线",
+    "subtitle": "从跨境清算到代币化贸易融资，Remi 将结算、合规与国库编织进每一条受监管的交易链路。",
+    "crossBorder": {
+      "title": "跨境支付",
+      "desc": "Remi 银行间跨境清算与结算系统，为安全、实时的支付流而构建。"
+    },
+    "fx": {
+      "title": "外汇与国库",
+      "desc": "在单一实时机构级工作流中执行外汇与跨境支付。"
+    },
+    "stablecoin": {
+      "title": "稳定币发行",
+      "desc": "以端到端的发行、管控与分发轨道，启动受监管的稳定币项目。"
+    },
+    "regtech": {
+      "title": "合规科技",
+      "desc": "将可编程的合规、监控与报告嵌入每一笔受监管的交易旅程。"
+    },
+    "lc": {
+      "title": "代币化信用证",
+      "desc": "为银行与企业级对手方数字化信用证与贸易融资流程。"
+    },
+    "cheque": {
+      "title": "电子支票",
+      "desc": "将传统支票转化为数字化、可追踪且合规的支付工具。"
+    },
+    "learnMore": "了解详情"
+  },
+  "About": {
+    "eyebrow": "关于 Remi",
+    "title": "以受监管的可编程性，重塑机构级金融",
+    "paragraph1": "Remi 是面向金融机构的受监管稳定币基础设施。我们相信数字金融的未来应当是可互操作、可审计且合规的——因此我们为银行构建了将结算、合规与国库合而为一的编排层。",
+    "paragraph2": "今天，Remi 服务于全球 200 余家银行与金融机构，覆盖 60 多个国家与地区。我们的基础设施承载着日均数十亿美元的真实交易，以 99.99% 的可用性 7×24 小时不间断运行。",
+    "values": {
+      "title": "我们的坚持"
+    },
+    "value1": {
+      "title": "合规优先",
+      "desc": "把可编程合规写进每一条交易链路，让监管要求成为产品的默认能力。"
+    },
+    "value2": {
+      "title": "机构级可靠",
+      "desc": "以 99.99% 的可用性与端到端可审计性，承载真实世界的金融流量。"
+    },
+    "value3": {
+      "title": "开放互操作",
+      "desc": "以开放标准连接现有支付、清算与托管系统，而非另起炉灶。"
+    },
+    "value4": {
+      "title": "长期主义",
+      "desc": "与监管机构、银行与生态伙伴共建可持续的数字金融底座。"
+    }
+  },
+  "News": {
+    "eyebrow": "新闻与活动",
+    "title": "Remi 时刻",
+    "subtitle": "了解我们的最新进展、行业洞察与合规实践。",
+    "readMore": "阅读全文",
+    "items": {
+      "0": {
+        "title": "Remi 银行间跨境清算网络扩展至 60 国",
+        "date": "2025-03-18",
+        "tag": "产品进展",
+        "summary": "Remi 宣布其跨境清算网络已覆盖 60 余个国家，接入机构超 200 家，日均清算量突破新高。"
+      },
+      "1": {
+        "title": "Remi 与某地区监管机构签署监管科技合作备忘录",
+        "date": "2025-02-26",
+        "tag": "战略合作",
+        "summary": "双方将共同探索可编程合规在跨境支付与稳定币发行场景中的落地路径。"
+      },
+      "2": {
+        "title": "Remi 完成新一轮战略融资，加速全球扩张",
+        "date": "2025-01-15",
+        "tag": "资本市场",
+        "summary": "本轮融资由多家国际金融机构领投，资金将用于基础设施扩容与新兴市场合规布局。"
+      }
+    }
+  },
+  "Clients": {
+    "eyebrow": "合作伙伴",
+    "title": "与全球领先金融机构并肩同行",
+    "subtitle": "我们为银行、支付机构与金融科技企业提供长期基础设施服务。"
+  },
+  "Cta": {
+    "title": "准备好与 Remi 一起，编排数字金融的未来了吗？",
+    "subtitle": "无论您正在寻找稳定币发行伙伴、跨境清算接入，还是合规科技方案，欢迎与我们取得联系。",
+    "primary": "预约商务洽谈",
+    "secondary": "加入 Remi"
+  },
+  "Footer": {
+    "tagline": "为金融机构编排数字金融的未来。",
+    "col": {
+      "navigation": "导航",
+      "contact": "联系我们"
+    },
+    "contact": {
+      "bd": "商务拓展",
+      "compliance": "合规事务",
+      "pr": "媒体公关"
+    },
+    "rights": "© {year} Remi Network. 保留所有权利。"
+  },
+  "NotFound": {
+    "title": "页面未找到",
+    "description": "您访问的页面可能已被移动或删除。",
+    "back": "返回首页"
+  }
+}

@@ -1,0 +1,480 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Latin uses the loaded Inter font; CJK gracefully falls back to system fonts. */
+  --font-sans: var(--font-inter), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchored sections so the sticky header doesn't overlap headings. */
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@layer components {
+  /* Reusable section heading eyebrow (small uppercase label). */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground;
+  }
+  /* Brand accent gradient text (Remi orange). */
+  .text-gradient {
+    @apply bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500 bg-clip-text text-transparent;
+  }
+  /* Brand accent colour helpers (single source of truth = siteConfig.colors). */
+  .text-brand {
+    color: #ff6900;
+  }
+  .text-brand-hover {
+    color: #ff8c2e;
+  }
+  .bg-brand {
+    background-color: #ff6900;
+  }
+  .border-brand {
+    border-color: #ff6900;
+  }
+  /* Subtle grid background for hero / feature panels. */
+  .bg-grid {
+    background-image: linear-gradient(
+        to right,
+        color-mix(in oklch, var(--foreground) 8%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--foreground) 8%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 56px 56px;
+  }
+  /* Container with consistent horizontal padding across breakpoints. */
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  /* Mobile register drawer — iOS-friendly scroll + safe-area handling. */
+  .reg-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .reg-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  .reg-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .reg-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+  }
+  .reg-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .reg-drawer-inner {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  @supports (height: 100dvh) {
+    .reg-drawer-inner {
+      height: 100dvh;
+      max-height: 100dvh;
+    }
+  }
+  /* Prevent iOS auto-zoom on input focus (inputs must be ≥16px font). */
+  @media (max-width: 768px) {
+    .reg-scroll input,
+    .reg-scroll select {
+      font-size: 16px;
+    }
+  }
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .reg-scroll {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 60px) !important;
+    }
+  }
+
+  /* ----------------------------------------------------------------- */
+  /* M3u8Player — Artplayer overrides + overlays                        */
+  /* ----------------------------------------------------------------- */
+  .m3u8-player-container {
+    .artplayer-app {
+      .art-video-player {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        border-radius: 8px !important;
+      }
+      .art-video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important; /* preserve aspect ratio, no crop */
+      }
+      .art-controls {
+        width: 100% !important;
+      }
+      .art-layer {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      /* hideControls mode — class toggled by the imperative API */
+      .art-controls.art-controls-hide {
+        display: none !important;
+      }
+    }
+  }
+
+  /* Shared overlay base */
+  .player-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .player-overlay--loading {
+    z-index: 1001;
+  }
+  .player-overlay--buffering {
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .player-overlay--error {
+    z-index: 1002;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.85);
+  }
+  .player-banner-hint {
+    z-index: 500;
+  }
+
+  /* Spinner animation */
+  .player-spinner {
+    animation: player-spin 1s linear infinite;
+  }
+  @keyframes player-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Reduced-motion: stop the spinner animation */
+  @media (prefers-reduced-motion: reduce) {
+    .player-spinner {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .m3u8-player-container {
+      border-radius: 6px;
+    }
+    .player-overlay--error {
+      padding: 16px;
+    }
+  }
+
+  /* ----------------------------------------------------------------- */
+  /* HeroCarousel — Ken Burns + slide transitions + controls            */
+  /* ----------------------------------------------------------------- */
+  .hero-carousel {
+    height: 100vh;
+    @media (max-width: 767px) {
+      height: 100svh;
+    }
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    will-change: opacity;
+    transition: opacity 0.4s ease-out;
+  }
+  .hero-slide.active {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: auto;
+  }
+
+  .hero-effect {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hero-slide-image-wrap {
+    position: absolute;
+    inset: -20px;
+    overflow: hidden;
+    @media (max-width: 767px) {
+      inset: 0;
+    }
+  }
+  .hero-slide-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    @media (max-width: 767px) {
+      object-position: 64% center;
+    }
+  }
+
+  /* Ken Burns effects — only animate the active slide */
+  .hero-slide.active .effect-zoom-in .hero-slide-image-wrap img {
+    animation: kenburns-zoom-in 8s ease-out forwards;
+  }
+  .hero-slide.active .effect-zoom-out .hero-slide-image-wrap img {
+    animation: kenburns-zoom-out 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-pan-left .hero-slide-image-wrap img {
+    animation: kenburns-pan-left 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-pan-right .hero-slide-image-wrap img {
+    animation: kenburns-pan-right 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-pan-up .hero-slide-image-wrap img {
+    animation: kenburns-pan-up 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-pan-down .hero-slide-image-wrap img {
+    animation: kenburns-pan-down 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-rotate-focus .hero-slide-image-wrap img {
+    animation: kenburns-rotate-focus 8s ease-in-out forwards;
+  }
+  .hero-slide.active .effect-diagonal .hero-slide-image-wrap img {
+    animation: kenburns-diagonal 8s ease-in-out forwards;
+  }
+
+  @keyframes kenburns-zoom-in {
+    0% { transform: scale(1.05) translate(0, 0); }
+    100% { transform: scale(1.15) translate(0, 0); }
+  }
+  @keyframes kenburns-zoom-out {
+    0% { transform: scale(1.15) translate(0, 0); }
+    100% { transform: scale(1.05) translate(0, 0); }
+  }
+  @keyframes kenburns-pan-left {
+    0% { transform: scale(1.1) translate(3%, 0); }
+    100% { transform: scale(1.1) translate(-3%, 0); }
+  }
+  @keyframes kenburns-pan-right {
+    0% { transform: scale(1.1) translate(-3%, 0); }
+    100% { transform: scale(1.1) translate(3%, 0); }
+  }
+  @keyframes kenburns-pan-up {
+    0% { transform: scale(1.1) translate(0, 3%); }
+    100% { transform: scale(1.1) translate(0, -3%); }
+  }
+  @keyframes kenburns-pan-down {
+    0% { transform: scale(1.1) translate(0, -3%); }
+    100% { transform: scale(1.1) translate(0, 3%); }
+  }
+  @keyframes kenburns-rotate-focus {
+    0% { transform: scale(1.05) rotate(0deg) translate(0, 0); }
+    100% { transform: scale(1.12) rotate(1deg) translate(1%, -0.5%); }
+  }
+  @keyframes kenburns-diagonal {
+    0% { transform: scale(1.08) translate(-3%, 2%); }
+    100% { transform: scale(1.15) translate(3%, -2%); }
+  }
+
+  /* Mobile slide content adjustments */
+  @media (max-width: 767px) {
+    .hero-slide-content {
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 72px 24px 130px;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.22) 0%,
+        rgba(0, 0, 0, 0.16) 22%,
+        rgba(0, 0, 0, 0.12) 48%,
+        rgba(0, 0, 0, 0.44) 100%
+      );
+    }
+    .hero-slide-bottom-quote {
+      bottom: 32px !important;
+      left: 24px !important;
+      right: 24px !important;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  }
+
+  /* Reduced-motion: disable Ken Burns */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide.active .hero-slide-image-wrap img {
+      animation: none !important;
+      transform: scale(1.1);
+    }
+  }
+
+  /* ----------------------------------------------------------------- */
+  /* Solution page — card reveal animation                               */
+  /* ----------------------------------------------------------------- */
+  .card-hidden {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .card-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@layer utilities {
+  /* Honour reduced-motion preferences for accessibility. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
