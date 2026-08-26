@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: remi-frontend-ssr
-  namespace: sit-website
+  namespace: sit-website-ssr
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: remi-frontend-ssr-svc
-  namespace: sit-website
+  namespace: sit-website-ssr
 spec:
   selector:
     app: remi-frontend-ssr

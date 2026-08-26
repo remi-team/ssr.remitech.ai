@@ -12,7 +12,7 @@ import type {
  * Client-side files service — the "interface abstraction" for file operations.
  *
  * Migrated from the legacy Vue `files.js`. Calls the BFF (Next.js Route
- * Handlers under `/api/files/*`), never the upstream directly. The BFF handles
+ * Handlers under `/api/files/*`), never the website API directly. The BFF handles
  * token injection (httpOnly cookies), Range forwarding, and response streaming.
  *
  * Key difference from the legacy axios-based client: download methods return

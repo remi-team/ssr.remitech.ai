@@ -17,11 +17,12 @@
       "cheque": "E-Cheque"
     },
     "membership": "Membership",
-    "about": "About Us",
+    "about": "About us",
     "news": "News & Events",
     "resources": "Resources",
     "compliance": "Compliance",
-    "cta": "Contact Us"
+    "cta": "Contact Us",
+    "aboutFooter": "About Us"
   },
   "Theme": {
     "toggle": "Toggle theme",
@@ -196,27 +197,31 @@
     "eyebrow": "News & Events",
     "title": "Remi moments",
     "subtitle": "The latest on our progress, industry perspectives and compliance practice.",
+    "readMore": "Read more"
+  },
+  "NewsDetail": {
+    "breadcrumbHome": "Home",
+    "breadcrumbNews": "News & Events",
+    "breadcrumbArticle": "Article",
+    "alsoFeaturedOn": "Also featured on",
+    "backToNews": "Back to News & Events",
+    "share": "Share",
+    "continueReading": "Continue Reading",
     "readMore": "Read more",
-    "items": {
-      "0": {
-        "title": "Remi interbank clearing network expands to 60 countries",
-        "date": "2025-03-18",
-        "tag": "Product",
-        "summary": "Remi announces its cross-border clearing network now spans 60+ countries with 200+ onboarded institutions, hitting new daily clearing highs."
-      },
-      "1": {
-        "title": "Remi signs RegTech MoU with a regional regulator",
-        "date": "2025-02-26",
-        "tag": "Partnership",
-        "summary": "The two parties will explore programmable compliance in cross-border payment and stablecoin issuance scenarios."
-      },
-      "2": {
-        "title": "Remi closes strategic round to accelerate global expansion",
-        "date": "2025-01-15",
-        "tag": "Capital markets",
-        "summary": "Led by international financial institutions, proceeds will fund infrastructure scale-out and emerging-market compliance build-out."
-      }
-    }
+    "ctaTitle": "Want to learn more about how Remi can support your institution?"
+  },
+  "Player": {
+    "back": "Back",
+    "videoListTitle": "Video Resource List",
+    "chapters": "Video Chapters",
+    "noChapters": "No chapter information available",
+    "loginRequired": "Please log in to watch this video",
+    "login": "Log in",
+    "loading": "Video Loading",
+    "loadingDesc": "Please wait, video is loading...",
+    "loadFailed": "Video Load Failed",
+    "loadFailedDesc": "Unable to load video, please try again later",
+    "unknownVideo": "Unknown video"
   },
   "Clients": {
     "eyebrow": "Partners",
@@ -230,7 +235,7 @@
     "secondary": "Join Remi"
   },
   "Footer": {
-    "tagline": "Orchestrating the future of digital finance for institutions.",
+    "tagline": "Regulated Stablecoin Infrastructure for Financial Institutions. Orchestrating the Future of Digital Finance.",
     "col": {
       "navigation": "Navigation",
       "contact": "Contact Us"
@@ -240,7 +245,20 @@
       "compliance": "Compliance",
       "pr": "Media & PR"
     },
-    "rights": "© {year} Remi Network. All Rights Reserved."
+    "rights": "© {year} Remi Network. All Rights Reserved.",
+    "privacy": "Privacy Policy",
+    "cookie": "Cookie Policy"
+  },
+  "Announcement": {
+    "title": "Official Announcement",
+    "close": "Close"
+  },
+  "CookieConsent": {
+    "message": "We use cookies to improve your experience. By continuing to browse, you agree to our use of cookies.",
+    "cookiePolicy": "Cookie Policy",
+    "privacyPolicy": "Privacy Policy",
+    "rejectAll": "Reject All",
+    "acceptAll": "Accept All"
   },
   "NotFound": {
     "title": "Page not found",

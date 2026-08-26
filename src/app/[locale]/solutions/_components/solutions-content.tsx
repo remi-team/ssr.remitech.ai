@@ -64,15 +64,6 @@ const capitalMarkets = [
   { label: "Long-term Bond & Short-term Debt" },
 ];
 
-const funcCompare = [
-  { label: "7x24 Instant Settlement" },
-  { label: "Direct Minor Currency Pairs" },
-  { label: "Atomic Rate Lock" },
-  { label: "Real-time Collateralisation" },
-  { label: "KYC/AML Embedded" },
-  { label: "Regulated Stablecoin Rails" },
-];
-
 // ── Inline SVG icons ──
 
 function CheckIcon() {
@@ -150,61 +141,10 @@ function SmartImg({
   );
 }
 
-/** Modal overlay for component card extContent */
-function DetailModal({
-  open,
-  onClose,
-  title,
-  content,
-}: {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  content: string;
-}) {
-  if (!open) return null;
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6"
-      onClick={onClose}
-    >
-      <div
-        className="relative max-h-[80vh] w-full max-w-[640px] overflow-y-auto rounded-[4px] bg-white p-10 md:p-12"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-[#86909C] hover:bg-[#f4f2f0] hover:text-[#2d2722] transition-colors"
-          aria-label="Close"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-5 w-5 stroke-current"
-            fill="none"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            <path d="M18 6 6 18M6 6l12 12" />
-          </svg>
-        </button>
-        <h2 className="text-[24px] font-semibold text-[#2d2722] mb-5 md:text-[28px]">
-          {title}
-        </h2>
-        <p className="text-[14px] leading-[1.6] text-[#86909C]">{content}</p>
-      </div>
-    </div>
-  );
-}
-
 // ── Main export ──
 
 export function SolutionsContent() {
   const cardsRef = React.useRef<HTMLDivElement | null>(null);
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalItem, setModalItem] = React.useState<{
-    title: string;
-    content: string;
-  } | null>(null);
 
   // Scroll-triggered card reveal (IntersectionObserver)
   React.useEffect(() => {
@@ -233,18 +173,6 @@ export function SolutionsContent() {
     articles.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
-
-  const openModal = (item: {
-    title: string;
-    description: string;
-    extContent: string;
-  }) => {
-    setModalItem({
-      title: item.title,
-      content: item.extContent || item.description,
-    });
-    setModalOpen(true);
-  };
 
   return (
     <>
@@ -325,24 +253,6 @@ export function SolutionsContent() {
                       <p className="mt-1.5 flex-1 text-[12px] leading-[1.45] text-[#86909C] md:mt-5 md:text-[18px]">
                         {item.description}
                       </p>
-                      <span
-                        className="mt-2.5 flex cursor-pointer items-center text-[13px] font-semibold text-[#ff7a1a] md:mt-3 md:text-[16px]"
-                        onClick={() => openModal(item)}
-                      >
-                        <span>Learn more</span>
-                        <span className="ml-1 text-[#FF6900]">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="h-4 w-4 stroke-current"
-                            fill="none"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                          </svg>
-                        </span>
-                      </span>
                     </article>
                   ))}
                 </div>
@@ -413,58 +323,6 @@ export function SolutionsContent() {
           </div>
         </div>
       </section>
-
-      {/* ── Function Comparison (Architectural View) ── */}
-      <section data-scroll="func-compare" className="bg-white">
-        <div className="mx-auto max-w-[1536px] px-6 py-11 md:px-8 md:py-[58px] lg:px-10 lg:py-[72px] xl:px-12 xl:py-[84px]">
-          <div className="mx-auto max-w-[880px] text-center mb-12 md:mb-16">
-            <h2 className="text-[28px] font-medium uppercase leading-none text-[#2d2722] md:text-[36px] lg:text-[42px]">
-              Architectural View
-            </h2>
-            <p className="mt-2 text-[11px] leading-[1.45] text-[#8f867f] md:text-[12px] lg:text-[13px]">
-              A comparison of core functional capabilities
-            </p>
-          </div>
-          <div className="mx-auto grid max-w-[980px] gap-[14px] md:grid-cols-2 md:gap-4 lg:gap-[18px]">
-            {funcCompare.map((f) => (
-              <article
-                key={f.label}
-                className="flex items-center gap-[14px] rounded-[4px] border border-[#f1b486] bg-transparent px-5 py-[18px] text-[#9f948c] md:min-h-[82px] md:px-[22px] lg:min-h-[88px] lg:px-6"
-              >
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#ff7a1a] text-white shadow-[0_6px_12px_rgba(255,122,34,0.24)]">
-                  <CheckIcon />
-                </span>
-                <span className="text-[15px] leading-[1.25] md:text-[16px] lg:text-[18px]">
-                  {f.label}
-                </span>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="bg-[#141110]">
-        <div className="mx-auto max-w-[1536px] px-6 py-[60px] text-center md:px-8 md:py-[80px] lg:py-[100px]">
-          <h2 className="mx-auto max-w-[860px] text-[24px] font-light leading-[1.3] text-white md:text-[28px] lg:text-[32px] mb-9">
-            Ready to Transform Your Cross-Border Payments?
-          </h2>
-          <a
-            href="/contact"
-            className="inline-block rounded-[4px] bg-[#FF6900] px-8 py-3 text-[14px] font-medium uppercase tracking-[0.04em] text-white transition-colors hover:bg-[#e55e00]"
-          >
-            Get In Touch
-          </a>
-        </div>
-      </section>
-
-      {/* ── Modal ── */}
-      <DetailModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalItem?.title ?? ""}
-        content={modalItem?.content ?? ""}
-      />
 
       {/* ── Global styles for card reveal animation ── */}
       <style jsx global>{`

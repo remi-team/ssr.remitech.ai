@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { Cta } from "@/components/cta";
 import { StablecoinHero } from "./_components/stablecoin-hero";
 import { StablecoinContent } from "./_components/stablecoin-content";
@@ -21,7 +21,7 @@ type Props = {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
   const title =
     validLocale === "zh" ? "稳定币发行 — Remi" : "Stablecoin Issuance — Remi";
   const description =
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StablecoinPage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   setRequestLocale(validLocale);

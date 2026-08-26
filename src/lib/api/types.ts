@@ -1,10 +1,10 @@
 /**
- * Shared API types — used by the upstream client, server services, BFF routes,
+ * Shared API types — used by the website API client, server services, BFF routes,
  * and client services. Keeping them in one place guarantees the `{ code, data,
  * message }` envelope is consistent end-to-end.
  */
 
-/** Standard upstream response envelope. */
+/** Standard website API response envelope. */
 export interface ApiResponse<T = unknown> {
   code: string;
   message?: string;
@@ -38,7 +38,7 @@ export interface LoginPayload {
 export interface LoginResult {
   accessToken?: string;
   refreshToken?: string;
-  /** Legacy snake_case fields (some upstreams return these). */
+  /** Legacy snake_case fields (the website API may return these). */
   access_token?: string;
   refresh_token?: string;
   username?: string;
@@ -127,15 +127,15 @@ export interface RangeOptions {
   end?: number;
 }
 
-/** Normalized error thrown by the upstream client. */
-export class UpstreamError extends Error {
+/** Normalized error thrown by the website API client. */
+export class WebsiteApiError extends Error {
   constructor(
     message: string,
     public readonly status: number,
     public readonly code?: string,
-    public readonly upstreamBody?: unknown,
+    public readonly errorBody?: unknown,
   ) {
     super(message);
-    this.name = "UpstreamError";
+    this.name = "WebsiteApiError";
   }
 }

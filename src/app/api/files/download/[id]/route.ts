@@ -5,7 +5,7 @@ import type { RangeOptions } from "@/lib/api/types";
 /**
  * GET /api/files/download/[id] — BFF bridge for file download.
  *
- * Forwards Range headers for resumable downloads and streams the upstream
+ * Forwards Range headers for resumable downloads and streams the website API
  * response body back to the client.
  */
 export const revalidate = 0;
@@ -33,14 +33,14 @@ export async function GET(
       }
     }
 
-    const upstreamRes = await filesServerService.download(id, range);
+    const serviceRes = await filesServerService.download(id, range);
 
-    // Forward the upstream response (body + headers) to the client.
+    // Forward the website API response (body + headers) to the client.
     const headers = new Headers();
-    upstreamRes.headers.forEach((v, k) => headers.set(k, v));
-    return new Response(upstreamRes.body, {
-      status: upstreamRes.status,
-      statusText: upstreamRes.statusText,
+    serviceRes.headers.forEach((v, k) => headers.set(k, v));
+    return new Response(serviceRes.body, {
+      status: serviceRes.status,
+      statusText: serviceRes.statusText,
       headers,
     });
   } catch (err) {

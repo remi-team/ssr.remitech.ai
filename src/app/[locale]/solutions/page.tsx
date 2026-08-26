@@ -1,23 +1,22 @@
-import { redirect } from "next/navigation";
 import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { setRequestLocale } from "next-intl/server";
+import { SolutionsHero } from "./_components/solutions-hero";
+import { SolutionsContent } from "./_components/solutions-content";
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
 /**
- * Solutions index — redirects to the primary solution page (Cross-Border Payment).
- *
- * Legacy behaviour: `/solution` showed an overview with a generic CBP hero.
- * The decision was made to land visitors directly on the cross-border-payment
- * page, which is the flagship product.
+ * Solutions index — mirrors the legacy Vue `/solution` overview page
+ * ("7*24 Instant Stablecoin Exchange Platform" hero + metrics + solution grid).
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   const title =
@@ -31,12 +30,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SolutionsPage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
+  setRequestLocale(validLocale);
 
-  // Build the redirect target with locale prefix.
-  // zh is the default locale (no prefix); all other locales get prefixed.
-  const prefix = validLocale === routing.defaultLocale ? "" : `/${validLocale}`;
-  redirect(`${prefix}/solutions/cross-border-payment`);
+  return (
+    <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
+      <SolutionsHero />
+      <SolutionsContent />
+    </div>
+  );
 }

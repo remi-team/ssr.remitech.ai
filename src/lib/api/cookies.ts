@@ -2,7 +2,7 @@ import "server-only";
 
 import { TOKEN_CONFIG, HTTP_STATUS } from "@/lib/api/config";
 import { cookies } from "next/headers";
-import type { UpstreamError } from "@/lib/api/types";
+import type { WebsiteApiError } from "@/lib/api/types";
 
 /**
  * Server-side cookie helpers for BFF token management.
@@ -50,12 +50,12 @@ export async function clearTokens(): Promise<void> {
 }
 
 /**
- * Convert an `UpstreamError` (or any thrown error) into a JSON response with
+ * Convert a `WebsiteApiError` (or any thrown error) into a JSON response with
  * the appropriate HTTP status. Keeps BFF route handlers terse.
  */
 export function errorResponse(err: unknown): Response {
-  if (err instanceof Error && err.name === "UpstreamError") {
-    const e = err as UpstreamError;
+  if (err instanceof Error && err.name === "WebsiteApiError") {
+    const e = err as WebsiteApiError;
     return new Response(
       JSON.stringify({ code: e.code ?? String(e.status), message: e.message }),
       { status: e.status, headers: { "Content-Type": "application/json" } },

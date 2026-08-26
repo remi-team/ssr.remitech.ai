@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { NewsHero } from "./_components/news-hero";
 import { NewsGrid } from "./_components/news-grid";
 import { NewsCta } from "./_components/news-cta";
@@ -21,7 +21,7 @@ type Props = {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
   const title = validLocale === "zh" ? "新闻与活动 — Remi" : "News & Events — Remi";
   const description =
     validLocale === "zh"
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NewsPage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   setRequestLocale(validLocale);

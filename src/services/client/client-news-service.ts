@@ -7,8 +7,8 @@ import type { ApiResponse, NewsItem, PageParams, PageResponse } from "@/lib/api/
  * Client-side news service — the "interface abstraction" for news data.
  *
  * Migrated from the legacy Vue `news.js`. Calls the BFF (Next.js Route
- * Handlers under `/api/news/*`), never the upstream directly. The BFF handles
- * ISR caching and upstream proxying.
+ * Handlers under `/api/news/*`), never the website API directly. The BFF handles
+ * ISR caching and website API proxying.
  */
 
 async function fetchPage<T>(
@@ -21,7 +21,7 @@ async function fetchPage<T>(
   const qs = sp.toString();
   const url = qs ? `${path}?${qs}` : path;
 
-  const res = await fetch(url, { Accept: "application/json" });
+  const res = await fetch(url, { headers: { Accept: "application/json" } });
   if (!res.ok) {
     throw new Error(`News request failed: ${res.status} ${path}`);
   }
@@ -40,4 +40,13 @@ export const newsService = {
   /** LinkedIn posts list (paginated). */
   getLinkedin: (params: PageParams = { current: 1, size: 10 }) =>
     fetchPage<PageResponse<NewsItem>>(BFF_ROUTES.NEWS.LINKEDIN, params),
+
+  /** Single article detail (news detail page). */
+  getDetail: async (id: string): Promise<ApiResponse<NewsItem>> => {
+    const res = await fetch(BFF_ROUTES.NEWS.DETAIL(id), { headers: { Accept: "application/json" } });
+    if (!res.ok) {
+      throw new Error(`News detail request failed: ${res.status} ${id}`);
+    }
+    return res.json() as Promise<ApiResponse<NewsItem>>;
+  },
 };

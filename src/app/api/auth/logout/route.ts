@@ -13,7 +13,7 @@ export async function DELETE() {
     await clearTokens();
     return jsonResponse({ code: "200", message: "Logged out.", data: null });
   } catch (err) {
-    // Even if the upstream logout fails, clear local cookies.
+    // Even if the website API logout fails, clear local cookies.
     await clearTokens();
     return errorResponse(err);
   }

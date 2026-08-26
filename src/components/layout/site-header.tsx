@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
@@ -9,9 +10,15 @@ import { Logo } from "@/components/layout/logo";
 import { MenuDropdown } from "@/components/layout/menu-dropdown";
 import { MobileNav } from "@/components/layout/mobile-nav";
 // import { ThemeToggle } from "@/components/layout/theme-toggle"; // disabled: light-only for launch
-// import { LanguageSwitcher } from "@/components/layout/language-switcher"; // disabled: English-only
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { UserMenu } from "@/components/layout/user-menu";
 import { mainNav } from "@/config/navigation";
+
+/**
+ * Routes that keep a solid white header at the very top — mirrors the legacy
+ * router meta (these pages have no `headerOverlay: true`, e.g. /contactUs).
+ */
+const SOLID_HEADER_PATHS = ["/contact", "/privacy-policy", "/cookie-policy"];
 
 /**
  * Site header — migrated from the legacy Vue `header.vue`.
@@ -30,6 +37,7 @@ import { mainNav } from "@/config/navigation";
  */
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const t = useTranslations();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -41,8 +49,14 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Strip the optional locale prefix (localePrefix: "as-needed").
+  const barePath = pathname.replace(/^\/(en|zh)(?=\/|$)/, "");
+  const forceSolid = SOLID_HEADER_PATHS.some(
+    (p) => barePath === p || barePath.startsWith(`${p}/`),
+  );
+
   // The header uses dark styling only when overlay is requested AND not scrolled.
-  const useDarkStyle = overlay && !scrolled;
+  const useDarkStyle = overlay && !forceSolid && !scrolled;
 
   return (
     <header
@@ -85,7 +99,8 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             {t("Nav.cta")}
           </a>
 
-          {/* Language switcher disabled — English-only. Re-enable when adding locales. */}
+          {/* Language switcher (zh/en bilingual). */}
+          <LanguageSwitcher dark={useDarkStyle} />
           {/* ThemeToggle disabled — light-only for launch. Re-enable when dark mode is needed. */}
           <UserMenu dark={useDarkStyle} />
 

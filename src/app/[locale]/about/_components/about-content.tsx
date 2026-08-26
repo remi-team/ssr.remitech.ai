@@ -26,7 +26,7 @@ const partnerCards = [
   {
     icon: "/images/about-icon_03.png",
     title: "Bison FX & Treasury",
-    subtitle: "Hong Kong · SFC",
+    subtitle: "Hong Kong",
     description:
       "The Revenue Center. FX spread + treasury margin on every cross-border transaction. The structural margin lives here.",
     colSpan: true,

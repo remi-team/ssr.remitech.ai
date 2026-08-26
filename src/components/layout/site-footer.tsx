@@ -2,8 +2,9 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 
 import { siteConfig } from "@/config/site";
-import { mainNav } from "@/config/navigation";
+import { footerNav } from "@/config/navigation";
 import { Logo } from "@/components/layout/logo";
+import { Link } from "@/i18n/navigation";
 
 /**
  * Site footer — migrated from the legacy Vue `footer.vue`.
@@ -42,7 +43,7 @@ export function SiteFooter() {
             <h3 className="border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
               {t("Footer.col.navigation")}
             </h3>
-            {mainNav.map((link) => (
+            {footerNav[0].links.map((link) => (
               <a
                 key={link.labelKey}
                 href={link.href}
@@ -128,7 +129,23 @@ export function SiteFooter() {
 
       {/* Copyright bar */}
       <div className="border-t border-[#E5E7EB]">
-        <div className="mx-auto max-w-[1536px] px-[24px] py-[20px] text-center lg:px-[123px] lg:py-[24px]">
+        <div className="mx-auto flex max-w-[1536px] flex-col items-center gap-[8px] px-[24px] py-[20px] text-center lg:px-[123px] lg:py-[24px]">
+          {/* Legal links — legacy footer.vue parity. */}
+          <div className="flex items-center gap-[16px]">
+            <Link
+              href="/privacy-policy"
+              className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
+            >
+              {t("Footer.privacy")}
+            </Link>
+            <span className="text-[12px] text-[#9CA3AF] md:text-[13px]">|</span>
+            <Link
+              href="/cookie-policy"
+              className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
+            >
+              {t("Footer.cookie")}
+            </Link>
+          </div>
           <p className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] md:text-[13px]">
             {t("Footer.rights", { year })}
           </p>

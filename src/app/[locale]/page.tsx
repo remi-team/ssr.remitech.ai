@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 
 import { HeroCarousel } from "./_components/hero-carousel";
 import { WhatRemiUnlocks } from "./_components/what-remi-unlocks";
@@ -41,7 +41,7 @@ type Props = {
  */
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   setRequestLocale(validLocale);

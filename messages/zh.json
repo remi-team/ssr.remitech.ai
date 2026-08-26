@@ -21,7 +21,8 @@
     "news": "新闻与活动",
     "resources": "资源",
     "compliance": "合规",
-    "cta": "联系我们"
+    "cta": "联系我们",
+    "aboutFooter": "关于我们"
   },
   "Theme": {
     "toggle": "切换主题",
@@ -196,27 +197,31 @@
     "eyebrow": "新闻与活动",
     "title": "Remi 时刻",
     "subtitle": "了解我们的最新进展、行业洞察与合规实践。",
+    "readMore": "阅读全文"
+  },
+  "NewsDetail": {
+    "breadcrumbHome": "首页",
+    "breadcrumbNews": "新闻与活动",
+    "breadcrumbArticle": "文章",
+    "alsoFeaturedOn": "同时发布于",
+    "backToNews": "返回新闻与活动",
+    "share": "分享",
+    "continueReading": "继续阅读",
     "readMore": "阅读全文",
-    "items": {
-      "0": {
-        "title": "Remi 银行间跨境清算网络扩展至 60 国",
-        "date": "2025-03-18",
-        "tag": "产品进展",
-        "summary": "Remi 宣布其跨境清算网络已覆盖 60 余个国家，接入机构超 200 家，日均清算量突破新高。"
-      },
-      "1": {
-        "title": "Remi 与某地区监管机构签署监管科技合作备忘录",
-        "date": "2025-02-26",
-        "tag": "战略合作",
-        "summary": "双方将共同探索可编程合规在跨境支付与稳定币发行场景中的落地路径。"
-      },
-      "2": {
-        "title": "Remi 完成新一轮战略融资，加速全球扩张",
-        "date": "2025-01-15",
-        "tag": "资本市场",
-        "summary": "本轮融资由多家国际金融机构领投，资金将用于基础设施扩容与新兴市场合规布局。"
-      }
-    }
+    "ctaTitle": "想了解更多 Remi 如何支持贵机构吗？"
+  },
+  "Player": {
+    "back": "返回",
+    "videoListTitle": "视频资源列表",
+    "chapters": "视频章节",
+    "noChapters": "暂无章节信息",
+    "loginRequired": "请先登录后观看本视频",
+    "login": "登录",
+    "loading": "视频加载中",
+    "loadingDesc": "请稍候，视频正在加载...",
+    "loadFailed": "视频加载失败",
+    "loadFailedDesc": "无法加载视频，请稍后重试",
+    "unknownVideo": "未知视频"
   },
   "Clients": {
     "eyebrow": "合作伙伴",
@@ -230,7 +235,7 @@
     "secondary": "加入 Remi"
   },
   "Footer": {
-    "tagline": "为金融机构编排数字金融的未来。",
+    "tagline": "面向金融机构的受监管稳定币基础设施。编排数字金融的未来。",
     "col": {
       "navigation": "导航",
       "contact": "联系我们"
@@ -240,7 +245,20 @@
       "compliance": "合规事务",
       "pr": "媒体公关"
     },
-    "rights": "© {year} Remi Network. 保留所有权利。"
+    "rights": "© {year} Remi Network. 保留所有权利。",
+    "privacy": "隐私政策",
+    "cookie": "Cookie 政策"
+  },
+  "Announcement": {
+    "title": "官方公告",
+    "close": "关闭"
+  },
+  "CookieConsent": {
+    "message": "我们使用 Cookie 来提升您的浏览体验。继续浏览即表示您同意我们使用 Cookie。",
+    "cookiePolicy": "Cookie 政策",
+    "privacyPolicy": "隐私政策",
+    "rejectAll": "全部拒绝",
+    "acceptAll": "全部接受"
   },
   "NotFound": {
     "title": "页面未找到",

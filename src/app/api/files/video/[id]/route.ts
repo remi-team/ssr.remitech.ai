@@ -9,7 +9,7 @@ import type { RangeOptions } from "@/lib/api/types";
  *  • Range requests (resumable / chunked playback)
  *  • HEAD requests (video metadata — size, accept-ranges)
  *
- * Streams the upstream response back to the client.
+ * Streams the website API response back to the client.
  */
 export const revalidate = 0;
 
@@ -33,13 +33,13 @@ export async function GET(
       return errorResponse(new Error("File id is required"));
     }
     const range = parseRange(request.headers.get("range"));
-    const upstreamRes = await filesServerService.downloadVideoChunk(id, range ?? { start: 0 });
+    const serviceRes = await filesServerService.downloadVideoChunk(id, range ?? { start: 0 });
 
     const headers = new Headers();
-    upstreamRes.headers.forEach((v, k) => headers.set(k, v));
-    return new Response(upstreamRes.body, {
-      status: upstreamRes.status,
-      statusText: upstreamRes.statusText,
+    serviceRes.headers.forEach((v, k) => headers.set(k, v));
+    return new Response(serviceRes.body, {
+      status: serviceRes.status,
+      statusText: serviceRes.statusText,
       headers,
     });
   } catch (err) {
@@ -57,12 +57,12 @@ export async function HEAD(
     if (!id) {
       return errorResponse(new Error("File id is required"));
     }
-    const upstreamRes = await filesServerService.getVideoHead(id);
+    const serviceRes = await filesServerService.getVideoHead(id);
     const headers = new Headers();
-    upstreamRes.headers.forEach((v, k) => headers.set(k, v));
+    serviceRes.headers.forEach((v, k) => headers.set(k, v));
     return new Response(null, {
-      status: upstreamRes.status,
-      statusText: upstreamRes.statusText,
+      status: serviceRes.status,
+      statusText: serviceRes.statusText,
       headers,
     });
   } catch (err) {

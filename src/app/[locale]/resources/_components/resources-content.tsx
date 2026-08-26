@@ -2,26 +2,27 @@
 
 import * as React from "react";
 import { Cta } from "@/components/cta";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
-/* ── Data (migrated from Vue ref/reactive → const) ── */
+import { filesService } from "@/services/client/client-files-service";
+import { BFF_ROUTES } from "@/lib/api/config";
+import type { FileItem } from "@/lib/api/types";
+import { useAuthStore } from "@/stores/auth-store";
+import { useModalStore } from "@/stores/modal-store";
 
-/** 5 static category definitions */
-const CATEGORIES = [
-  { id: "all", name: "All Resources", icon: "all" },
-  {
-    id: "Whitepapers & Tech Docs",
-    name: "Whitepapers & Tech Docs",
-    icon: "docs",
-  },
-  {
-    id: "Compliance & Policies",
-    name: "Compliance & Policies",
-    icon: "policy",
-  },
-  { id: "Membership", name: "Membership", icon: "membership" },
-  { id: "Media", name: "Media", icon: "media" },
-] as const;
+/* ── Data (migrated from Vue ref/reactive) ── */
+
+/** Lenient shape of a document coming from the website API file list. */
+type DocItem = FileItem & {
+  title?: string;
+  description?: string;
+  format?: string;
+  version?: string;
+  type_level1?: string;
+  type_level2?: string;
+};
 
 const categoryIconMap: Record<string, string> = {
   all: "all",
@@ -31,204 +32,8 @@ const categoryIconMap: Record<string, string> = {
   media: "media",
 };
 
-/* Placeholder document list per category */
-const PLACEHOLDER_DOCS: Record<string, { title: string; description: string; type: string; version: string; format: string }[]> = {
-  "Whitepapers & Tech Docs": [
-    {
-      title: "Remi Network Architecture Overview",
-      description: "Comprehensive overview of the Remi cross-border settlement network including protocol design, node architecture, and security model.",
-      type: "PDF",
-      version: "v2.1",
-      format: "pdf",
-    },
-    {
-      title: "Remi API Reference Guide",
-      description: "Complete REST and WebSocket API documentation for integrating with the Remi Network.",
-      type: "PDF",
-      version: "v1.8",
-      format: "pdf",
-    },
-    {
-      title: "Stablecoin Monetary Policy Framework",
-      description: "Technical whitepaper on Remi's AI-driven stablecoin monetary policy management system.",
-      type: "PDF",
-      version: "v1.0",
-      format: "pdf",
-    },
-    {
-      title: "Cross-Border Settlement Protocol",
-      description: "Detailed specification of the peer-to-peer settlement protocol powering Remi.",
-      type: "PDF",
-      version: "v3.2",
-      format: "pdf",
-    },
-    {
-      title: "Integration Guide",
-      description: "Step-by-step guide for integrating Remi with existing core banking and payment systems.",
-      type: "PDF",
-      version: "v2.4",
-      format: "pdf",
-    },
-    {
-      title: "Security Architecture Whitepaper",
-      description: "In-depth analysis of Remi's multi-layer security architecture and cryptographic protocols.",
-      type: "PDF",
-      version: "v1.5",
-      format: "pdf",
-    },
-  ],
-  "Compliance & Policies": [
-    {
-      title: "FATF Travel Rule Compliance",
-      description: "How Remi implements the FATF Travel Rule for cross-border digital asset transfers.",
-      type: "PDF",
-      version: "v2.0",
-      format: "pdf",
-    },
-    {
-      title: "AML & Sanctions Screening Framework",
-      description: "Overview of Remi's real-time AML and sanctions screening capabilities for member institutions.",
-      type: "PDF",
-      version: "v1.3",
-      format: "pdf",
-    },
-    {
-      title: "Regulatory Dashboard Whitepaper",
-      description: "Mapping Remi's capabilities to all 40 FATF anti-money laundering recommendations.",
-      type: "PDF",
-      version: "v1.0",
-      format: "pdf",
-    },
-    {
-      title: "MiCA Compliance Overview",
-      description: "How Remi aligns with the EU Markets in Crypto-Assets (MiCA) regulation.",
-      type: "PDF",
-      version: "v1.1",
-      format: "pdf",
-    },
-    {
-      title: "Data Privacy & GDPR Policy",
-      description: "Remi's approach to data privacy, encryption, and GDPR compliance across regions.",
-      type: "PDF",
-      version: "v2.1",
-      format: "pdf",
-    },
-    {
-      title: "Third-Party Audit Reports",
-      description: "Independent security and compliance audit summaries for the Remi Network.",
-      type: "PDF",
-      version: "v1.0",
-      format: "pdf",
-    },
-    {
-      title: "Sanctions Policy",
-      description: "Global sanctions compliance policy for all Remi member institutions.",
-      type: "PDF",
-      version: "v2.0",
-      format: "pdf",
-    },
-    {
-      title: "KYC/AML Onboarding Guide",
-      description: "Member onboarding procedures aligned with global KYC/AML requirements.",
-      type: "PDF",
-      version: "v1.7",
-      format: "pdf",
-    },
-  ],
-  Membership: [
-    {
-      title: "Remi Network Membership Agreement",
-      description: "Complete terms and conditions for joining the Remi Network as a member institution.",
-      type: "PDF",
-      version: "v3.0",
-      format: "pdf",
-    },
-    {
-      title: "Membership Categories Guide",
-      description: "Detailed overview of Issuing, Custodian, Transaction, and Messaging membership tiers.",
-      type: "PDF",
-      version: "v2.2",
-      format: "pdf",
-    },
-    {
-      title: "Onboarding Checklist",
-      description: "Step-by-step checklist for regulated financial institutions joining Remi.",
-      type: "PDF",
-      version: "v1.5",
-      format: "pdf",
-    },
-    {
-      title: "Fee Schedule",
-      description: "Transparent fee structure for all Remi Network services and functions.",
-      type: "PDF",
-      version: "v2.0",
-      format: "pdf",
-    },
-    {
-      title: "Technical Requirements",
-      description: "Minimum technical requirements and infrastructure specifications for member nodes.",
-      type: "PDF",
-      version: "v1.9",
-      format: "pdf",
-    },
-    {
-      title: "Service Level Agreement",
-      description: "SLA terms including uptime guarantees, support channels, and escalation procedures.",
-      type: "PDF",
-      version: "v2.3",
-      format: "pdf",
-    },
-  ],
-  Media: [
-    {
-      title: "Remi Network Overview Video",
-      description: "Executive overview of the Remi cross-border settlement network and its capabilities.",
-      type: "MP4",
-      version: "2024",
-      format: "mp4",
-    },
-    {
-      title: "Product Demo: Regulatory Dashboard",
-      description: "Live demonstration of Remi's regulatory dashboard for anti-money laundering monitoring.",
-      type: "MP4",
-      version: "2024",
-      format: "mp4",
-    },
-    {
-      title: "Press Kit",
-      description: "Official Remi brand assets, logos, and media resources for partners.",
-      type: "ZIP",
-      version: "2024",
-      format: "zip",
-    },
-    {
-      title: "Case Study: APAC Corridor Launch",
-      description: "How Remi launched its first Asia-Pacific cross-border settlement corridor.",
-      type: "PDF",
-      version: "v1.0",
-      format: "pdf",
-    },
-    {
-      title: "Event: BAFT Global Summit 2024",
-      description: "Remi's presentation on stablecoin regulatory frameworks at BAFT Global Summit.",
-      type: "PDF",
-      version: "v1.0",
-      format: "pdf",
-    },
-    {
-      title: "Interview: CEO on Cross-Border Payments",
-      description: "Exclusive interview discussing the future of cross-border settlement infrastructure.",
-      type: "MP4",
-      version: "2024",
-      format: "mp4",
-    },
-  ],
-};
-
-/** Flatten all docs for search/filter */
-const ALL_DOCS = Object.entries(PLACEHOLDER_DOCS).flatMap(([category, docs]) =>
-  docs.map((doc) => ({ ...doc, category }))
-);
+/* The document list is fetched from the files BFF at runtime (see
+   ResourcesContent below) — same behaviour as the legacy documents store. */
 
 /* ── FAQ data ── */
 
@@ -380,46 +185,135 @@ function EmptyDocIcon() {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function ResourcesContent() {
+  const router = useRouter();
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const userInfo = useAuthStore((s) => s.userInfo);
+  const hydrate = useAuthStore((s) => s.hydrate);
+  const showLogin = useModalStore((s) => s.showLogin);
+
+  const [documents, setDocuments] = useState<DocItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedQA, setExpandedQA] = useState<number>(-1);
+  const [expandedQA, setExpandedQA] = useState<number>(0);
+
+  // Legacy parity: `isAuthenticated` = logged in and approved (status 2).
+  const isAuthenticated = isLoggedIn && userInfo?.status === 2;
+
+  // Fetch the document list on mount (legacy `documentsStore.getDocumentsList`).
+  useEffect(() => {
+    void hydrate();
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await filesService.getFileList();
+        if (cancelled) return;
+        if (res.code === "200" && res.data) {
+          setDocuments(res.data as DocItem[]);
+        }
+      } catch (err) {
+        console.error("Document list fetch failed:", err);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrate]);
 
   const toggleQA = useCallback((index: number) => {
     setExpandedQA((prev) => (prev === index ? -1 : index));
   }, []);
 
+  /* Dynamic categories derived from the docs' type_level1 field. */
+  const categories = useMemo(() => {
+    const result = [{ id: "all", name: "All Resources", icon: "all" }];
+    const seen = new Set<string>();
+    documents.forEach((doc) => {
+      if (doc.type_level1 && !seen.has(doc.type_level1)) {
+        seen.add(doc.type_level1);
+        const keyLower = doc.type_level1.toLowerCase();
+        result.push({
+          id: doc.type_level1,
+          name: doc.type_level1,
+          icon: categoryIconMap[keyLower] || keyLower,
+        });
+      }
+    });
+    return result;
+  }, [documents]);
+
   /* Filter docs by category + search */
   const filteredDocuments = useMemo(() => {
-    let docs = ALL_DOCS;
+    let docs = documents;
     if (activeCategory !== "all") {
-      docs = docs.filter((doc) => doc.category === activeCategory);
+      docs = docs.filter((doc) => doc.type_level1 === activeCategory);
     }
     const query = searchQuery.trim().toLowerCase();
     if (query) {
       docs = docs.filter(
         (doc) =>
-          doc.title.toLowerCase().includes(query) ||
-          doc.description.toLowerCase().includes(query) ||
-          doc.type.toLowerCase().includes(query) ||
-          doc.version.toLowerCase().includes(query) ||
-          doc.format.toLowerCase().includes(query) ||
-          doc.category.toLowerCase().includes(query)
+          doc.title?.toLowerCase().includes(query) ||
+          doc.description?.toLowerCase().includes(query) ||
+          doc.format?.toLowerCase().includes(query) ||
+          doc.type?.toLowerCase().includes(query) ||
+          doc.type_level1?.toLowerCase().includes(query) ||
+          doc.type_level2?.toLowerCase().includes(query) ||
+          doc.version?.toLowerCase().includes(query)
       );
     }
     return docs;
-  }, [activeCategory, searchQuery]);
+  }, [documents, activeCategory, searchQuery]);
 
-  /* Group filtered docs by category */
+  /* Group filtered docs by type_level1 */
   const groupedDocuments = useMemo(() => {
-    const groups: Record<string, { categoryName: string; items: typeof ALL_DOCS }> = {};
+    const groups: Record<string, { categoryName: string; items: DocItem[] }> = {};
     filteredDocuments.forEach((doc) => {
-      if (!groups[doc.category]) {
-        groups[doc.category] = { categoryName: doc.category, items: [] };
+      const key = doc.type_level1 || "Other";
+      if (!groups[key]) {
+        groups[key] = { categoryName: key, items: [] };
       }
-      groups[doc.category].items.push(doc);
+      groups[key].items.push(doc);
     });
     return Object.values(groups);
   }, [filteredDocuments]);
+
+  /* Document click — legacy `handleDocClick` parity:
+     1) login gate → 2) approval gate (24h review notice) → 3) open/play/download */
+  const handleDocClick = async (doc: DocItem) => {
+    if (!isLoggedIn) {
+      showLogin();
+      return;
+    }
+    if (!isAuthenticated) {
+      toast.warning(
+        "Your request has been submitted. We will review it within 24 hours.",
+        { duration: 5000 },
+      );
+      return;
+    }
+    if (doc.format === "pdf") {
+      // The BFF download route injects the auth cookie server-side.
+      window.open(`${BFF_ROUTES.FILES.DOWNLOAD}/${doc.id}`, "_blank");
+    } else if (doc.format === "mp4") {
+      router.push(`/player?id=${encodeURIComponent(String(doc.id))}`);
+    } else {
+      try {
+        const blob = await filesService.downloadFile(String(doc.id));
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = doc.title || doc.name || "download";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error("Download failed:", err);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
@@ -470,7 +364,7 @@ export function ResourcesContent() {
         <div className="max-w-[1024px] mx-auto px-[24px] sm:px-[32px] lg:px-[40px]">
           {/* Category Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-[24px] mb-[24px]">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <div
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
@@ -521,8 +415,23 @@ export function ResourcesContent() {
         className="bg-white px-[24px] sm:px-[48px] lg:px-0 pt-[24px] pb-[48px] sm:pb-[56px] md:pb-[64px] lg:pb-[80px]"
       >
         <div className="max-w-[1024px] mx-auto">
-          {/* Grouped Document List */}
-          {groupedDocuments.length > 0 ? (
+          {/* Loading Skeleton */}
+          {isLoading ? (
+            <div className="py-[8px]">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between border-b border-[#EBE8E5] p-[16px_12px] last:border-b-0"
+                >
+                  <div className="mr-[16px] flex min-w-0 flex-1 items-center">
+                    <div className="mr-[14px] h-[20px] w-[20px] shrink-0 animate-pulse rounded-[4px] bg-[#EBE8E5]" />
+                    <div className="h-[14px] w-[70%] animate-pulse rounded-[4px] bg-[#EBE8E5]" />
+                  </div>
+                  <div className="h-[36px] w-[36px] shrink-0 animate-pulse rounded-full border border-[#EBE8E5]" />
+                </div>
+              ))}
+            </div>
+          ) : groupedDocuments.length > 0 ? (
             <>
               {groupedDocuments.map((group) => (
                 <div key={group.categoryName}>
@@ -532,11 +441,12 @@ export function ResourcesContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px] sm:gap-[20px] lg:gap-[24px] mb-[60px]">
                     {group.items.map((doc, i) => (
                       <div
-                        key={`${doc.title}-${i}`}
+                        key={`${doc.id ?? doc.title}-${i}`}
+                        onClick={() => handleDocClick(doc)}
                         className="bg-[#F7F5F3] rounded-[4px] p-[24px] flex flex-col cursor-pointer transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(241,227,218,0.6)] hover:-translate-y-[2px]"
                       >
                         <div className="text-[11px] font-[600] uppercase tracking-[0.05em] text-[#FF6900] mb-[12px]">
-                          {doc.type}
+                          {doc.type_level2 || doc.type?.toUpperCase()}
                         </div>
                         <h4 className="text-[15px] md:text-[16px] font-[500] text-[#29221D] leading-[1.4] mb-[10px] line-clamp-2 transition-colors duration-200 group-hover:text-[#FF6900]">
                           {doc.title}
@@ -545,19 +455,19 @@ export function ResourcesContent() {
                           {doc.description}
                         </p>
                         <div className="text-[12px] text-[#86909C] mt-auto">
-                          {[doc.version, doc.format?.toUpperCase(), doc.type]
+                          {[doc.version, doc.format, doc.type?.toUpperCase()]
                             .filter(Boolean)
                             .join(" · ")}
                         </div>
                         <div className="mt-[12px] flex items-center">
-                          {doc.format === "pdf" && (
+                          {(doc.format === "pdf" || doc.type === "pdf") && (
                             <img
                               src="/images/icon-pdf.svg"
                               className="w-[18px] h-[18px] object-contain"
                               alt="PDF"
                             />
                           )}
-                          {doc.format === "mp4" && (
+                          {(doc.format === "mp4" || doc.type === "mp4") && (
                             <img
                               src="/images/icon-video.svg"
                               className="w-[18px] h-[18px] object-contain"

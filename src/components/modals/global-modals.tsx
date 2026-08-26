@@ -19,6 +19,11 @@ import { MobileRegisterModal } from "@/components/modals/mobile/mobile-register-
 import { MobileForgotModal } from "@/components/modals/mobile/mobile-forgot-modal";
 import { MobileRegCallbackModal } from "@/components/modals/mobile/mobile-reg-callback-modal";
 
+import {
+  PcAnnouncementModal,
+  MobileAnnouncementModal,
+} from "@/components/modals/announcement-modal";
+
 /**
  * GlobalModals — migrated from the legacy Vue `GlobalModals.vue`.
  *
@@ -58,6 +63,7 @@ function GlobalModalsInner() {
   const showRegister_ = active === "register";
   const showForgot_ = active === "forgot";
   const showCallback_ = active === "regCallback";
+  const showAnnouncement_ = active === "announcement";
 
   // Email-activation callback handler.
   const checkRouteParams = React.useCallback(() => {
@@ -136,6 +142,9 @@ function GlobalModalsInner() {
           <MobileRegisterModal show={showRegister_} />
           <MobileForgotModal show={showForgot_} />
           <MobileRegCallbackModal show={showCallback_} />
+          {/* Announcement — mechanism kept, no active announcement (legacy
+              production had it commented out after the content expired). */}
+          <MobileAnnouncementModal show={showAnnouncement_} />
         </>
       ) : (
         <>
@@ -143,6 +152,7 @@ function GlobalModalsInner() {
           <PcRegisterModal show={showRegister_} />
           <PcForgotModal show={showForgot_} />
           <PcRegCallbackModal show={showCallback_} />
+          <PcAnnouncementModal show={showAnnouncement_} />
         </>
       )}
     </>

@@ -27,6 +27,13 @@ interface RegForm {
   relevantAuthorities: string;
 }
 
+const ErrorMsg = ({ msg }: { msg: string }) =>
+  msg ? (
+    <div className="min-h-[1rem] text-xs text-red-500">{msg}</div>
+  ) : (
+    <div className="min-h-[1rem]" />
+  );
+
 const EMPTY: RegForm = {
   firstname: "",
   lastname: "",
@@ -139,13 +146,6 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
     cn(
       "h-10 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
       err && "border-red-500 focus:border-red-500"
-    );
-
-  const ErrorMsg = ({ msg }: { msg: string }) =>
-    msg ? (
-      <div className="min-h-[1rem] text-xs text-red-500">{msg}</div>
-    ) : (
-      <div className="min-h-[1rem]" />
     );
 
   return (

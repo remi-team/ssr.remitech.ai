@@ -15,7 +15,7 @@ import type {
  * Client-side auth service — the "interface abstraction" for auth flows.
  *
  * Migrated from the legacy Vue `auth.js`. All methods call the BFF (Next.js
- * Route Handlers under `/api/auth/*`), never the upstream directly. The BFF
+ * Route Handlers under `/api/auth/*`), never the website API directly. The BFF
  * handles token persistence via httpOnly cookies, so the client never sees
  * raw tokens — only the user profile.
  *

@@ -1,26 +1,31 @@
 import "server-only";
 
-import { API_ENDPOINTS, REQUEST_CONFIG, TOKEN_CONFIG, HTTP_STATUS } from "./config";
-import { ApiResponse, UpstreamError } from "./types";
+import { WEBSITE_API_ENDPOINTS, REQUEST_CONFIG, TOKEN_CONFIG, HTTP_STATUS } from "./config";
+import { ApiResponse, WebsiteApiError } from "./types";
 
 /**
- * Server-side upstream HTTP client.
+ * Server-side HTTP client for the **website API service** (`remi-website-backend`,
+ * the official-site data service providing auth / content / files APIs).
  *
- * This is the single egress point through which all BFF routes talk to the
- * real backend. It centralises:
- *  • base-URL + endpoint resolution (from `API_ENDPOINTS`)
+ * This is the single egress point through which all BFF routes talk to that
+ * service. It centralises:
+ *  • endpoint resolution (from `WEBSITE_API_ENDPOINTS`)
  *  • timeout enforcement (via AbortController)
  *  • Authorization header injection (from the caller-provided token)
  *  • response-envelope normalisation (`{ code, data, message }`)
- *  • error normalisation (`UpstreamError` with status + body)
+ *  • error normalisation (`WebsiteApiError` with status + body)
  *
- * Only runs on the server (`import "server-only"` guard) — the upstream host
- * and tokens must never leak to the client bundle.
+ * Naming convention: each external API service gets its own `<service>ApiClient`
+ * (e.g. a future CRM service would add `crmApiClient` with `CRM_API_*` env
+ * vars), so multiple services stay distinguishable and extensible.
+ *
+ * Only runs on the server (`import "server-only"` guard) — service hosts and
+ * tokens must never leak to the client bundle.
  */
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD";
 
-export interface UpstreamRequestOptions {
+export interface WebsiteApiRequestOptions {
   method?: HttpMethod;
   /** JSON body (will be stringified). */
   body?: unknown;
@@ -32,7 +37,7 @@ export interface UpstreamRequestOptions {
   headers?: Record<string, string>;
   /** Request timeout (ms). Defaults to `REQUEST_CONFIG.TIMEOUT`. */
   timeout?: number;
-  /** Override the upstream URL (normally derived from API_ENDPOINTS). */
+  /** Target URL (normally an entry from `WEBSITE_API_ENDPOINTS`). */
   url?: string;
   /** Access token for Authorization. When omitted, no auth header is sent. */
   accessToken?: string | null;
@@ -41,7 +46,7 @@ export interface UpstreamRequestOptions {
 }
 
 /** Build a URL with query params. */
-function withParams(url: string, params?: UpstreamRequestOptions["params"]): string {
+function withParams(url: string, params?: WebsiteApiRequestOptions["params"]): string {
   if (!params) return url;
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(params)) {
@@ -55,8 +60,8 @@ function withParams(url: string, params?: UpstreamRequestOptions["params"]): str
  * Core request method. Returns the parsed `{ code, data, message }` envelope
  * (or a raw `Response` when `raw: true`).
  */
-export async function upstream<T = unknown>(
-  opts: UpstreamRequestOptions,
+export async function websiteApiFetch<T = unknown>(
+  opts: WebsiteApiRequestOptions,
 ): Promise<ApiResponse<T>> {
   const {
     method = "GET",
@@ -106,10 +111,10 @@ export async function upstream<T = unknown>(
   } catch (err) {
     clearTimeout(timer);
     if (err instanceof Error && err.name === "AbortError") {
-      throw new UpstreamError("Request timeout", HTTP_STATUS.GATEWAY_TIMEOUT, "TIMEOUT");
+      throw new WebsiteApiError("Request timeout", HTTP_STATUS.GATEWAY_TIMEOUT, "TIMEOUT");
     }
-    throw new UpstreamError(
-      "Network error contacting upstream",
+    throw new WebsiteApiError(
+      "Network error contacting the website API service",
       HTTP_STATUS.BAD_GATEWAY,
       "NETWORK_ERROR",
     );
@@ -124,18 +129,18 @@ export async function upstream<T = unknown>(
   }
 
   if (!res.ok) {
-    // Try to parse the upstream error body for a richer message.
-    let upstreamBody: unknown;
+    // Try to parse the service error body for a richer message.
+    let errorBody: unknown;
     try {
-      upstreamBody = await res.json();
+      errorBody = await res.json();
     } catch {
-      upstreamBody = await res.text().catch(() => undefined);
+      errorBody = await res.text().catch(() => undefined);
     }
     const message =
-      (typeof upstreamBody === "object" && upstreamBody !== null
-        ? (upstreamBody as { message?: string }).message
+      (typeof errorBody === "object" && errorBody !== null
+        ? (errorBody as { message?: string }).message
         : undefined) ?? res.statusText;
-    throw new UpstreamError(message, res.status, String(res.status), upstreamBody);
+    throw new WebsiteApiError(message, res.status, String(res.status), errorBody);
   }
 
   // Parse the standard envelope.
@@ -143,36 +148,36 @@ export async function upstream<T = unknown>(
   return json;
 }
 
-/** Convenience helpers bound to the endpoint map. */
-export const upstreamClient = {
+/** Convenience helpers bound to the website API endpoint map. */
+export const websiteApiClient = {
   get: <T = unknown>(
     endpointKey: string,
-    opts: Omit<UpstreamRequestOptions, "method" | "url"> = {},
-  ) => upstream<T>({ ...opts, method: "GET", url: endpointKey }),
+    opts: Omit<WebsiteApiRequestOptions, "method" | "url"> = {},
+  ) => websiteApiFetch<T>({ ...opts, method: "GET", url: endpointKey }),
 
   post: <T = unknown>(
     endpointKey: string,
-    opts: Omit<UpstreamRequestOptions, "method" | "url"> = {},
-  ) => upstream<T>({ ...opts, method: "POST", url: endpointKey }),
+    opts: Omit<WebsiteApiRequestOptions, "method" | "url"> = {},
+  ) => websiteApiFetch<T>({ ...opts, method: "POST", url: endpointKey }),
 
   put: <T = unknown>(
     endpointKey: string,
-    opts: Omit<UpstreamRequestOptions, "method" | "url"> = {},
-  ) => upstream<T>({ ...opts, method: "PUT", url: endpointKey }),
+    opts: Omit<WebsiteApiRequestOptions, "method" | "url"> = {},
+  ) => websiteApiFetch<T>({ ...opts, method: "PUT", url: endpointKey }),
 
   delete: <T = unknown>(
     endpointKey: string,
-    opts: Omit<UpstreamRequestOptions, "method" | "url"> = {},
-  ) => upstream<T>({ ...opts, method: "DELETE", url: endpointKey }),
+    opts: Omit<WebsiteApiRequestOptions, "method" | "url"> = {},
+  ) => websiteApiFetch<T>({ ...opts, method: "DELETE", url: endpointKey }),
 
   head: <T = unknown>(
     endpointKey: string,
-    opts: Omit<UpstreamRequestOptions, "method" | "url"> = {},
-  ) => upstream<T>({ ...opts, method: "HEAD", url: endpointKey, raw: true }),
+    opts: Omit<WebsiteApiRequestOptions, "method" | "url"> = {},
+  ) => websiteApiFetch<T>({ ...opts, method: "HEAD", url: endpointKey, raw: true }),
 
   /** Issue a raw fetch (for streaming / blob responses). */
-  raw: (opts: UpstreamRequestOptions) => upstream<unknown>({ ...opts, raw: true }),
+  raw: (opts: WebsiteApiRequestOptions) => websiteApiFetch<unknown>({ ...opts, raw: true }),
 };
 
 /** Re-export the endpoint map for convenience. */
-export { API_ENDPOINTS };
+export { WEBSITE_API_ENDPOINTS };

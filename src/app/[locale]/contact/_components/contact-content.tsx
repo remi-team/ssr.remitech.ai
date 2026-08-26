@@ -235,6 +235,10 @@ export default function ContactContent() {
   const inputCls = (field: string) =>
     `${inputBase} ${hasError(field) ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-transparent"}`;
 
+  // Textarea keeps its natural rows-based height (no fixed h-12), matching the legacy form.
+  const textareaCls = (field: string) =>
+    `w-full px-4 py-3 border rounded-lg text-base bg-white placeholder:text-[#86909C] transition-colors focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 resize-none ${hasError(field) ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-transparent"}`;
+
   return (
     <div className="pt-[110px] pb-16 lg:pb-24">
       <div className="container mx-auto px-[24px] lg:max-w-[752px]">
@@ -440,7 +444,7 @@ export default function ContactContent() {
                 rows={6}
                 placeholder="Leave us message"
                 maxLength={2000}
-                className={`${inputCls("message")} px-4 py-3 resize-none`}
+                className={textareaCls("message")}
                 value={form.message}
                 onChange={handleChange}
                 onBlur={handleBlur}

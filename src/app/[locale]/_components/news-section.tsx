@@ -7,6 +7,10 @@ import { newsService } from "@/services/client/client-news-service";
 import type { NewsItem } from "@/lib/api/types";
 import { IMAGES } from "./images";
 
+/** Website API payloads use `imageUrl` / `externalUrl`; legacy `cover` / `link` kept as fallbacks. */
+const coverOf = (item: NewsItem) => (item.imageUrl as string | undefined) ?? item.cover;
+const hrefOf = (item: NewsItem) => (item.externalUrl as string | undefined) ?? item.link;
+
 /**
  * NewsSection — migrated from the legacy "News section".
  *
@@ -62,7 +66,10 @@ export function NewsSection() {
           {loading ? (
             <FeaturedSkeleton />
           ) : (
-            featured.map((card, i) => (
+            featured.map((card, i) => {
+              const href = hrefOf(card) || "/#news";
+              const external = /^https?:\/\//.test(href);
+              return (
               <div key={i} className="max-w-[680px]">
                 <h2 className="pt-4 text-left text-[20px] font-medium text-[#29221D] md:text-[28px] lg:text-[32px]">
                   {card.title}
@@ -71,13 +78,15 @@ export function NewsSection() {
                   {card.summary}
                 </p>
                 <a
-                  href={card.link || "/#news"}
+                  href={href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="inline-block rounded-full border border-[#86909C] px-8 py-2 text-left text-[14px] text-[#86909C] transition-colors hover:bg-[#FF6900] hover:text-white hover:border-[#FF6900] md:px-12 md:py-2.5 md:text-[16px]"
                 >
                   Read More
                 </a>
               </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>
@@ -87,15 +96,19 @@ export function NewsSection() {
         <div className="mx-auto grid max-w-[1104px] grid-cols-1 gap-5 pt-10 md:grid-cols-2 md:pt-[66px] lg:grid-cols-3 lg:gap-[30px]">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)
-            : linkedin.map((card, i) => (
+            : linkedin.map((card, i) => {
+                const cover = coverOf(card);
+                const href = hrefOf(card) || "/#news";
+                const external = /^https?:\/\//.test(href);
+                return (
                 <div
                   key={i}
                   className="relative flex h-full flex-col overflow-hidden rounded bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-[#F1E3DA]"
                 >
-                  {card.cover && (
+                  {cover && (
                     <div className="h-[160px] w-full overflow-hidden md:h-[180px] lg:h-[190px]">
                       <img
-                        src={card.cover}
+                        src={cover}
                         alt={card.title}
                         className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                       />
@@ -127,14 +140,16 @@ export function NewsSection() {
                       {card.summary}
                     </p>
                     <a
-                      href={card.link || "/#news"}
+                      href={href}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       className="mx-auto inline-flex w-full items-center justify-center rounded border border-[#FF6900] bg-white px-5 py-2.5 text-[13px] font-medium text-[#FF6900] transition-colors duration-200 hover:bg-[#FF6B00] hover:text-white sm:min-h-[48px] sm:py-3 sm:text-[14px] lg:max-w-[210px]"
                     >
                       View More
                     </a>
                   </div>
                 </div>
-              ))}
+                );
+              })}
         </div>
       </div>
 

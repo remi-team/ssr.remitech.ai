@@ -102,9 +102,10 @@ export const footerNav: { titleKey: string; links: NavChild[] }[] = [
   {
     titleKey: "Footer.col.navigation",
     links: mainNav
-      .filter((i) => i.labelKey !== "Nav.resources")
       .map((i) => ({
-        labelKey: i.labelKey,
+        // Legacy parity: the Vue footer renders "About Us" while the main
+        // nav shows "About us".
+        labelKey: i.labelKey === "Nav.about" ? "Nav.aboutFooter" : i.labelKey,
         descriptionKey: "",
         href: i.href,
         icon: i.icon,

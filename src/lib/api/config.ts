@@ -5,65 +5,79 @@
  * business status codes, request defaults, file-download config, error
  * messages, and token storage keys.
  *
- * Architecture note: in the new BFF design the `API_ENDPOINTS` map points at
- * the *upstream* backend (not the BFF). The BFF routes live under `/api/*` and
- * proxy to these upstream endpoints via the server-side upstream client.
+ * Architecture note: in the BFF design the `WEBSITE_API_ENDPOINTS` map points
+ * at the website API service (not the BFF itself). The BFF routes live under
+ * `/api/*` and proxy to these endpoints via the server-side website API
+ * client (`website-api-client.ts`).
+ *
+ * Naming convention: every external API service uses a `<SERVICE>_API_`
+ * prefix for env vars and constants (this service: `WEBSITE_API_*`), so
+ * additional services can be added without ambiguity (e.g. `CRM_API_*`).
  */
 
 // ---------------------------------------------------------------------------
-// Versioning & base path
+// Website API service (`remi-website-backend`) — versioning & base path
 // ---------------------------------------------------------------------------
 
-export const API_VERSION =
-  process.env.UPSTREAM_API_VERSION ?? "v1";
+/** Website API version segment (env-overridable per deployment). */
+export const WEBSITE_API_VERSION = process.env.WEBSITE_API_VERSION ?? "v1";
 
-export const API_BASE_PATH = `/api/${API_VERSION}`;
+/** Versioned API base path on the service, e.g. `/api/v1`. */
+export const WEBSITE_API_BASE_PATH = `/api/${WEBSITE_API_VERSION}`;
 
 /**
- * Upstream backend origin. In production this is the real API server; in
- * development it defaults to a local mock origin so the BFF can run standalone.
+ * Default origin of the website API service — the dev/SIT environment (same
+ * host the legacy Vue app proxied `/api` to via `VITE_APP_SERVER_URL`). Baked
+ * in as the CICD default so a deployment without overrides talks to SIT; ops
+ * point each environment at its own service by injecting
+ * `WEBSITE_API_SERVER_URL` (K8s ConfigMap `remi-frontend-ssr-configmap`).
  */
-export const API_HOST =
-  process.env.UPSTREAM_API_HOST ??
-  process.env.UPSTREAM_SERVER_URL ??
-  "http://localhost:8080";
+export const DEFAULT_WEBSITE_API_SERVER_URL =
+  "http://remi-website-backend-sit.remitech.ai";
 
-/** Full upstream base URL (host + versioned path). */
-export const API_BASE_URL = `${API_HOST}${API_BASE_PATH}`;
+/**
+ * Website API service origin. Env override wins over the built-in default.
+ */
+export const WEBSITE_API_SERVER_URL =
+  process.env.WEBSITE_API_SERVER_URL ?? DEFAULT_WEBSITE_API_SERVER_URL;
+
+/** Full website API base URL (origin + versioned path). */
+export const WEBSITE_API_BASE_URL = `${WEBSITE_API_SERVER_URL}${WEBSITE_API_BASE_PATH}`;
 
 // ---------------------------------------------------------------------------
-// Upstream endpoint map (the real backend routes the BFF proxies to)
+// Website API endpoint map (the real routes the BFF proxies to)
 // ---------------------------------------------------------------------------
 
-export const API_ENDPOINTS = {
+export const WEBSITE_API_ENDPOINTS = {
   AUTH: {
-    LOGIN: `${API_BASE_URL}/auth/login`,
-    REFRESH: `${API_BASE_URL}/auth/refresh`,
-    LOGOUT: `${API_BASE_URL}/auth/logout`,
-    USER_INFO: `${API_BASE_URL}/auth/user`,
+    LOGIN: `${WEBSITE_API_BASE_URL}/auth/login`,
+    REFRESH: `${WEBSITE_API_BASE_URL}/auth/refresh`,
+    LOGOUT: `${WEBSITE_API_BASE_URL}/auth/logout`,
+    USER_INFO: `${WEBSITE_API_BASE_URL}/auth/user`,
   },
 
   USER: {
-    REGISTER: `${API_BASE_URL}/user/regis`,
-    ACTIVATE: `${API_BASE_URL}/user/active`,
-    ACTIVATE_RESOURCE: `${API_BASE_URL}/user/review`,
-    FORGET_PASSWORD: `${API_BASE_URL}/user/forget`,
-    RESET_PASSWORD: `${API_BASE_URL}/user/password-reset`,
-    CHANGE_PASSWORD: `${API_BASE_URL}/user/password`,
-    CONTACT: `${API_BASE_URL}/user/contact-us`,
+    REGISTER: `${WEBSITE_API_BASE_URL}/user/regis`,
+    ACTIVATE: `${WEBSITE_API_BASE_URL}/user/active`,
+    ACTIVATE_RESOURCE: `${WEBSITE_API_BASE_URL}/user/review`,
+    FORGET_PASSWORD: `${WEBSITE_API_BASE_URL}/user/forget`,
+    RESET_PASSWORD: `${WEBSITE_API_BASE_URL}/user/password-reset`,
+    CHANGE_PASSWORD: `${WEBSITE_API_BASE_URL}/user/password`,
+    CONTACT: `${WEBSITE_API_BASE_URL}/user/contact-us`,
   },
 
   CONTENT: {
-    NEWS_HOMEPAGE: `${API_BASE_URL}/content/news/homepage/page`,
-    NEWS_EVENTS: `${API_BASE_URL}/content/news/events/page`,
-    LINKEDIN: `${API_BASE_URL}/content/linkedin/page`,
+    NEWS_HOMEPAGE: `${WEBSITE_API_BASE_URL}/content/news/homepage/page`,
+    NEWS_EVENTS: `${WEBSITE_API_BASE_URL}/content/news/events/page`,
+    LINKEDIN: `${WEBSITE_API_BASE_URL}/content/linkedin/page`,
+    NEWS_DETAIL: (id: string) => `${WEBSITE_API_BASE_URL}/content/news/detail/${id}`,
   },
 
   FILES: {
-    LIST: `${API_BASE_URL}/files/list`,
-    DOWNLOAD: `${API_BASE_URL}/files/download`,
-    VIDEO_CHAPTER: `${API_BASE_URL}/files/video-info`,
-    VIDEO_DOWNLOAD: `${API_BASE_URL}/files/video`,
+    LIST: `${WEBSITE_API_BASE_URL}/files/list`,
+    DOWNLOAD: `${WEBSITE_API_BASE_URL}/files/download`,
+    VIDEO_CHAPTER: `${WEBSITE_API_BASE_URL}/files/video-info`,
+    VIDEO_DOWNLOAD: `${WEBSITE_API_BASE_URL}/files/video`,
   },
 } as const;
 
@@ -195,6 +209,7 @@ export const BFF_ROUTES = {
     HOMEPAGE: "/api/news/homepage",
     EVENTS: "/api/news/events",
     LINKEDIN: "/api/news/linkedin",
+    DETAIL: (id: string) => `/api/content/news/${id}`,
   },
   FILES: {
     LIST: "/api/files/list",
@@ -205,11 +220,11 @@ export const BFF_ROUTES = {
 } as const;
 
 const apiConfig = {
-  API_VERSION,
-  API_BASE_PATH,
-  API_BASE_URL,
-  API_HOST,
-  API_ENDPOINTS,
+  WEBSITE_API_VERSION,
+  WEBSITE_API_BASE_PATH,
+  WEBSITE_API_BASE_URL,
+  WEBSITE_API_SERVER_URL,
+  WEBSITE_API_ENDPOINTS,
   HTTP_STATUS,
   BUSINESS_CODE,
   REQUEST_CONFIG,

@@ -13,7 +13,13 @@ import { create } from "zustand";
  * `callbackEmail` + `callbackType` carry context into the RegCallback modal
  * (registration vs. password-reset feedback).
  */
-export type ModalKind = "login" | "register" | "forgot" | "regCallback" | null;
+export type ModalKind =
+  | "login"
+  | "register"
+  | "forgot"
+  | "regCallback"
+  | "announcement"
+  | null;
 
 export type RegCallbackType = "reg" | "reset";
 
@@ -29,6 +35,7 @@ interface ModalState {
   showRegister: () => void;
   showForgot: () => void;
   showRegCallback: (email: string, type: RegCallbackType) => void;
+  showAnnouncement: () => void;
   closeAll: () => void;
 }
 
@@ -42,6 +49,7 @@ export const useModalStore = create<ModalState>((set) => ({
   showForgot: () => set({ active: "forgot" }),
   showRegCallback: (email, type) =>
     set({ active: "regCallback", callbackEmail: email, callbackType: type }),
+  showAnnouncement: () => set({ active: "announcement" }),
   closeAll: () => set({ active: null }),
 }));
 

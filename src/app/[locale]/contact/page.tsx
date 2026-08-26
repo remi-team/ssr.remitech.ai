@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import ContactContent from "./_components/contact-content";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   const title =
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ContactPage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   setRequestLocale(validLocale);

@@ -37,6 +37,10 @@ export function LanguageSwitcher({
   const router = useRouter();
   const pathname = usePathname();
 
+  // Hidden while only one locale is served (kept mounted-safe: the switcher
+  // reappears automatically once `routing.locales` holds more than one entry).
+  if (routing.locales.length < 2) return null;
+
   const onSelect = (next: Locale) => {
     if (next === locale) return;
     router.replace(pathname, { locale: next });

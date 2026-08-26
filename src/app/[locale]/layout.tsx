@@ -5,7 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 
 import "../globals.css";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/config/site";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -13,6 +13,7 @@ import { QueryProvider } from "@/components/providers/query-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { GlobalModals } from "@/components/modals/global-modals";
+import { CookieConsent } from "@/components/cookie-consent";
 import { Toaster } from "@/components/ui/sonner";
 import { Toaster as LegacyToaster } from "@/components/ui/toaster";
 
@@ -111,7 +112,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   // Guard: unsupported locales fall back to the default locale's home.
   // (The middleware normally prevents this, but we stay defensive.)
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
 
@@ -165,6 +166,8 @@ export default async function LocaleLayout({ children, params }: Props) {
               {/* Global auth modals (login/register/forgot/callback) —
                   renders the PC or Mobile variant based on viewport. */}
               <GlobalModals />
+              {/* Cookie consent banner (legacy `CookieConsent.vue` parity). */}
+              <CookieConsent />
               <Toaster richColors closeButton />
               <LegacyToaster />
             </QueryProvider>

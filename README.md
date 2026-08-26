@@ -44,9 +44,12 @@ pnpm start      # 生产模式，端口 3212
 
 | 变量 | 说明 |
 |---|---|
-| `UPSTREAM_API_HOST` | 上游 API 主机 |
-| `UPSTREAM_API_VERSION` | 上游 API 版本 |
-| `UPSTREAM_SERVER_URL` | 上游服务完整地址 |
+| `WEBSITE_API_SERVER_URL` | 官网 API 服务（`remi-website-backend`）完整地址 |
+| `WEBSITE_API_VERSION` | 官网 API 版本段（默认 `v1`） |
+
+命名约定：每个外部 API 服务使用独立的 `<SERVICE>_API_` 前缀（当前服务为 `WEBSITE_API_*`），后续新增服务平行扩展（如 `CRM_API_SERVER_URL`），互不冲突。
+
+默认值（不配置任何变量时）为开发/SIT 官网 API 服务 `http://remi-website-backend-sit.remitech.ai`（与旧版 Vue 开发代理 `VITE_APP_SERVER_URL` 同源），已作为测试/生产 CICD 的默认配置内置；运维只需通过 ConfigMap 注入对应环境的地址即可切换环境。
 
 均无 `NEXT_PUBLIC_` 前缀，构建镜像时无需注入。
 
@@ -59,7 +62,7 @@ docker run -p 3212:3212 --env-file .env remi-frontend-ssr:local
 
 ## 部署（Jenkins → K8s）
 
-流水线流程：拉取代码 → 构建镜像并推送 → 按 `remi-frontend-ssr.yaml` 部署到命名空间 `sit-website` 并滚动更新。
+流水线流程：拉取代码 → 构建镜像并推送 → 按 `remi-frontend-ssr.yaml` 部署到命名空间 `sit-website-ssr` 并滚动更新。
 
 集群侧需预先配置：ConfigMap `remi-frontend-ssr-configmap`（运行时变量）、镜像拉取密钥 `registry-secret`。
 

@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { routing } from "@/i18n/routing";
+import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { ResetPasswordContent } from "./_components/reset-password-content";
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
   const title =
     validLocale === "zh" ? "重置密码 — Remi" : "Reset Password — Remi";
   return { title, robots: "noindex" };
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ResetPasswordPage({ params }: Props) {
   const { locale } = await params;
-  const validLocale = hasLocale(routing.locales, locale)
+  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
     ? locale
     : routing.defaultLocale;
   setRequestLocale(validLocale);

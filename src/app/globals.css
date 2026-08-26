@@ -123,9 +123,31 @@
     /* Offset anchored sections so the sticky header doesn't overlap headings. */
     scroll-padding-top: 5rem;
   }
+  /* Legacy parity (old global.css): clip horizontal overflow globally. */
+  html,
+  body {
+    overflow-x: hidden;
+  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    line-height: normal;
+  }
+  /* Legacy parity: Vue version resets heading/paragraph line-height to
+     `normal` (all vertical rhythm comes from explicit utilities). */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: normal;
+  }
+  h3::after {
+    background: none;
+  }
+  p {
+    line-height: normal;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
@@ -133,6 +155,27 @@
 }
 
 @layer components {
+  /* Legacy parity: the Vue site picks Inter weights via dedicated font
+     families (Inter_Bold, Inter_Light, …). This build loads one Inter
+     variable stack instead, so these classes map to font weights. The
+     page-level markup keeps the original class names 1:1. */
+  .inter,
+  .inter-regular {
+    font-weight: 400;
+  }
+  .inter-light {
+    font-weight: 300;
+  }
+  .inter-medium {
+    font-weight: 500;
+  }
+  .inter-semibold {
+    font-weight: 600;
+  }
+  .inter-bold {
+    font-weight: 700;
+  }
+
   /* Reusable section heading eyebrow (small uppercase label). */
   .eyebrow {
     @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground;

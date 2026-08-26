@@ -6,7 +6,7 @@ import type { LoginPayload } from "@/lib/api/types";
 /**
  * POST /api/auth/login — BFF bridge for login.
  *
- * Calls the upstream auth service, then stores the returned token pair in
+ * Calls the website API auth service, then stores the returned token pair in
  * httpOnly cookies. The client only receives the user profile (never the raw
  * tokens) in the response body.
  */
