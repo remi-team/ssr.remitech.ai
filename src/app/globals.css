@@ -139,7 +139,7 @@
   }
   /* Brand accent gradient text (Remi orange). */
   .text-gradient {
-    @apply bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500 bg-clip-text text-transparent;
+    @apply bg-linear-to-br from-orange-500 via-orange-500 to-amber-500 bg-clip-text text-transparent;
   }
   /* Brand accent colour helpers (single source of truth = siteConfig.colors). */
   .text-brand {

@@ -205,7 +205,7 @@ export function ResetPasswordContent() {
               type="button"
               onClick={handleSubmit}
               disabled={!formValid || isSubmitting}
-              className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-full text-base font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50 sm:h-14 sm:text-lg lg:h-16 lg:text-xl"
+              className="w-full h-12 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-full text-base font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-orange-500/50 sm:h-14 sm:text-lg lg:h-16 lg:text-xl"
             >
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>

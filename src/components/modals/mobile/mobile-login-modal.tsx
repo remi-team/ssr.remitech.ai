@@ -81,7 +81,7 @@ export function MobileLoginModal({ show }: { show: boolean }) {
     >
       {/* Welcome background header */}
       <div className="welcome-bg relative flex flex-1 flex-col justify-center p-10 text-center text-white">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 to-black/35" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/25 to-black/35" />
         <div className="relative z-10 text-left">
           <h1 className="mb-6 text-[28px] font-light tracking-tight">
             {t("login.welcomeTitle")}

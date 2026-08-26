@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { routing } from "@/i18n/routing";
 import { ResetPasswordContent } from "./_components/reset-password-content";
@@ -34,5 +35,9 @@ export default async function ResetPasswordPage({ params }: Props) {
     : routing.defaultLocale;
   setRequestLocale(validLocale);
 
-  return <ResetPasswordContent />;
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
 }
