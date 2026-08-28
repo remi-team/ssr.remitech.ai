@@ -34,7 +34,7 @@ pipeline {
                 script {
                     def branch = params.BRANCH_NAME.toLowerCase()
                     env.RAW_BRANCH_NAME = params.BRANCH_NAME
-                    env.K8S_NAMESPACE = "sit-website-ssr"
+                    env.K8S_NAMESPACE = "sit-website"
                     env.KUBECONFIG_CREDS = "kubeconfig-sit"
                     echo "===== 初始化配置完成 ====="
                     echo "原始分支：${params.BRANCH_NAME} → 标准化分支：${branch}"
