@@ -32,7 +32,7 @@ function SmartImg({ src, alt, className }: { src: string; alt: string; className
 
 export function WhatRemiUnlocks() {
   return (
-    <section data-scroll="system" className="bg-white pb-[80px] pt-[60px] lg:pb-[133px] lg:pt-[100px]">
+    <section id="solutions" data-scroll="system" className="scroll-mt-[80px] bg-white pb-[80px] pt-[60px] lg:pb-[133px] lg:pt-[100px]">
       <div className="mx-auto max-w-[1536px] px-6 lg:px-[123px]">
         <div className="text-left md:text-center">
           <h2 className="mb-3 text-[32px] font-medium text-[#29221D]">What Remi Unlocks</h2>

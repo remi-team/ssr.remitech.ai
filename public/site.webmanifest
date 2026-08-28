@@ -1,0 +1,22 @@
+{
+  "name": "Remi — Regulated Stablecoin Infrastructure",
+  "short_name": "Remi",
+  "description": "Regulated stablecoin infrastructure for financial institutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2efec",
+  "theme_color": "#FF6900",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

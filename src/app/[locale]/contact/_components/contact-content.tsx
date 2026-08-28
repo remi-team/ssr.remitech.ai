@@ -83,7 +83,8 @@ function validateContactNumber(contactNumber: string): string {
 }
 
 function validateMessage(message: string): string {
-  if (message && message.length > 2000) return "Message cannot exceed 2000 characters";
+  if (!message || message.trim() === "") return "Message is required";
+  if (message.length > 2000) return "Message cannot exceed 2000 characters";
   return "";
 }
 
@@ -106,6 +107,7 @@ export default function ContactContent() {
       "lastname",
       "companyEmail",
       "companyName",
+      "message",
     ];
     for (const field of requiredFields) {
       if (!form[field] || (typeof form[field] === "string" && (form[field] as string).trim() === "")) {
@@ -442,6 +444,7 @@ export default function ContactContent() {
               <textarea
                 id="message"
                 rows={6}
+                required
                 placeholder="Leave us message"
                 maxLength={2000}
                 className={textareaCls("message")}

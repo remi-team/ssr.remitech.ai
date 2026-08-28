@@ -1,6 +1,6 @@
 import "server-only";
 
-import { TOKEN_CONFIG, HTTP_STATUS } from "@/lib/api/config";
+import { TOKEN_CONFIG, HTTP_STATUS, BUSINESS_CODE } from "@/lib/api/config";
 import { cookies } from "next/headers";
 import type { WebsiteApiError } from "@/lib/api/types";
 
@@ -68,9 +68,30 @@ export function errorResponse(err: unknown): Response {
 }
 
 /** Standard JSON success response. */
-export function jsonResponse(body: unknown, status = HTTP_STATUS.OK): Response {
+export function jsonResponse(body: unknown, status: number = HTTP_STATUS.OK): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+/**
+ * Map a website API business code to the HTTP status the BFF should return.
+ *
+ * A failed login / rejected token MUST surface as a 4xx at the HTTP level —
+ * passing business failures through as 200 makes authentication look
+ * successful to scanners, proxies and clients. Code `2009` is the website
+ * API's "Invalid Email or Password" result and maps to 401.
+ */
+export function businessCodeStatus(code: string): number {
+  if (code === BUSINESS_CODE.SUCCESS || code === BUSINESS_CODE.SUCCESS_ALT) {
+    return HTTP_STATUS.OK;
+  }
+  if (code === BUSINESS_CODE.UNAUTHORIZED || code === "2009") {
+    return HTTP_STATUS.UNAUTHORIZED;
+  }
+  if (code === BUSINESS_CODE.FORBIDDEN) return HTTP_STATUS.FORBIDDEN;
+  if (code === BUSINESS_CODE.NOT_FOUND) return HTTP_STATUS.NOT_FOUND;
+  if (code === BUSINESS_CODE.VALIDATION_ERROR) return HTTP_STATUS.UNPROCESSABLE_ENTITY;
+  return HTTP_STATUS.BAD_REQUEST;
 }

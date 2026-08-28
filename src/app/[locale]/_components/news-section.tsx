@@ -10,6 +10,8 @@ import { IMAGES } from "./images";
 /** Website API payloads use `imageUrl` / `externalUrl`; legacy `cover` / `link` kept as fallbacks. */
 const coverOf = (item: NewsItem) => (item.imageUrl as string | undefined) ?? item.cover;
 const hrefOf = (item: NewsItem) => (item.externalUrl as string | undefined) ?? item.link;
+/** Internal article detail page — every card gets a standalone indexable URL. */
+const detailHref = (item: NewsItem) => (item.id != null ? `/news/${item.id}` : "/news");
 
 /**
  * NewsSection — migrated from the legacy "News section".
@@ -49,7 +51,7 @@ export function NewsSection() {
   }, []);
 
   return (
-    <section data-scroll="news" className="bg-[#f2efec] pb-8 pt-[60px] lg:pb-12 lg:pt-[110px]">
+    <section id="news" data-scroll="news" className="bg-[#f2efec] pb-8 pt-[60px] lg:pb-12 lg:pt-[110px]">
       {/* Featured press */}
       <div className="relative mx-auto max-w-[1024px] px-6 lg:px-[123px]">
         <div className="flex h-[60px] w-[56px] items-center justify-center md:h-[80px] md:w-[76px]">
@@ -67,8 +69,7 @@ export function NewsSection() {
             <FeaturedSkeleton />
           ) : (
             featured.map((card, i) => {
-              const href = hrefOf(card) || "/#news";
-              const external = /^https?:\/\//.test(href);
+              const href = detailHref(card);
               return (
               <div key={i} className="max-w-[680px]">
                 <h2 className="pt-4 text-left text-[20px] font-medium text-[#29221D] md:text-[28px] lg:text-[32px]">
@@ -79,7 +80,6 @@ export function NewsSection() {
                 </p>
                 <a
                   href={href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="inline-block rounded-full border border-[#86909C] px-8 py-2 text-left text-[14px] text-[#86909C] transition-colors hover:bg-[#FF6900] hover:text-white hover:border-[#FF6900] md:px-12 md:py-2.5 md:text-[16px]"
                 >
                   Read More
@@ -98,7 +98,9 @@ export function NewsSection() {
             ? Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)
             : linkedin.map((card, i) => {
                 const cover = coverOf(card);
-                const href = hrefOf(card) || "/#news";
+                // LinkedIn posts link out to the original post; fall back to
+                // the internal detail page when no external URL exists.
+                const href = hrefOf(card) || detailHref(card);
                 const external = /^https?:\/\//.test(href);
                 return (
                 <div
@@ -110,6 +112,8 @@ export function NewsSection() {
                       <img
                         src={cover}
                         alt={card.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                       />
                     </div>
@@ -157,7 +161,7 @@ export function NewsSection() {
       <div className="relative mx-auto max-w-[1024px] px-6 lg:px-[123px]">
         <div className="pb-6 pt-12 text-center md:pb-12">
           <a
-            href="/#news"
+            href="/news"
             className="group mx-auto flex max-w-[320px] items-center justify-center rounded-[62px] border border-[#FF6900] px-6 py-3 transition-all duration-300 hover:bg-[#FF6900]"
           >
             <span className="text-[16px] text-[#FF6900] transition-colors duration-300 group-hover:text-white md:text-[20px]">

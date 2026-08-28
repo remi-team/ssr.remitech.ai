@@ -79,11 +79,11 @@ export function UNCommitment() {
 
       {/* Partner logos */}
       <div className="mx-auto flex max-w-[1536px] flex-wrap items-center justify-center gap-4 px-6 lg:flex-row">
-        <div className="grid grid-cols-2 items-center justify-center gap-1.5 md:flex md:flex-wrap lg:gap-[30px]">
+        <div className="grid w-full grid-cols-2 items-center justify-center gap-1.5 md:flex md:w-auto md:flex-wrap lg:gap-[30px]">
           {partners.map((p) => (
             <div
               key={p.name}
-              className="flex h-[80px] w-[180px] items-center justify-center md:h-[126px] md:w-[260px]"
+              className="flex h-[80px] w-full items-center justify-center md:h-[126px] md:w-[260px]"
             >
               <SmartImg
                 src={p.src}

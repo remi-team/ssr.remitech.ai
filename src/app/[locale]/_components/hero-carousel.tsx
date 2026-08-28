@@ -342,7 +342,9 @@ export function HeroCarousel() {
                     src={`${slide.image768}@1x_compressed.jpg`}
                     srcSet={`${slide.image768}@1x_compressed.jpg 1x, ${slide.image768}@2x_compressed.jpg 2x`}
                     alt={slide.tag}
-                    loading={index < 2 ? "eager" : "lazy"}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
                     onError={(e) => {
                       // Image not yet in /public/images/ — hide it so the
                       // grid-background fallback shows cleanly. The picture
@@ -370,7 +372,7 @@ export function HeroCarousel() {
       {/* ----------------------------------------------------------------- */}
       {/* Slide content (title + subtitle + quote + CTA)                     */}
       {/* ----------------------------------------------------------------- */}
-      <div className="hero-slide-content absolute inset-0 z-10 mx-auto flex max-w-[1536px] flex-col items-start justify-center px-8">
+      <div className="hero-slide-content absolute inset-0 z-10 mx-auto flex max-w-[1536px] flex-col items-start justify-center px-8 lg:pr-44 min-[1600px]:pr-8">
         <div className="hero-slide-text max-w-[1280px]">
           <h1
             id="hero-title"
@@ -462,7 +464,7 @@ export function HeroCarousel() {
       {/* Scroll-down cue (preserved from the existing hero)                  */}
       {/* ----------------------------------------------------------------- */}
       <a
-        href="/#solutions"
+        href="#solutions"
         className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1 text-xs text-white/50 transition-colors hover:text-white"
         aria-label={t("scroll")}
         onClick={(e) => e.stopPropagation()}

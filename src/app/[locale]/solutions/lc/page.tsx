@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { Cta } from "@/components/cta";
 import { LcHero } from "./_components/lc-hero";
 import { LcContent } from "./_components/lc-content";
@@ -22,13 +23,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "代币化信用证 — Remi" : "Tokenized Letter of Credit — Remi";
-  const description =
-    validLocale === "zh"
-      ? "智能合约信用证在共享许可链上运行。四方同时查看同一状态，修订自动触发，抵押品实时调整。"
-      : "Smart contract LC on a shared permissioned chain. All four parties see the same state simultaneously. Amendment triggers automatically. Collateral adjusts in real time.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "solutionsLc");
 }
 
 export default async function LcPage({ params }: Props) {

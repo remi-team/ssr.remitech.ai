@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { PolicyPageLayout } from "../_components/policy-page-layout";
 import { privacyIntroEn, privacySectionsEn } from "./_components/content-en";
 import { privacyIntroZh, privacySectionsZh } from "./_components/content-zh";
@@ -16,12 +17,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title = validLocale === "zh" ? "隐私政策 — Remi" : "Privacy Policy — Remi";
-  const description =
-    validLocale === "zh"
-      ? "了解 Remi 如何收集、使用、披露和保护您在使用本网站时的个人数据。"
-      : "Learn how Remi collects, uses, discloses and protects personal data when you interact with this website.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "privacyPolicy");
 }
 
 export default async function PrivacyPolicyPage({ params }: Props) {

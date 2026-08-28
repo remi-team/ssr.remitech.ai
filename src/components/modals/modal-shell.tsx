@@ -6,6 +6,16 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+/** Focusable elements inside the dialog, used for the Tab focus trap. */
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
 /**
  * ModalShell — the shared PC-modal scaffolding migrated from the recurring
  * `<Teleport> + mask + Transition` block in the legacy Vue modals
@@ -45,6 +55,8 @@ export function ModalShell({
 }: ModalShellProps) {
   const [mounted, setMounted] = React.useState(false);
   const [entered, setEntered] = React.useState(false);
+  const cardRef = React.useRef<HTMLDivElement | null>(null);
+  const lastFocusedRef = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => setMounted(true), []);
 
@@ -62,10 +74,47 @@ export function ModalShell({
     };
   }, [show]);
 
+  // Focus management: move focus into the dialog on open, restore it on
+  // close, so keyboard users never land on the masked page behind.
+  React.useEffect(() => {
+    if (!show) return;
+    lastFocusedRef.current = (document.activeElement as HTMLElement) ?? null;
+    const card = cardRef.current;
+    if (card) {
+      const first = card.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      (first ?? card).focus();
+    }
+    return () => {
+      lastFocusedRef.current?.focus();
+    };
+  }, [show]);
+
   React.useEffect(() => {
     if (!show) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      // Focus trap: Tab cycles only through the dialog's focusable nodes.
+      if (e.key !== "Tab" || !cardRef.current) return;
+      const focusables = Array.from(
+        cardRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusables.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !cardRef.current.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !cardRef.current.contains(active))) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -88,11 +137,15 @@ export function ModalShell({
           entered ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       />
-      {/* Card */}
+      {/* Card — inert while closed so its controls stay out of the tab order */}
       <div
+        ref={cardRef}
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
+        aria-hidden={!show}
+        inert={!show}
+        tabIndex={-1}
         className={cn(
           "fixed left-1/2 top-1/2 z-[1001] w-[90%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-300",
           cardWidth,

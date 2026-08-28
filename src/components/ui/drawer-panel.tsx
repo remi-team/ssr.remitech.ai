@@ -6,6 +6,16 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+/** Focusable elements inside the panel, used for the Tab focus trap. */
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
 export type DrawerDirection = "left" | "right" | "top" | "bottom";
 
 export interface DrawerProps {
@@ -76,6 +86,8 @@ export function Drawer({
   // Tracks whether the *enter* transition has played so we can animate from
   // the hidden state on first show.
   const [entered, setEntered] = React.useState(false);
+  const panelRef = React.useRef<HTMLDivElement | null>(null);
+  const lastFocusedRef = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => setMounted(true), []);
 
@@ -96,11 +108,47 @@ export function Drawer({
     };
   }, [visible, onOpen]);
 
-  // Esc to close.
+  // Focus management: move focus into the drawer on open, restore it on
+  // close, so keyboard users never land on the masked page behind.
+  React.useEffect(() => {
+    if (!visible) return;
+    lastFocusedRef.current = (document.activeElement as HTMLElement) ?? null;
+    const panel = panelRef.current;
+    if (panel) {
+      const first = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      (first ?? panel).focus();
+    }
+    return () => {
+      lastFocusedRef.current?.focus();
+    };
+  }, [visible]);
+
+  // Esc to close + Tab focus trap within the open panel.
   React.useEffect(() => {
     if (!visible) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose?.();
+      if (e.key === "Escape") {
+        onClose?.();
+        return;
+      }
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const focusables = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusables.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !panelRef.current.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !panelRef.current.contains(active))) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -154,11 +202,15 @@ export function Drawer({
         )}
         style={{ zIndex: zIndex - 5 }}
       />
-      {/* Panel */}
+      {/* Panel — inert while closed so its controls stay out of the tab order */}
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel ?? title}
+        aria-hidden={!visible}
+        inert={!visible}
+        tabIndex={-1}
         className={cn(
           "fixed flex flex-col bg-white/90 shadow-[0_4px_4px_0_rgba(0,0,0,0.02)] transition-transform duration-300 ease-out",
           positionClass,

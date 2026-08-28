@@ -3,6 +3,10 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { BUSINESS_CODE } from "@/lib/api/config";
+import type { NewsItem } from "@/lib/api/types";
+import { newsServerService } from "@/services/server/news-server-service";
+import { buildPageMetadata } from "@/lib/seo";
 import { NewsHero } from "./_components/news-hero";
 import { NewsGrid } from "./_components/news-grid";
 import { NewsCta } from "./_components/news-cta";
@@ -22,12 +26,32 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title = validLocale === "zh" ? "新闻与活动 — Remi" : "News & Events — Remi";
-  const description =
-    validLocale === "zh"
-      ? "新闻稿、行业洞察与全球活动。跟随我们构建受监管的数字金融清算基础设施的旅程。"
-      : "Press releases, industry insights, and global events. Follow our journey as we build the regulated clearing infrastructure for digital finance.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "news");
+}
+
+/** Refresh the server-rendered news list every 5 minutes (ISR). */
+export const revalidate = 300;
+
+/**
+ * Prefetch the news lists server-side so the first HTML response contains the
+ * articles (crawlable + instantly visible) instead of an empty shell that
+ * fills ~6s later via a client fetch.
+ */
+async function loadInitialNews(): Promise<{ events: NewsItem[]; linkedin: NewsItem[] }> {
+  try {
+    const [eventsRes, linkedinRes] = await Promise.all([
+      newsServerService.getEvents({ current: 1, size: 20 }),
+      newsServerService.getLinkedin({ current: 1, size: 20 }),
+    ]);
+    return {
+      events:
+        eventsRes.code === BUSINESS_CODE.SUCCESS ? (eventsRes.data?.records ?? []) : [],
+      linkedin:
+        linkedinRes.code === BUSINESS_CODE.SUCCESS ? (linkedinRes.data?.records ?? []) : [],
+    };
+  } catch {
+    return { events: [], linkedin: [] };
+  }
 }
 
 export default async function NewsPage({ params }: Props) {
@@ -37,10 +61,12 @@ export default async function NewsPage({ params }: Props) {
     : routing.defaultLocale;
   setRequestLocale(validLocale);
 
+  const { events, linkedin } = await loadInitialNews();
+
   return (
     <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
       <NewsHero />
-      <NewsGrid />
+      <NewsGrid initialEvents={events} initialLinkedin={linkedin} />
       <NewsCta />
     </div>
   );

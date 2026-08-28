@@ -1,5 +1,11 @@
 import { authServerService } from "@/services/server/auth-server-service";
-import { errorResponse, jsonResponse, getRefreshToken, setTokenPair } from "@/lib/api/cookies";
+import {
+  errorResponse,
+  jsonResponse,
+  getRefreshToken,
+  setTokenPair,
+  businessCodeStatus,
+} from "@/lib/api/cookies";
 
 /** POST /api/auth/refresh — BFF bridge for token refresh. */
 export const revalidate = 0;
@@ -18,8 +24,12 @@ export async function POST() {
         res.data.refreshToken ?? res.data.refresh_token,
       );
     }
-    // Return only success status — tokens stay in cookies.
-    return jsonResponse({ code: res.code, message: res.message, data: null });
+    // Return only success status — tokens stay in cookies. A rejected
+    // refresh token surfaces as 401, never 200.
+    return jsonResponse(
+      { code: res.code, message: res.message, data: null },
+      businessCodeStatus(res.code),
+    );
   } catch (err) {
     return errorResponse(err);
   }

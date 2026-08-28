@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import AboutContent from "./_components/about-content";
 
 type Props = {
@@ -18,13 +19,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "关于我们 — Remi" : "About Us — Remi";
-  const description =
-    validLocale === "zh"
-      ? "Remi 是面向金融机构的受监管稳定币基础设施。了解我们的使命、理念与团队。"
-      : "Remi is regulated stablecoin infrastructure built for financial institutions. Learn about our mission, values, and team.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "about");
 }
 
 export default async function AboutPage({ params }: Props) {

@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { CbpHero } from "./_components/cbp-hero";
 import { CbpContent } from "./_components/cbp-content";
 
@@ -23,13 +24,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "跨境支付 — Remi" : "Cross-Border Payment — Remi";
-  const description =
-    validLocale === "zh"
-      ? "Remi 银行间跨境清算与结算系统，为全球受监管机构之间高效、安全、合规且低成本的 P2P 交易网络。"
-      : "Remi Inter-bank Cross-border Clearing and Settlement System creates an efficient, secure, highly compliant, and cost-effective network for peer-to-peer transactions among regulated institutions globally.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "solutionsCrossBorder");
 }
 
 export default async function CrossBorderPaymentPage({ params }: Props) {

@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import ComplianceContent from "./_components/compliance-content";
 
 type Props = {
@@ -23,13 +24,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "合规与监管 — Remi" : "Compliance — Remi";
-  const description =
-    validLocale === "zh"
-      ? "Remi 的合规框架、监管牌照与信托架构 — 以监管合规为默认能力。"
-      : "Remi's regulatory framework, licences and trust architecture — compliance as a default capability.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "compliance");
 }
 
 export default async function CompliancePage({ params }: Props) {

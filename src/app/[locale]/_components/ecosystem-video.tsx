@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { M3u8Player, type M3u8PlayerHandle } from "@/components/player/m3u8-player";
+import { M3u8Player } from "@/components/player/m3u8-player";
+import type { M3u8PlayerHandle } from "@/components/player/types";
+
+/**
+ * Ecosystem video stream — same source as the legacy Vue homepage
+ * (`videoSrc` in `views/home/index.vue`).
+ */
+const VIDEO_SRC = "https://s.remitech.ai/static/video/m3u8/xc/master.m3u8";
 
 /**
  * EcosystemVideo — migrated from "See Our Ecosystem In Action".
@@ -10,7 +17,6 @@ import { M3u8Player, type M3u8PlayerHandle } from "@/components/player/m3u8-play
  * when scrolled into view via IntersectionObserver (matching the legacy
  * `initVideoViewportObserver`).
  */
-const VIDEO_SRC = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
 export function EcosystemVideo() {
   const playerRef = React.useRef<M3u8PlayerHandle>(null);

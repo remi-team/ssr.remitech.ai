@@ -22,10 +22,11 @@ import { Toaster as LegacyToaster } from "@/components/ui/toaster";
 // Performance strategy per Next.js best practices:
 //  1. All 5 weights declared in one `localFont` call → single font-family
 //     stack so the browser can match any `font-weight: 300–700` correctly.
-//  2. `preload: true` adds <link rel="preload"> for each .woff2 file.
-//     Inter Latin woff2 files are typically 10–20 KB each. With HTTP/2
-//     multiplexing across the same origin, all 5 preloads resolve in one
-//     round-trip — the cost is ~75 KB total, comparable to a single JPEG.
+//  2. `preload: false` — automatic preloading of all five files would push
+//     ~600 KB into the critical path. Instead only the two first-paint
+//     weights (Regular 400 + Bold 700) are preloaded manually in <head>
+//     below; the remaining weights load on demand via their @font-face
+//     rules (`display: swap` keeps text visible meanwhile).
 //  3. `adjustFontFallback: "Arial"` tells Next.js to measure Arial metrics
 //     at build time and inject `size-adjust` + `ascent-override` CSS so
 //     fallback text occupies the same bounding box as Inter, eliminating
@@ -67,7 +68,7 @@ const inter = localFont({
   ],
   variable: "--font-inter",
   display: "swap",
-  preload: true,
+  preload: false,
   adjustFontFallback: "Arial",
   fallback: [
     "PingFang SC",
@@ -124,6 +125,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={validLocale} suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
+        {/* Brand favicon — same asset as the legacy site's index.html. */}
+        <link rel="icon" type="image/png" href="/images/logo-icon.png" />
+        {/* First-paint font weights only — the rest load on demand (swap). */}
+        <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         {/* Organization structured data — boosts rich-result eligibility. */}
         <script
           type="application/ld+json"

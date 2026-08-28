@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { Cta } from "@/components/cta";
 import { ChequeHero } from "./_components/cheque-hero";
 import { ChequeContent } from "./_components/cheque-content";
@@ -25,13 +26,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "电子支票 — Remi" : "E-Cheque — Remi";
-  const description =
-    validLocale === "zh"
-      ? "将传统支票转化为数字化、可追踪且合规的支付工具。赋能合同支付、薪资清算与贸易融资。"
-      : "Transform traditional checks into digital, trackable and compliant payment instruments for contract payments, payroll, and trade finance.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "solutionsCheque");
 }
 
 export default async function ChequePage({ params }: Props) {

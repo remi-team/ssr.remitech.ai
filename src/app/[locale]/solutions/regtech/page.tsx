@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { RegtechContent } from "./_components/regtech-content";
 
 type Props = {
@@ -21,13 +22,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "合规科技 — Remi" : "RegTech — Remi";
-  const description =
-    validLocale === "zh"
-      ? "将可编程的合规、监控与报告嵌入每一笔受监管的交易旅程。"
-      : "Embed programmable compliance, monitoring and reporting into every regulated transaction journey.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "solutionsRegtech");
 }
 
 export default async function RegtechPage({ params }: Props) {

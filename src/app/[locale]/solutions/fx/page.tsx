@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { FxHero } from "./_components/fx-hero";
 import { FxContent } from "./_components/fx-content";
 
@@ -20,13 +21,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title =
-    validLocale === "zh" ? "外汇与国库 — Remi" : "FX & Treasury — Remi";
-  const description =
-    validLocale === "zh"
-      ? "在单一实时机构级工作流中执行外汇与跨境支付。"
-      : "Execute foreign exchange and cross-border payment in a single real-time institutional workflow.";
-  return { title, description };
+  return buildPageMetadata(validLocale, "solutionsFx");
 }
 
 export default async function FxPage({ params }: Props) {

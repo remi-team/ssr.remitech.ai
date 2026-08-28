@@ -79,11 +79,22 @@ const clamp3: React.CSSProperties = { ...clamp2, WebkitLineClamp: 3 };
 
 // ── main component ────────────────────────────────────────────────────────
 
-export function NewsGrid() {
+type NewsGridProps = {
+  /**
+   * Server-rendered initial data. When provided, the list is part of the
+   * first HTML response (crawlable/indexable); the client effect below only
+   * refreshes in the background when nothing was prefetched.
+   */
+  initialEvents?: NewsItem[];
+  initialLinkedin?: NewsItem[];
+};
+
+export function NewsGrid({ initialEvents, initialLinkedin }: NewsGridProps) {
+  const prefetched = Boolean(initialEvents || initialLinkedin);
   const [activeTab, setActiveTab] = React.useState<TabKey>("all");
-  const [events, setEvents] = React.useState<NewsItem[]>([]);
-  const [linkedin, setLinkedin] = React.useState<NewsItem[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [events, setEvents] = React.useState<NewsItem[]>(initialEvents ?? []);
+  const [linkedin, setLinkedin] = React.useState<NewsItem[]>(initialLinkedin ?? []);
+  const [loading, setLoading] = React.useState(!prefetched);
 
   const featuredGridRef = React.useRef<HTMLDivElement | null>(null);
   const linkedinPreviewRef = React.useRef<HTMLDivElement | null>(null);
@@ -91,6 +102,8 @@ export function NewsGrid() {
   const linkedinGridRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
+    // Server already supplied the data — nothing to fetch on the client.
+    if (prefetched) return;
     let cancelled = false;
     (async () => {
       try {
@@ -110,7 +123,7 @@ export function NewsGrid() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [prefetched]);
 
   // Featured: first item flagged featured, fallback to first item.
   const featuredItem = React.useMemo(
@@ -317,7 +330,7 @@ function FeaturedCard({ item }: { item: NewsItem }) {
   return (
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-[#FFF5EE] shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg">
       <div className="h-[220px] w-full overflow-hidden bg-[#f0ebe6] sm:h-[280px] lg:h-[320px]">
-        <img src={resolveImage(item)} alt={item.title} className="h-full w-full object-cover" />
+        <img src={resolveImage(item)} alt={item.title} decoding="async" className="h-full w-full object-cover" />
       </div>
       <div className="flex flex-1 flex-col p-[12px]">
         <div className="mb-[12px] flex items-center gap-[10px]">
@@ -389,7 +402,7 @@ function RowCard({ item }: { item: NewsItem }) {
   return (
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-white shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg sm:flex-row sm:items-start">
       <div className="shrink-0 bg-[#f0ebe6] sm:w-[373px]" style={{ aspectRatio: "16/9" }}>
-        <img src={resolveImage(item)} alt={item.title} className="h-full w-full object-contain" />
+        <img src={resolveImage(item)} alt={item.title} loading="lazy" decoding="async" className="h-full w-full object-contain" />
       </div>
       <div className="flex flex-1 flex-col p-[20px] sm:p-[24px]">
         <div className="mb-[12px] h-[68px]">
@@ -426,7 +439,7 @@ function LinkedInCard({ card }: { card: NewsItem }) {
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-white shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg">
       {imageUrl(card) && (
         <div className="h-[180px] w-full overflow-hidden sm:h-[200px]">
-          <img src={imageUrl(card)} alt={card.title} className="h-full w-full object-cover" />
+          <img src={imageUrl(card)} alt={card.title} loading="lazy" decoding="async" className="h-full w-full object-cover" />
         </div>
       )}
       <div className="flex flex-1 flex-col px-[18px] pt-[18px] sm:px-[22px] sm:pt-[22px]">

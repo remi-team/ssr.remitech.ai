@@ -1,5 +1,5 @@
 import { authServerService } from "@/services/server/auth-server-service";
-import { errorResponse, jsonResponse, setTokenPair } from "@/lib/api/cookies";
+import { errorResponse, jsonResponse, setTokenPair, businessCodeStatus } from "@/lib/api/cookies";
 import { BUSINESS_CODE } from "@/lib/api/config";
 import type { LoginPayload } from "@/lib/api/types";
 
@@ -46,7 +46,8 @@ export async function POST(request: Request) {
       });
     }
 
-    return jsonResponse(res, 200);
+    // Business failure (e.g. invalid credentials) must NOT be a 200.
+    return jsonResponse(res, businessCodeStatus(res.code));
   } catch (err) {
     return errorResponse(err);
   }

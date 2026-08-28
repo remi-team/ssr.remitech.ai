@@ -6,7 +6,7 @@ export const siteConfig = {
   /** Legal entity / brand name (latin fallback used for metadata + OG). */
   name: "Remi",
   /** Canonical production origin used as metadataBase for relative OG URLs. */
-  url: "https://www.remi.tech",
+  url: "https://www.remitech.ai",
   /** Brand handle shown in footer / social. */
   shortName: "Remi",
   /** Default OG image (fallback when dynamic image is unavailable). */

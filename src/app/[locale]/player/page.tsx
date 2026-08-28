@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
 import { PlayerContent } from "./_components/player-content";
 
 type Props = {
@@ -19,13 +20,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(AVAILABLE_LOCALES, locale) ? locale : routing.defaultLocale;
-  const title = validLocale === "zh" ? "视频播放 — Remi" : "Video Player — Remi";
-  const description =
-    validLocale === "zh"
-      ? "观看 Remi 会员视频资源：产品演示与培训材料。"
-      : "Watch Remi member video resources: product demonstrations and training material.";
-  // Legacy parity: the player route was marked `noindex`.
-  return { title, description, robots: "noindex" };
+  return buildPageMetadata(validLocale, "player");
 }
 
 export default async function PlayerPage({ params, searchParams }: Props) {
