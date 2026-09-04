@@ -15,10 +15,28 @@ import { UserMenu } from "@/components/layout/user-menu";
 import { mainNav } from "@/config/navigation";
 
 /**
- * Routes that keep a solid white header at the very top — mirrors the legacy
- * router meta (these pages have no `headerOverlay: true`, e.g. /contactUs).
+ * Routes whose dark hero sits underneath a frosted transparent header —
+ * mirrors the legacy Vue router meta (`headerOverlay: true`).
+ *
+ * Every other route (/player, /contact, /news/[id], /reset-password, …)
+ * gets a solid white header from the very top, exactly like the legacy
+ * site, so dark-on-light text stays readable on light page backgrounds.
  */
-const SOLID_HEADER_PATHS = ["/contact", "/privacy-policy", "/cookie-policy"];
+const OVERLAY_HEADER_PATHS = [
+  "/",
+  "/solutions",
+  "/solutions/cross-border-payment",
+  "/solutions/fx",
+  "/solutions/stablecoin",
+  "/solutions/regtech",
+  "/solutions/lc",
+  "/solutions/cheque",
+  "/membership",
+  "/about",
+  "/news",
+  "/resources",
+  "/compliance",
+];
 
 /**
  * Site header — migrated from the legacy Vue `header.vue`.
@@ -51,12 +69,12 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   // Strip the optional locale prefix (localePrefix: "as-needed").
   const barePath = pathname.replace(/^\/(en|zh)(?=\/|$)/, "");
-  const forceSolid = SOLID_HEADER_PATHS.some(
-    (p) => barePath === p || barePath.startsWith(`${p}/`),
-  );
+  // Legacy parity: only routes whose meta set `headerOverlay: true` may use
+  // the frosted transparent header at the top; everyone else stays solid.
+  const allowOverlay = OVERLAY_HEADER_PATHS.includes(barePath);
 
-  // The header uses dark styling only when overlay is requested AND not scrolled.
-  const useDarkStyle = overlay && !forceSolid && !scrolled;
+  // The header uses dark styling only when overlay is allowed AND not scrolled.
+  const useDarkStyle = overlay && allowOverlay && !scrolled;
 
   return (
     <header

@@ -352,7 +352,7 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
 
         // Fullscreen lifecycle: show controls inside fullscreen; on exit,
         // re-hide them when in banner mode and pause playback.
-        art.on("fullscreen", (state: boolean) => {
+        art.on("fullscreen", (state: unknown) => {
           if (state) {
             showControls();
           } else if (hideControls) {
@@ -441,7 +441,10 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
     return (
       <div
         className={cn(
-          "m3u8-player-container relative h-full w-full overflow-hidden rounded-lg bg-black",
+          // `isolate` creates a stacking context so the internal overlays
+          // (z-index up to 1002, needed to sit above Artplayer controls)
+          // can never escape and cover the fixed site header (z-[101]).
+          "m3u8-player-container relative isolate h-full w-full overflow-hidden rounded-lg bg-black",
           className,
         )}
       >

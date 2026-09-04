@@ -2,6 +2,7 @@ import "server-only";
 
 import { WEBSITE_API_ENDPOINTS } from "@/lib/api/config";
 import { websiteApiClient } from "@/lib/api/website-api-client";
+import { encryptPassword } from "@/lib/auth/rsa-crypto";
 import type {
   ApiResponse,
   ChangePasswordPayload,
@@ -23,17 +24,23 @@ import type {
  */
 
 export const authServerService = {
-  /** Login — the website API expects multipart/form-data (per legacy postman config). */
+  /** Login — the website API expects multipart/form-data (per legacy postman config).
+   *  The password is RSA-encrypted server-side before forwarding (mirrors the
+   *  legacy client-side `encryptPassword()` from `crypto.ts`). */
   async login(payload: LoginPayload): Promise<ApiResponse<LoginResult>> {
     const formData = new FormData();
     formData.append("username", payload.email);
-    formData.append("password", payload.password);
+    formData.append("password", encryptPassword(payload.password));
     return websiteApiClient.post<LoginResult>(WEBSITE_API_ENDPOINTS.AUTH.LOGIN, { formData });
   },
 
-  /** Register a new institutional user. */
+  /** Register a new institutional user. Password fields are RSA-encrypted
+   *  server-side before forwarding (mirrors the legacy client-side flow). */
   async register(payload: RegisterPayload): Promise<ApiResponse<{ email: string }>> {
-    return websiteApiClient.post<{ email: string }>(WEBSITE_API_ENDPOINTS.USER.REGISTER, { body: payload });
+    const encryptedPassword = encryptPassword(payload.password);
+    return websiteApiClient.post<{ email: string }>(WEBSITE_API_ENDPOINTS.USER.REGISTER, {
+      body: { ...payload, password: encryptedPassword, passwordConfirm: encryptedPassword },
+    });
   },
 
   /** Contact-us form submission. */
@@ -65,9 +72,13 @@ export const authServerService = {
     );
   },
 
-  /** Reset password (POST with email + code + new password). */
+  /** Reset password (POST with email + code + new password). Password fields
+   *  are RSA-encrypted server-side before forwarding. */
   async resetPassword(payload: ResetPasswordPayload): Promise<ApiResponse<null>> {
-    return websiteApiClient.post<null>(WEBSITE_API_ENDPOINTS.USER.RESET_PASSWORD, { body: payload });
+    const encryptedPassword = encryptPassword(payload.password);
+    return websiteApiClient.post<null>(WEBSITE_API_ENDPOINTS.USER.RESET_PASSWORD, {
+      body: { ...payload, password: encryptedPassword, passwordConfirm: encryptedPassword },
+    });
   },
 
   /** Refresh the access token. */

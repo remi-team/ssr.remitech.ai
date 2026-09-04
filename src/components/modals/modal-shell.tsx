@@ -176,7 +176,7 @@ export function ModalShell({
           <div className="flex-1 bg-white">{children}</div>
           {/* Right welcome panel (opt-in) */}
           {welcomePanel && (
-            <div className="flex-1 bg-linear-to-br from-black/40 to-black/20 bg-cover bg-center pt-[72px] text-white relative max-md:min-h-[200px]">
+            <div className="flex-1 bg-linear-to-br from-black/40 to-black/20 bg-[url('/images/modal_bg.png')] bg-cover bg-center pt-[72px] text-white relative max-md:min-h-[200px]">
               {welcomePanel}
             </div>
           )}

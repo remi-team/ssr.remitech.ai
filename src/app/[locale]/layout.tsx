@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -130,8 +131,16 @@ export default async function LocaleLayout({ children, params }: Props) {
         {/* First-paint font weights only — the rest load on demand (swap). */}
         <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        {/* Organization structured data — boosts rich-result eligibility. */}
-        <script
+      </head>
+      <body
+        className={`${inter.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
+        {/* Organization structured data — boosts rich-result eligibility.
+            Rendered via next/script to avoid React 19 "script tag in
+            component" warnings (raw <script> is not executed on the client). */}
+        <Script
+          id="ld-json-organization"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -149,10 +158,6 @@ export default async function LocaleLayout({ children, params }: Props) {
             }),
           }}
         />
-      </head>
-      <body
-        className={`${inter.variable} font-sans antialiased`}
-      >
         <NextIntlClientProvider locale={validLocale} messages={messages}>
           <ThemeProvider
             attribute="class"

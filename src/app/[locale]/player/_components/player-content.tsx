@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 
 import { M3u8Player } from "@/components/player/m3u8-player";
 import type { M3u8PlayerHandle } from "@/components/player/types";
+import { BFF_ROUTES } from "@/lib/api/config";
 import type { FileItem } from "@/lib/api/types";
 import { filesService } from "@/services/client/client-files-service";
 import { useAuthStore } from "@/stores/auth-store";
@@ -127,7 +128,17 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
         if (cancelled) return;
         if (res.code === "200" && res.data) {
           const data = res.data as { url?: string; chapters?: Array<{ start: number; end: number; title: string }> };
-          setVideoUrl(data.url ?? "");
+          // Stream through the BFF proxy (`/api/files/video/[id]`) instead of
+          // the raw website-API url: the raw host (www.remitech.ai) sends no
+          // CORS headers, so direct cross-origin playback fails. The BFF
+          // route forwards Range requests and injects the auth token
+          // server-side. Artplayer falls back to native <video> playback for
+          // extension-less URLs, which streams fine from the same origin.
+          setVideoUrl(
+            data.url
+              ? `${BFF_ROUTES.FILES.VIDEO}/${encodeURIComponent(String(currentVideo.id))}`
+              : "",
+          );
           const list = data.chapters ?? [];
           setChapters(
             list.map((chapter, index) => ({
