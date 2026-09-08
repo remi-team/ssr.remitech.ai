@@ -277,7 +277,6 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
               ? navigator.language.toLowerCase()
               : "en",
           moreVideoAttr: {
-            crossOrigin: "anonymous",
             playsInline: true,
             "webkit-playsinline": true,
           },

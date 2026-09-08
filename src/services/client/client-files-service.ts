@@ -20,6 +20,20 @@ import type {
  * without buffering the entire payload in JS memory.
  */
 
+/**
+ * Error thrown for non-ok BFF responses. Carries the HTTP status so callers
+ * can react uniformly to session expiry (401) — mirroring the legacy axios
+ * interceptor which switched on `response.status`.
+ */
+export class HttpError extends Error {
+  readonly status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "HttpError";
+    this.status = status;
+  }
+}
+
 export const filesService = {
   /** Get the authenticated user's file list. */
   async getFileList(): Promise<ApiResponse<FileItem[]>> {
@@ -27,7 +41,7 @@ export const filesService = {
       credentials: "same-origin",
       headers: { Accept: "application/json" },
     });
-    if (!res.ok) throw new Error(`File list failed: ${res.status}`);
+    if (!res.ok) throw new HttpError(res.status, `File list failed: ${res.status}`);
     return res.json() as Promise<ApiResponse<FileItem[]>>;
   },
 
@@ -49,7 +63,7 @@ export const filesService = {
       credentials: "same-origin",
       headers,
     });
-    if (!res.ok) throw new Error(`Download failed: ${res.status}`);
+    if (!res.ok) throw new HttpError(res.status, `Download failed: ${res.status}`);
     return res.blob();
   },
 
@@ -74,7 +88,7 @@ export const filesService = {
       credentials: "same-origin",
       headers: { Accept: "application/json" },
     });
-    if (!res.ok) throw new Error(`Video info failed: ${res.status}`);
+    if (!res.ok) throw new HttpError(res.status, `Video info failed: ${res.status}`);
     return res.json() as Promise<ApiResponse<VideoChapter>>;
   },
 
@@ -108,7 +122,7 @@ export const filesService = {
       credentials: "same-origin",
       headers: { Accept: "application/octet-stream" },
     });
-    if (!res.ok) throw new Error(`Video HEAD failed: ${res.status}`);
+    if (!res.ok) throw new HttpError(res.status, `Video HEAD failed: ${res.status}`);
     return res.headers;
   },
 };

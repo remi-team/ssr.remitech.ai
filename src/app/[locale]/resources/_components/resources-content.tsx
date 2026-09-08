@@ -9,6 +9,10 @@ import { useRouter } from "@/i18n/navigation";
 import { filesService } from "@/services/client/client-files-service";
 import { BFF_ROUTES } from "@/lib/api/config";
 import type { FileItem } from "@/lib/api/types";
+import {
+  isUnauthorizedError,
+  handleSessionExpiry,
+} from "@/lib/auth/session-expiry";
 import { useAuthStore } from "@/stores/auth-store";
 import { useModalStore } from "@/stores/modal-store";
 
@@ -226,7 +230,12 @@ export function ResourcesContent() {
         a.remove();
         URL.revokeObjectURL(url);
       } catch (err) {
-        console.error("Download failed:", err);
+        if (isUnauthorizedError(err)) {
+          // Expired token — uniform logout + login modal.
+          void handleSessionExpiry();
+        } else {
+          console.error("Download failed:", err);
+        }
       }
     }
   };

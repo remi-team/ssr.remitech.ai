@@ -22,7 +22,7 @@ const cspDirectives = [
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
-  "media-src 'self' blob: https:",
+  "media-src 'self' blob: https: http:",
   "font-src 'self' data:",
   `connect-src 'self' https:${isDev ? " ws:" : ""}`,
   "frame-ancestors 'none'",

@@ -12,7 +12,8 @@ import type { UserInfo } from "@/lib/api/types";
  * stored in localStorage**. Instead, the BFF stores them in httpOnly cookies
  * that client-side JavaScript cannot read. This store only mirrors the user
  * *profile* (username / email / status) for UI display, and re-hydrates by
- * calling the BFF `/api/auth/user` endpoint (which reads the cookie server-side).
+ * reading the cached profile from localStorage — mirroring the legacy Vue
+ * `checkAuth()` which never called the `/api/auth/user` endpoint.
  *
  * Security benefit: XSS attacks cannot exfiltrate tokens because they are
  * never accessible to client-side JS.
@@ -31,7 +32,7 @@ interface AuthState {
   clearAuth: () => void;
   /** Logout via BFF (clears httpOnly cookies) + local state. */
   logout: () => Promise<void>;
-  /** Re-hydrate the session by calling the BFF user endpoint. */
+  /** Re-hydrate the session from the cached localStorage profile. */
   hydrate: () => Promise<void>;
 }
 
@@ -78,7 +79,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   hydrate: async () => {
     set({ isHydrating: true });
 
-    // 1) Restore cached profile from localStorage for instant UI.
+    // Restore cached profile from localStorage.
+    // Mirrors the legacy Vue `checkAuth()` which reads from Storage without
+    // calling the API (the old `fetchUserInfo()` was commented out and never
+    // invoked). The website API's `/auth/user` endpoint returns 400, so we
+    // align with the old version by relying solely on the cached profile.
     const userRaw = readLS(USER_KEY);
     if (userRaw) {
       try {
@@ -89,27 +94,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     }
 
-    // 2) Only verify with the BFF if a cached profile exists
-    //    (avoids a 401 on every page load when the user is not logged in).
-    if (!userRaw) {
-      set({ isHydrating: false });
-      return;
-    }
-
-    try {
-      const res = await authService.getUserInfo();
-      if (res.code === "200" && res.data) {
-        writeLS(USER_KEY, JSON.stringify(res.data));
-        set({ isLoggedIn: true, username: res.data.username, userInfo: res.data });
-      } else {
-        // Cookie expired / invalid — clear local state.
-        writeLS(USER_KEY, null);
-        set({ isLoggedIn: false, username: "", userInfo: null });
-      }
-    } catch {
-      // Network error — keep the optimistic profile if present.
-    } finally {
-      set({ isHydrating: false });
-    }
+    set({ isHydrating: false });
   },
 }));

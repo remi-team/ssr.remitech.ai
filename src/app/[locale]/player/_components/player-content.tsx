@@ -6,8 +6,11 @@ import { Link } from "@/i18n/navigation";
 
 import { M3u8Player } from "@/components/player/m3u8-player";
 import type { M3u8PlayerHandle } from "@/components/player/types";
-import { BFF_ROUTES } from "@/lib/api/config";
 import type { FileItem } from "@/lib/api/types";
+import {
+  isUnauthorizedError,
+  handleSessionExpiry,
+} from "@/lib/auth/session-expiry";
 import { filesService } from "@/services/client/client-files-service";
 import { useAuthStore } from "@/stores/auth-store";
 import { useModalStore } from "@/stores/modal-store";
@@ -18,9 +21,12 @@ import { cn } from "@/lib/utils";
  * `player/components/player.vue`.
  *
  * Flow (parity with legacy):
- *  1. Login-gated — unauthenticated visitors see a lock panel with a login
- *     trigger (legacy redirected to home; the modal flow is the Next.js
- *     equivalent).
+ *  1. Login-gated — the legacy route guard popped the global login modal for
+ *     unauthenticated visitors (and the legacy axios interceptor did the same
+ *     on a 401 / expired token). We mirror that uniformly: logged-out or
+ *     expired sessions log out and open the global login modal; the page
+ *     body stays empty like the legacy aborted navigation. No bespoke lock
+ *     panel.
  *  2. Fetch the authenticated file list and keep the `mp4` entries.
  *  3. Select the video by the `?id=` query (or the first one).
  *  4. Fetch video info (stream url + chapters) and render M3u8Player with a
@@ -81,6 +87,19 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
     void hydrate();
   }, [hydrate]);
 
+  // Legacy route-guard equivalent: a visitor who was never logged in during
+  // this mount gets the global login modal (the guard called
+  // `modalStore.showLogin()`); an expired token reaches the same state via
+  // `handleSessionExpiry()` below. Explicit logouts do not re-open it.
+  const sawLoggedIn = React.useRef(false);
+  React.useEffect(() => {
+    if (isLoggedIn) sawLoggedIn.current = true;
+  }, [isLoggedIn]);
+  React.useEffect(() => {
+    if (isHydrating || isLoggedIn || sawLoggedIn.current) return;
+    showLogin();
+  }, [isHydrating, isLoggedIn, showLogin]);
+
   // Load the video list once logged in.
   React.useEffect(() => {
     if (!isLoggedIn) return;
@@ -98,7 +117,13 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
           setCurrentId(String(videos[0].id));
         }
       } catch (err) {
-        console.error("Video list fetch failed:", err);
+        if (cancelled) return;
+        if (isUnauthorizedError(err)) {
+          // Expired token — uniform logout + login modal.
+          void handleSessionExpiry();
+        } else {
+          console.error("Video list fetch failed:", err);
+        }
       }
     })();
     return () => {
@@ -128,17 +153,12 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
         if (cancelled) return;
         if (res.code === "200" && res.data) {
           const data = res.data as { url?: string; chapters?: Array<{ start: number; end: number; title: string }> };
-          // Stream through the BFF proxy (`/api/files/video/[id]`) instead of
-          // the raw website-API url: the raw host (www.remitech.ai) sends no
-          // CORS headers, so direct cross-origin playback fails. The BFF
-          // route forwards Range requests and injects the auth token
-          // server-side. Artplayer falls back to native <video> playback for
-          // extension-less URLs, which streams fine from the same origin.
-          setVideoUrl(
-            data.url
-              ? `${BFF_ROUTES.FILES.VIDEO}/${encodeURIComponent(String(currentVideo.id))}`
-              : "",
-          );
+          // Use the raw video URL returned by the website API directly —
+          // mirrors the legacy Vue `player.vue` which sets `videoUrl = resData.url`.
+          // The BFF proxy (`/api/files/video/[id]`) is not used because the
+          // raw URL is publicly accessible (the old Vite proxy forwarded
+          // <video> requests without auth headers and playback worked).
+          setVideoUrl(data.url ?? "");
           const list = data.chapters ?? [];
           setChapters(
             list.map((chapter, index) => ({
@@ -152,7 +172,12 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
           );
         }
       } catch (err) {
-        console.error("Video info fetch failed:", err);
+        if (!cancelled && isUnauthorizedError(err)) {
+          // Expired token — uniform logout + login modal.
+          void handleSessionExpiry();
+        } else {
+          console.error("Video info fetch failed:", err);
+        }
       } finally {
         if (!cancelled) setInfoLoading(false);
       }
@@ -186,41 +211,11 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
   };
 
   // ------------------------------------------------------------------
-  // Login gate
+  // Logged-out gate — legacy parity: the route guard aborted navigation so
+  // the page body stayed blank while the global login modal was open.
   // ------------------------------------------------------------------
-  if (!isHydrating && !isLoggedIn) {
-    return (
-      <div className="mx-auto flex min-h-screen max-w-[1200px] items-center justify-center px-6">
-        <div className="text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff5f0] text-[#FF6900]">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-          <p className="mb-6 text-[16px] text-[#666]">{t("loginRequired")}</p>
-          <button
-            type="button"
-            onClick={showLogin}
-            className="cursor-pointer border border-[#FF6900] bg-[#FF6900] px-[24px] py-[10px] text-[14px] font-medium text-white transition-colors hover:bg-[#ff6b35]"
-          >
-            {t("login")}
-          </button>
-        </div>
-      </div>
-    );
+  if (isHydrating || !isLoggedIn) {
+    return <div className="min-h-screen" />;
   }
 
   return (
