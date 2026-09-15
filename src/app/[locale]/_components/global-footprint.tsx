@@ -18,10 +18,10 @@ export function GlobalFootprint() {
     >
       <div className="mx-auto max-w-[1536px] px-6">
         <div className="text-left md:text-center">
-          <h2 className="text-[32px] font-medium text-[#29221D]">
+          <h2 className="text-[32px] inter-medium text-[#29221D]">
             Remi Global Footprint
           </h2>
-          <p className="mx-auto py-3 text-[18px] text-[#86909C]">
+          <p className="mx-auto py-3 text-[18px] inter-light text-[#86909C]">
             A Rapidly Expanding Network of Banks and Licensed Financial
             Institutions Worldwide
           </p>

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { SolutionPageJsonLd } from "@/components/seo/json-ld";
 import { Cta } from "@/components/cta";
 import { ChequeHero } from "./_components/cheque-hero";
 import { ChequeContent } from "./_components/cheque-content";
@@ -38,13 +39,14 @@ export default async function ChequePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#FAF8F7]">
+      <SolutionPageJsonLd page="solutionsCheque" locale={validLocale} />
       <ChequeHero />
       <ChequeContent />
       <Cta>
-        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
-          &ldquo;The balance sheet ceiling is structural. The way through it
+        <h2 className="inter-light mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+          "The balance sheet ceiling is structural. The way through it
           has always been fees — and fees build the relationships that build
-          reputations that open corridors.&rdquo;
+          reputations that open corridors."
         </h2>
       </Cta>
     </div>

@@ -109,6 +109,18 @@ export function CookieConsent() {
     return () => cancelAnimationFrame(raf);
   }, [showBanner]);
 
+  // Expose the banner height as a CSS custom property so fixed-position
+  // elements (e.g. the hero scroll-down cue) can shift up to avoid overlap
+  // (QA: 2026-09-04 — cookie banner blocks scroll-down indicator).
+  React.useEffect(() => {
+    const root = document.documentElement;
+    if (showBanner) root.style.setProperty("--cookie-h", "90px");
+    else root.style.removeProperty("--cookie-h");
+    return () => {
+      root.style.removeProperty("--cookie-h");
+    };
+  }, [showBanner]);
+
   const decide = (value: ConsentValue) => {
     saveConsent(value);
     if (value === "accepted") loadGtag();
@@ -127,6 +139,7 @@ export function CookieConsent() {
       }`}
     >
       <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-4 px-6 py-4 md:flex-row md:items-center">
+        {/* Reserve space so the banner doesn't overlap content on mobile */}
         {/* Copy */}
         <p className="flex-1 text-[14px] leading-relaxed text-[#333]">
           {t("message")}{" "}
@@ -144,14 +157,14 @@ export function CookieConsent() {
           <button
             type="button"
             onClick={() => decide("rejected")}
-            className="cursor-pointer rounded border border-[#333] px-6 py-2.5 text-[14px] font-semibold text-[#333] transition-colors hover:bg-gray-50"
+            className="cursor-pointer rounded border border-[#333] px-6 py-3 text-[14px] font-semibold text-[#333] transition-colors hover:bg-gray-50"
           >
             {t("rejectAll")}
           </button>
           <button
             type="button"
             onClick={() => decide("accepted")}
-            className="cursor-pointer rounded bg-[#1a1a1a] px-6 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-[#333]"
+            className="cursor-pointer rounded bg-[#1a1a1a] px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-[#333]"
           >
             {t("acceptAll")}
           </button>

@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 
-import { siteConfig } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { PAGE_META } from "@/lib/seo";
+import { requestOrigin } from "@/lib/seo-origin";
 import { newsServerService } from "@/services/server/news-server-service";
+import { isValidArticleId } from "@/lib/news-id";
 import { BUSINESS_CODE } from "@/lib/api/config";
 
 /**
@@ -17,7 +18,13 @@ import { BUSINESS_CODE } from "@/lib/api/config";
  *
  * Excluded by design: login / reset-password flows, `/api/*`, `/player`
  * (authenticated media only — filtered via `indexable: false`).
+ *
+ * `force-dynamic` for two reasons (QA BUG-17): the `<loc>` host has to be the
+ * host actually serving the file rather than whatever `SITE_URL` defaulted to
+ * during the image build, and newly published articles must become discoverable
+ * without a redeploy.
  */
+export const dynamic = "force-dynamic";
 
 async function newsArticlePaths(): Promise<string[]> {
   try {
@@ -29,7 +36,9 @@ async function newsArticlePaths(): Promise<string[]> {
     for (const res of [events, linkedin]) {
       if (res.code !== BUSINESS_CODE.SUCCESS) continue;
       for (const item of res.data?.records ?? []) {
-        if (item.id != null) ids.add(String(item.id));
+        // Id-less LinkedIn posts are external-only — publishing `/news/undefined`
+        // here would put a soft-404 straight into the index (QA BUG-04).
+        if (isValidArticleId(item.id)) ids.add(String(item.id));
       }
     }
     return [...ids].map((id) => `/news/${id}`);
@@ -41,6 +50,7 @@ async function newsArticlePaths(): Promise<string[]> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const origin = await requestOrigin();
 
   const staticPaths = Object.values(PAGE_META)
     .filter((m) => m.indexable)
@@ -54,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of routing.locales) {
     const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
     for (const path of allPaths) {
-      const url = new URL(`${prefix}${path === "/" ? "/" : path}`, siteConfig.url).toString();
+      const url = new URL(`${prefix}${path === "/" ? "/" : path}`, origin).toString();
       const isHome = path === "/";
       const isArticle = path.startsWith("/news/");
       entries.push({
@@ -66,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           languages: Object.fromEntries(
             routing.locales.map((l) => {
               const p = l === routing.defaultLocale ? "" : `/${l}`;
-              return [l, new URL(`${p}${path}`, siteConfig.url).toString()];
+              return [l, new URL(`${p}${path}`, origin).toString()];
             }),
           ),
         },

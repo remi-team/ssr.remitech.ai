@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { MembershipContent } from "./_components/membership-content";
 
 type Props = {
@@ -29,5 +30,10 @@ export default async function MembershipPage({ params }: Props) {
     : routing.defaultLocale;
   setRequestLocale(validLocale);
 
-  return <MembershipContent />;
+  return (
+    <>
+      <PageJsonLd page="membership" />
+      <MembershipContent />
+    </>
+  );
 }

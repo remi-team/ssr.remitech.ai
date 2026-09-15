@@ -46,6 +46,12 @@ export interface DrawerProps {
   closeButtonColor?: string;
   /** ARIA dialog label. */
   "aria-label"?: string;
+  /**
+   * `id` of an element inside the drawer that names it (aria-labelledby).
+   * Preferred over `aria-label` because the accessible name then matches the
+   * heading a sighted user sees (QA BUG-12).
+   */
+  labelledBy?: string;
   /** Fired after the open transition settles. */
   onOpen?: () => void;
   /** Fired when the user requests to close (mask / close button / Esc). */
@@ -78,6 +84,7 @@ export function Drawer({
   customClass,
   closeButtonColor = "#9C9086",
   "aria-label": ariaLabel,
+  labelledBy,
   onOpen,
   onClose,
   children,
@@ -207,7 +214,8 @@ export function Drawer({
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label={ariaLabel ?? title}
+        aria-label={labelledBy ? undefined : (ariaLabel ?? title)}
+        aria-labelledby={labelledBy}
         aria-hidden={!visible}
         inert={!visible}
         tabIndex={-1}

@@ -67,8 +67,7 @@ const fatfItems = [
   },
   {
     title: "C – Terrorist Financing & Proliferation (R5–R8)",
-    remiCapability:
-      "Risk Whitelist & Blacklist; Real-time Screening Mechanism; AI-driven KYCC; Real-time Regulatory Intervention",
+    remiCapability: "",
     items: [
       {
         recommendation:
@@ -324,6 +323,10 @@ function HeroSection() {
           <img
             src="/images/compliance_640@2x_compressed.jpg"
             alt="Remi Network"
+            width={1280}
+            height={1880}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         </picture>
@@ -661,6 +664,7 @@ function FATFSection() {
                   className="w-full flex items-center justify-between py-[20px] md:py-[24px] text-left cursor-pointer focus:outline-none group"
                   onClick={() => toggle(index)}
                   aria-expanded={isOpen}
+                  aria-controls={`fatf-panel-${index}`}
                 >
                   <h3 className="flex items-center gap-[10px] text-[16px] md:text-[18px] inter-medium text-[#29221D]">
                     <span className="h-[8px] w-[8px] rounded-full bg-[#FF6900] flex-shrink-0" />
@@ -670,6 +674,7 @@ function FATFSection() {
                 </button>
 
                 <div
+                  id={`fatf-panel-${index}`}
                   className={`grid transition-all duration-300 ease-in-out ${
                     isOpen
                       ? "grid-rows-[1fr] opacity-100"
@@ -809,9 +814,9 @@ export default function ComplianceContent() {
       <PatentsSection />
       <Cta wrapperBg="bg-[#f2efec]">
         <p className="inter-light text-[16px] md:text-[18px] text-white mb-[24px] md:mb-[36px] mx-auto">
-          &ldquo;The regulatory moat is not a filing. It is a licensed,
+          "The regulatory moat is not a filing. It is a licensed,
           operating bank with 30 years of institutional history behind every
-          transaction.&rdquo;
+          transaction."
         </p>
       </Cta>
     </>

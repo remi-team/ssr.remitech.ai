@@ -88,7 +88,7 @@ export function PcLoginModal({ show }: { show: boolean }) {
     >
       <div className="flex h-full items-center justify-center bg-white p-12 max-md:p-8 max-md:px-6">
         <form className="w-full max-w-[320px] space-y-[24px]" onSubmit={onSubmit}>
-          <h2 className="mb-8 text-left text-[28px] font-medium text-[#29221D] max-md:mb-6 max-md:text-[28px]">
+          <h2 className="mb-8 text-left text-[28px] inter-medium text-[#29221D] max-md:mb-6 max-md:text-[28px]">
             {t("login.title")}
           </h2>
 
@@ -104,12 +104,12 @@ export function PcLoginModal({ show }: { show: boolean }) {
               onBlur={() => setTouched((p) => ({ ...p, email: true }))}
               placeholder={t("login.emailPlaceholder")}
               className={cn(
-                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
                 emailError && "border-red-500 focus:border-red-500"
               )}
             />
             {emailError && (
-              <div className="text-[12px] text-red-500">{emailError}</div>
+              <div className="inter-light text-[12px] text-red-500">{emailError}</div>
             )}
           </div>
 
@@ -125,12 +125,12 @@ export function PcLoginModal({ show }: { show: boolean }) {
               onBlur={() => setTouched((p) => ({ ...p, password: true }))}
               placeholder={t("login.passwordPlaceholder")}
               className={cn(
-                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
                 passwordError && "border-red-500 focus:border-red-500"
               )}
             />
             {passwordError && (
-              <div className="text-[12px] text-red-500">{passwordError}</div>
+              <div className="inter-light text-[12px] text-red-500">{passwordError}</div>
             )}
           </div>
 
@@ -138,7 +138,7 @@ export function PcLoginModal({ show }: { show: boolean }) {
           <button
             type="submit"
             disabled={!isFormValid || submitting}
-            className="mt-6 h-[42px] w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="inter-light mt-6 h-[42px] w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
@@ -148,7 +148,7 @@ export function PcLoginModal({ show }: { show: boolean }) {
             <button
               type="button"
               onClick={() => showForgot()}
-              className="text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
+              className="inter-light text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
             >
               {t("login.forgot")}
             </button>

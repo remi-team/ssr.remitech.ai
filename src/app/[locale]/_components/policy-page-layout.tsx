@@ -33,12 +33,12 @@ export function PolicyPageLayout({
   return (
     <div className="overflow-hidden bg-[#f2efec] text-[#2c2520]">
       {/* Content */}
-      <section className="mx-auto max-w-[1200px] bg-[#f2efec] px-[24px] pt-[72px] py-[48px] sm:py-[56px] md:py-[64px] lg:px-0 lg:py-[80px] xl:py-[96px]">
+      <section className="mx-auto max-w-[1200px] bg-[#f2efec] px-[24px] pt-[100px] py-[48px] sm:pt-[100px] md:pt-[100px] lg:px-0 lg:py-[80px] xl:py-[96px]">
         <div className="text-left md:text-center">
-          <h1 className="mb-[8px] text-[32px] font-medium uppercase leading-[1.08] tracking-[-0.03em] text-[#2d2722] sm:text-[36px] md:text-[42px] lg:text-[48px]">
+          <h1 className="mb-[8px] text-[32px] inter-medium uppercase leading-[1.08] tracking-[-0.03em] text-[#2d2722] sm:text-[36px] md:text-[42px] lg:text-[48px]">
             {title}
           </h1>
-          <p className="mb-[32px] text-[15px] font-light leading-[1.8] text-[#86909C]">
+          <p className="mb-[32px] text-[15px] inter-light leading-[1.8] text-[#86909C]">
             {updated}
           </p>
         </div>
@@ -46,7 +46,7 @@ export function PolicyPageLayout({
           {intro.map((node, i) => (
             <p
               key={i}
-              className="mb-[16px] text-[15px] font-light leading-[1.8] text-[#86909C] last:mb-[32px]"
+              className="mb-[16px] text-[15px] inter-light leading-[1.8] text-[#86909C] last:mb-[32px]"
             >
               {node}
             </p>
@@ -54,7 +54,7 @@ export function PolicyPageLayout({
 
           {sections.map((section) => (
             <React.Fragment key={section.heading}>
-              <h2 className="mb-4 mt-2 text-[20px] font-medium text-[#2d2722]">
+              <h2 className="mb-4 mt-2 text-[20px] inter-medium text-[#2d2722]">
                 {section.heading}
               </h2>
               {section.blocks.map((block, i) => {
@@ -63,7 +63,7 @@ export function PolicyPageLayout({
                   return (
                     <p
                       key={i}
-                      className={`text-[15px] font-light leading-[1.8] text-[#86909C] ${
+                      className={`text-[15px] inter-light leading-[1.8] text-[#86909C] ${
                         last ? "mb-[32px]" : "mb-[16px]"
                       }`}
                     >
@@ -75,7 +75,7 @@ export function PolicyPageLayout({
                   return (
                     <ul
                       key={i}
-                      className={`ml-6 list-disc text-[15px] font-light leading-[1.8] text-[#86909C] ${
+                      className={`ml-6 list-disc text-[15px] inter-light leading-[1.8] text-[#86909C] ${
                         last ? "mb-[32px]" : "mb-4"
                       }`}
                     >
@@ -88,7 +88,7 @@ export function PolicyPageLayout({
                   );
                 }
                 return (
-                  <h3 key={i} className="mb-3 mt-5 text-[17px] font-medium text-[#2d2722]">
+                  <h3 key={i} className="mb-3 mt-5 text-[17px] inter-medium text-[#2d2722]">
                     {block.text}
                   </h3>
                 );
@@ -100,7 +100,7 @@ export function PolicyPageLayout({
 
       {/* CTA */}
       <Cta>
-        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] font-light leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] inter-light leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
           {ctaTitle}
         </h2>
       </Cta>

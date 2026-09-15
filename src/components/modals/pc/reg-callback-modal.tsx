@@ -38,7 +38,7 @@ export function PcRegCallbackModal({ show }: { show: boolean }) {
     >
       <div className="flex h-full items-center bg-white p-12 max-md:p-8 max-md:px-6">
         <div className="w-full max-w-[320px] text-left">
-          <h2 className="mb-8 mt-[24px] text-left text-[28px] font-light text-[#29221D] max-md:mb-6 max-md:text-[28px]">
+          <h2 className="mb-8 mt-[24px] text-left text-[28px] inter-light text-[#29221D] max-md:mb-6 max-md:text-[28px]">
             {isReg ? t("callback.regTitle") : t("callback.resetTitle")}
           </h2>
 

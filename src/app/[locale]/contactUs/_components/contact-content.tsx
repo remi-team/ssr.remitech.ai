@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback, type FormEvent, type ChangeEvent } from "react";
+import { toast } from "sonner";
+import { authService } from "@/lib/auth/auth-service";
+import type { ContactPayload } from "@/lib/api/types";
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
@@ -83,9 +86,41 @@ function validateContactNumber(contactNumber: string): string {
 }
 
 function validateMessage(message: string): string {
-  if (!message || message.trim() === "") return "Message is required";
-  if (message.length > 2000) return "Message cannot exceed 2000 characters";
+  if (message && message.length > 2000) return "Message cannot exceed 2000 characters";
   return "";
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pure field-error getter (usable synchronously in submit handler)  */
+/* ------------------------------------------------------------------ */
+
+function getFieldError(field: keyof ValidationErrors, currentForm: FormData): string {
+  switch (field) {
+    case "firstname":
+      return validateRequired(currentForm.firstname, "First name");
+    case "lastname":
+      return validateRequired(currentForm.lastname, "Last name");
+    case "contactNumber":
+      return validateContactNumber(currentForm.contactNumber);
+    case "companyEmail":
+      return validateEmail(currentForm.companyEmail);
+    case "companyName":
+      return validateRequired(currentForm.companyName, "Company name");
+    // Optional fields — no required check, only format validation when filled
+    case "companyType":
+      return "";
+    case "country":
+      return "";
+    case "relevantAuthorities":
+      if (currentForm.isRegulated === true && (!currentForm.relevantAuthorities || currentForm.relevantAuthorities.trim() === "")) {
+        return "Relevant authorities is required when business is regulated";
+      }
+      return "";
+    case "message":
+      return validateMessage(currentForm.message);
+    default:
+      return "";
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -128,46 +163,14 @@ export default function ContactContent() {
   const validateField = useCallback(
     (field: keyof ValidationErrors, currentForm: FormData) => {
       setTouched((prev) => ({ ...prev, [field]: true }));
-
-      let msg = "";
-      switch (field) {
-        case "firstname":
-          msg = validateRequired(currentForm.firstname, "First name");
-          break;
-        case "lastname":
-          msg = validateRequired(currentForm.lastname, "Last name");
-          break;
-        case "contactNumber":
-          msg = validateContactNumber(currentForm.contactNumber);
-          break;
-        case "companyEmail":
-          msg = validateEmail(currentForm.companyEmail);
-          break;
-        case "companyName":
-          msg = validateRequired(currentForm.companyName, "Company name");
-          break;
-        case "companyType":
-          msg = validateRequired(currentForm.companyType, "Company type");
-          break;
-        case "country":
-          msg = validateRequired(currentForm.country, "Country");
-          break;
-        case "relevantAuthorities":
-          if (currentForm.isRegulated === true && (!currentForm.relevantAuthorities || currentForm.relevantAuthorities.trim() === "")) {
-            msg = "Relevant authorities is required when business is regulated";
-          }
-          break;
-        case "message":
-          msg = validateMessage(currentForm.message);
-          break;
-      }
+      const msg = getFieldError(field, currentForm);
       setErrors((prev) => ({ ...prev, [field]: msg }));
     },
     [],
   );
 
   function hasError(field: string): boolean {
-    return touched[field] && !!(errors as Record<string, string>)[field];
+    return touched[field] && !!(errors[field as keyof ValidationErrors]);
   }
 
   /* ---- input change ---- */
@@ -182,7 +185,7 @@ export default function ContactContent() {
       // radio button
       newForm.isRegulated = value === "true" ? true : value === "false" ? false : null;
     } else {
-      (newForm as Record<string, string>)[id] = value;
+      (newForm as unknown as Record<string, string>)[id] = value;
     }
 
     setForm(newForm);
@@ -205,25 +208,72 @@ export default function ContactContent() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    // touch all fields
+    // Compute validation errors synchronously (avoids stale-closure issue
+    // where React's async state updates would make the old `isFormValid`
+    // closure value unreliable inside this handler).
     const allFields = Object.keys(initialErrors) as (keyof ValidationErrors)[];
     const currentForm = { ...form };
-    allFields.forEach((f) => validateField(f, currentForm));
+    const newErrors: ValidationErrors = { ...initialErrors };
+    allFields.forEach((f) => {
+      newErrors[f] = getFieldError(f, currentForm);
+    });
+    setErrors(newErrors);
     setTouched(Object.fromEntries(allFields.map((f) => [f, true])));
 
-    if (!isFormValid || isSubmitting) return;
+    // Check validity synchronously against the freshly-computed errors.
+    const requiredFields: (keyof FormData)[] = [
+      "firstname",
+      "lastname",
+      "companyEmail",
+      "companyName",
+      "message",
+    ];
+    let valid = true;
+    for (const field of requiredFields) {
+      if (!currentForm[field] || (typeof currentForm[field] === "string" && (currentForm[field] as string).trim() === "")) {
+        valid = false;
+        break;
+      }
+    }
+    if (valid && currentForm.isRegulated === true && (!currentForm.relevantAuthorities || currentForm.relevantAuthorities.trim() === "")) {
+      valid = false;
+    }
+    if (valid) {
+      for (const key of Object.keys(newErrors) as (keyof ValidationErrors)[]) {
+        if (newErrors[key] !== "") {
+          valid = false;
+          break;
+        }
+      }
+    }
+
+    if (!valid || isSubmitting) return;
 
     try {
       setIsSubmitting(true);
-      // TODO: replace with actual API call
-      await new Promise((r) => setTimeout(r, 600));
+      const payload: ContactPayload = {
+        firstname: currentForm.firstname,
+        lastname: currentForm.lastname,
+        companyEmail: currentForm.companyEmail,
+        contactNumber: currentForm.contactNumber,
+        companyName: currentForm.companyName,
+        companyType: currentForm.companyType,
+        relevantAuthorities: currentForm.relevantAuthorities,
+        country: currentForm.country,
+        message: currentForm.message,
+      };
+      await authService.contact(payload);
       setSubmitted(true);
+      toast.success("Message sent successfully!", {
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
       setForm({ ...initialFormData });
       setErrors({ ...initialErrors });
       setTouched({});
       setTimeout(() => setSubmitted(false), 3000);
     } catch (err) {
       console.error("Error submitting form:", err);
+      toast.error("Failed to send message. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
@@ -256,7 +306,7 @@ export default function ContactContent() {
         </div>
 
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form method="post" onSubmit={handleSubmit} className="space-y-6">
           {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
             {/* Firstname */}
@@ -488,7 +538,7 @@ export default function ContactContent() {
                 />
               </svg>
               <div>
-                <h4 className="text-green-900 font-semibold leading-tight">
+                <h4 className="text-green-900 inter-semibold leading-tight">
                   Message sent successfully!
                 </h4>
                 <p className="text-green-700 text-sm mt-1 leading-tight">

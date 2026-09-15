@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 
 import { M3u8Player } from "@/components/player/m3u8-player";
 import type { M3u8PlayerHandle } from "@/components/player/types";
@@ -24,9 +24,9 @@ import { cn } from "@/lib/utils";
  *  1. Login-gated — the legacy route guard popped the global login modal for
  *     unauthenticated visitors (and the legacy axios interceptor did the same
  *     on a 401 / expired token). We mirror that uniformly: logged-out or
- *     expired sessions log out and open the global login modal; the page
- *     body stays empty like the legacy aborted navigation. No bespoke lock
- *     panel.
+ *     expired sessions log out and open the global login modal. Dismissing
+ *     the modal without signing in redirects to the home page instead of
+ *     stranding the visitor on a blank, permission-blocked page.
  *  2. Fetch the authenticated file list and keep the `mp4` entries.
  *  3. Select the video by the `?id=` query (or the first one).
  *  4. Fetch video info (stream url + chapters) and render M3u8Player with a
@@ -68,10 +68,12 @@ function formatTime(seconds: number): string {
 
 export function PlayerContent({ initialId }: { initialId?: string }) {
   const t = useTranslations("Player");
+  const router = useRouter();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const isHydrating = useAuthStore((s) => s.isHydrating);
   const hydrate = useAuthStore((s) => s.hydrate);
   const showLogin = useModalStore((s) => s.showLogin);
+  const activeModal = useModalStore((s) => s.active);
 
   const [videoList, setVideoList] = React.useState<VideoDoc[]>([]);
   const [currentId, setCurrentId] = React.useState<string | undefined>(initialId);
@@ -87,18 +89,35 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
     void hydrate();
   }, [hydrate]);
 
-  // Legacy route-guard equivalent: a visitor who was never logged in during
-  // this mount gets the global login modal (the guard called
-  // `modalStore.showLogin()`); an expired token reaches the same state via
-  // `handleSessionExpiry()` below. Explicit logouts do not re-open it.
-  const sawLoggedIn = React.useRef(false);
+  // This page requires auth: ANY transition into the logged-out state —
+  // first visit, session expiry (401 → `handleSessionExpiry()`), or an
+  // explicit logout from the header menu — pops the global login modal
+  // (legacy route-guard equivalent). Public pages instead log out silently
+  // (the user menu only clears the session, no modal / no redirect).
   React.useEffect(() => {
-    if (isLoggedIn) sawLoggedIn.current = true;
-  }, [isLoggedIn]);
-  React.useEffect(() => {
-    if (isHydrating || isLoggedIn || sawLoggedIn.current) return;
+    // Read live store state at execution time: the closure values are stale
+    // on the mount pass (hydration runs in an earlier effect of the same
+    // commit), which would otherwise pop the modal for logged-in users on
+    // every refresh.
+    const { isLoggedIn: loggedIn, isHydrating: hydrating } =
+      useAuthStore.getState();
+    if (hydrating || loggedIn) return;
     showLogin();
   }, [isHydrating, isLoggedIn, showLogin]);
+
+  // Permission-blocked fallback: once logged out with no auth modal open
+  // (i.e. the visitor dismissed the login modal without signing in), leave
+  // for the home page instead of stranding them on a blank page that can
+  // never render its content (legacy parity: unauthenticated visitors were
+  // redirected to `/`).
+  React.useEffect(() => {
+    const { isLoggedIn: loggedIn, isHydrating: hydrating } =
+      useAuthStore.getState();
+    if (hydrating || loggedIn) return;
+    // An auth modal is still open — the visitor is in the sign-in flow.
+    if (useModalStore.getState().active !== null) return;
+    router.push("/");
+  }, [isHydrating, isLoggedIn, activeModal, router]);
 
   // Load the video list once logged in.
   React.useEffect(() => {
@@ -211,8 +230,8 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
   };
 
   // ------------------------------------------------------------------
-  // Logged-out gate — legacy parity: the route guard aborted navigation so
-  // the page body stayed blank while the global login modal was open.
+  // Logged-out gate — transient blank body while the global login modal is
+  // open; dismissing it redirects home (effect above).
   // ------------------------------------------------------------------
   if (isHydrating || !isLoggedIn) {
     return <div className="min-h-screen" />;

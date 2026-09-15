@@ -7,12 +7,29 @@ import type { Metadata } from "next";
  * returned the home page HTML with HTTP 200.
  */
 export const metadata: Metadata = {
+  title: "Page not found — Remi",
+  description:
+    "The page or file you are looking for on remitech.ai does not exist.",
   robots: { index: false, follow: false },
 };
 
 export default function NotFound() {
   return (
     <html lang="en">
+      {/* This route renders its own document (no root layout), so React's
+          metadata hoisting has no <head> to write into — the 404 therefore
+          shipped without a <title> (QA BUG-16). Declaring <head> explicitly
+          keeps the page valid even when metadata is skipped. */}
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Page not found — Remi</title>
+        <meta
+          name="description"
+          content="The page or file you are looking for on remitech.ai does not exist."
+        />
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
       <body style={{ margin: 0, fontFamily: "system-ui, sans-serif", background: "#f2efec", color: "#2c2520" }}>
         <main
           style={{

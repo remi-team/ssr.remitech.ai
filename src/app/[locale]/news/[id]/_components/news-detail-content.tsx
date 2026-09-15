@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 
 import { Cta } from "@/components/cta";
 import { renderEditorJsContent } from "@/lib/editorjs-renderer";
+import { articlePathFor } from "@/lib/news-id";
 import type { NewsItem } from "@/lib/api/types";
 import { newsService } from "@/services/client/client-news-service";
 import { NEWS_IMAGES } from "../../_components/images";
@@ -114,6 +115,10 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
               src={`${NEWS_IMAGES.hero.image640}@1x_compressed.webp`}
               srcSet={`${NEWS_IMAGES.hero.image640}@1x_compressed.webp 1x, ${NEWS_IMAGES.hero.image640}@2x_compressed.webp 2x`}
               alt="News"
+              width={640}
+              height={980}
+              loading="eager"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </picture>
@@ -124,17 +129,17 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
             {a.tag && (
               <span
                 className={[
-                  "mb-[20px] inline-block px-[14px] py-[5px] text-[11px] font-light uppercase tracking-wide text-white",
+                  "mb-[20px] inline-block px-[14px] py-[5px] text-[11px] inter-light uppercase tracking-wide text-white",
                   a.tag === "PRESS" ? "bg-black" : "bg-[#FF8C2E]",
                 ].join(" ")}
               >
                 {a.tag}
               </span>
             )}
-            <h1 className="mb-[15px] max-w-[900px] text-[24px] font-light leading-[1.3] text-white sm:text-[28px] md:text-[36px] lg:text-[42px]">
+            <h1 className="mb-[15px] max-w-[900px] text-[24px] inter-light leading-[1.3] text-white sm:text-[28px] md:text-[36px] lg:text-[42px]">
               {a.title}
             </h1>
-            <p className="mb-[25px] text-[13px] font-light text-white/55 sm:text-[14px]">
+            <p className="mb-[25px] text-[13px] inter-light text-white/55 sm:text-[14px]">
               {a.date}
             </p>
             {/* Breadcrumb */}
@@ -161,7 +166,7 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
               className="mb-[40px] w-full overflow-hidden rounded-[6px]"
               style={{ aspectRatio: "16/9" }}
             >
-              <img src={a.imageUrl} alt={a.title} className="h-full w-full object-cover" />
+              <img src={a.imageUrl} alt={a.title} width={200} height={200} loading="lazy" decoding="async" className="h-full w-full object-cover" />
             </div>
           )}
 
@@ -238,7 +243,7 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
       {/* Continue Reading */}
       <section className="bg-[#f2efec] py-[60px] sm:py-[72px] lg:py-[80px]">
         <div className="mx-auto max-w-[1200px] px-[24px] sm:px-[32px] md:px-[48px] lg:px-[64px]">
-          <h2 className="mb-[40px] text-center text-[28px] font-medium text-[#2d2722] sm:mb-[48px]">
+          <h2 className="mb-[40px] text-center text-[28px] inter-medium text-[#2d2722] sm:mb-[48px]">
             {t("continueReading")}
           </h2>
           <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3">
@@ -251,7 +256,7 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
 
       {/* CTA */}
       <Cta>
-        <h2 className="mx-auto mb-[24px] max-w-[860px] text-[24px] font-light leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+        <h2 className="mx-auto mb-[24px] max-w-[860px] text-[24px] inter-light leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
           {t("ctaTitle")}
         </h2>
       </Cta>
@@ -265,12 +270,15 @@ export function NewsDetailContent({ article }: { article: NewsItem }) {
 
 function RelatedCard({ card }: { card: ArticleEx }) {
   const t = useTranslations("NewsDetail");
+  // Id-less LinkedIn records have no detail route — send them to the list
+  // instead of rendering `/news/undefined` (QA BUG-04).
+  const href = articlePathFor(card) ?? "/news";
 
   return (
     <div className="flex flex-col overflow-hidden rounded-lg bg-white shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg">
       <div className="h-[200px] w-full rounded-t-lg bg-[#f0ebe6]">
         {card.imageUrl && (
-          <img src={card.imageUrl} alt={card.title} className="h-full w-full object-contain" />
+          <img src={card.imageUrl} alt={card.title} width={200} height={200} loading="lazy" decoding="async" className="h-full w-full object-contain" />
         )}
       </div>
       <div className="flex flex-1 flex-col p-[20px] sm:p-[24px]">
@@ -286,8 +294,8 @@ function RelatedCard({ card }: { card: ArticleEx }) {
               {card.tag}
             </span>
             {formatDate(card.publishTime || card.date) && (
-              <span className="flex items-center gap-[4px] text-[13px] font-light text-[#999]">
-                <img src="/images/icon-date.png" alt="Date" className="h-[24px] w-[24px] object-contain" />
+              <span className="flex items-center gap-[4px] text-[13px] inter-light text-[#999]">
+                <img src="/images/icon-date.png" alt="Date" width={48} height={48} loading="lazy" decoding="async" className="h-[24px] w-[24px] object-contain" />
                 {formatDate(card.publishTime || card.date)}
               </span>
             )}
@@ -307,7 +315,7 @@ function RelatedCard({ card }: { card: ArticleEx }) {
         {/* Content section: fixed height */}
         <div className="mb-[16px] h-[44px]">
           <p
-            className="text-[14px] font-light leading-[1.6] text-[#86909C]"
+            className="text-[14px] inter-light leading-[1.6] text-[#86909C]"
             style={{
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",
@@ -321,8 +329,8 @@ function RelatedCard({ card }: { card: ArticleEx }) {
         {/* Footer section: fixed height */}
         <div className="mt-auto h-[22px]">
           <Link
-            href={`/news/${card.id}`}
-            className="inline-flex items-center gap-[6px] text-[14px] font-bold text-[#2d2722] transition-colors hover:text-[#FF8C2E]"
+            href={href}
+            className="inline-flex items-center gap-[6px] text-[14px] inter-light font-bold text-[#2d2722] transition-colors hover:text-[#FF8C2E]"
           >
             {t("readMore")} <span>&rarr;</span>
           </Link>

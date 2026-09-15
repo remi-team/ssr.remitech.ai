@@ -68,7 +68,7 @@ export function PcForgotModal({ show }: { show: boolean }) {
     >
       <div className="flex h-full items-center justify-center bg-white p-12 max-md:p-8 max-md:px-6">
         <form className="w-full max-w-[320px] space-y-[24px]" onSubmit={onSubmit}>
-          <h2 className="mb-8 text-left text-[28px] font-medium leading-tight text-[#29221D] max-md:mb-6 max-md:text-[28px]">
+          <h2 className="mb-8 text-left text-[28px] inter-medium leading-tight text-[#29221D] max-md:mb-6 max-md:text-[28px]">
             {t("forgot.title")}
           </h2>
 
@@ -83,19 +83,19 @@ export function PcForgotModal({ show }: { show: boolean }) {
               onBlur={() => setTouched(true)}
               placeholder={t("forgot.emailPlaceholder")}
               className={cn(
-                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+                "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
                 emailError && "border-red-500 focus:border-red-500"
               )}
             />
             {emailError && (
-              <div className="text-[12px] text-red-500">{emailError}</div>
+              <div className="inter-light text-[12px] text-red-500">{emailError}</div>
             )}
           </div>
 
           <button
             type="submit"
             disabled={!isFormValid || submitting}
-            className="mt-6 h-[42px] w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="inter-light mt-6 h-[42px] w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             {submitting ? t("forgot.submitting") : t("forgot.submit")}
           </button>
@@ -104,7 +104,7 @@ export function PcForgotModal({ show }: { show: boolean }) {
             <button
               type="button"
               onClick={() => showLogin()}
-              className="text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
+              className="inter-light text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
             >
               {t("forgot.backToLogin")}
             </button>

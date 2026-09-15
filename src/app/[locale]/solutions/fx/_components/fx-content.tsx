@@ -163,10 +163,10 @@ export function FxContent() {
                     {metric.value}
                   </span>
                 </div>
-                <div className="text-[12px] uppercase leading-snug text-[#86909C]">
+                <div className="inter-light text-[12px] uppercase leading-snug text-[#86909C]">
                   {metric.title}
                 </div>
-                <div className="mt-[2px] text-[12px] uppercase leading-snug text-[#86909C]">
+                <div className="inter-light mt-[2px] text-[12px] uppercase leading-snug text-[#86909C]">
                   {metric.subtitle}
                 </div>
               </div>
@@ -181,10 +181,10 @@ export function FxContent() {
                   <span className="h-[8px] w-[8px] shrink-0 bg-[#FF6900]" />{" "}
                   {metric.value}
                 </div>
-                <div className="mt-[2px] text-left text-[18px] uppercase text-[#86909C]">
+                <div className="inter-light mt-[2px] text-left text-[18px] uppercase text-[#86909C]">
                   {metric.title}
                 </div>
-                <div className="mt-[4px] text-left text-[18px] uppercase text-[#86909C]">
+                <div className="inter-light mt-[4px] text-left text-[18px] uppercase text-[#86909C]">
                   {metric.subtitle}
                 </div>
               </div>
@@ -211,7 +211,7 @@ export function FxContent() {
 
             <div className="relative">
               <div className="pb-[32px] pt-[48px] sm:pb-[40px] sm:pt-[60px] lg:p-0 lg:mx-0 lg:pt-[83px]">
-                <h2 className="text-left text-[32px] text-[#2d2722] md:text-center lg:pl-[30px]">
+                <h2 className="inter-medium text-left text-[32px] text-[#2d2722] md:text-center lg:pl-[30px]">
                   Key Technical Components
                 </h2>
               </div>
@@ -234,7 +234,7 @@ export function FxContent() {
                         className="mt-[10px] text-[14px] font-[500] leading-[1.2] text-[#2d2722] md:mt-[12px] md:text-[18px]"
                         dangerouslySetInnerHTML={{ __html: item.title }}
                       />
-                      <p className="mt-[6px] flex-1 text-[12px] leading-[1.45] text-[#86909C] md:mt-[20px] md:text-[18px]">
+                      <p className="inter-light mt-[6px] flex-1 text-[12px] leading-[1.45] text-[#86909C] md:mt-[20px] md:text-[18px]">
                         {item.description}
                       </p>
                     </article>
@@ -253,7 +253,7 @@ export function FxContent() {
       >
         <div className="mx-auto max-w-[1024px] overflow-hidden py-[48px] sm:py-[56px] md:py-[64px] lg:py-[64px] xl:py-[72px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
+            <h2 className="inter-medium mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
               One Group. Two Streams. Zero Leakage.
             </h2>
           </div>
@@ -261,17 +261,17 @@ export function FxContent() {
             {/* Legacy Model */}
             <div className="space-y-4 pl-[20px]">
               <div>
-                <h3 className="flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
+                <h3 className="inter-medium flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
                   <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                   Legacy Model
                 </h3>
                 <div className="my-[12px] h-[1px] w-full bg-[#EBE8E5]" />
               </div>
-              <p className="text-[16px] leading-relaxed text-[#86909C]">
+              <p className="inter-light text-[16px] leading-relaxed text-[#86909C]">
                 The rail and the margin are owned by different parties. The
                 institution moving the money captures neither fully.
               </p>
-              <p className="text-[16px] leading-relaxed text-[#86909C]">
+              <p className="inter-light text-[16px] leading-relaxed text-[#86909C]">
                 Correspondent banks take the FX spread. Intermediaries take fees
                 at every hop. The originating bank gets none of it.
               </p>
@@ -280,18 +280,18 @@ export function FxContent() {
             {/* The REMI Model */}
             <div className="space-y-4 pl-[20px]">
               <div>
-                <h3 className="flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
+                <h3 className="inter-medium flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
                   <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                   The REMI Model
                 </h3>
                 <div className="my-[12px] h-[1px] w-full bg-[#EBE8E5]" />
               </div>
-              <p className="text-[16px] leading-relaxed text-[#86909C]">
+              <p className="inter-light text-[16px] leading-relaxed text-[#86909C]">
                 REMI settles on stablecoin rails. Bison FX & Treasury — a
                 strategic partner&apos;s SFC-licensed markets division — handles
                 the conversion.
               </p>
-              <p className="text-[16px] leading-relaxed text-[#86909C]">
+              <p className="inter-light text-[16px] leading-relaxed text-[#86909C]">
                 Two revenue streams per transaction: the settlement fee to REMI,
                 the FX spread to Bison FX & Treasury. Same group. No
                 intermediary taking a cut in between.
@@ -308,10 +308,10 @@ export function FxContent() {
       >
         <div className="mx-auto max-w-[1024px] overflow-hidden py-[48px] sm:py-[56px] md:py-[64px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
+            <h2 className="inter-medium mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
               Treasury & Capital Markets
             </h2>
-            <p className="mb-[24px] text-left text-[16px] leading-relaxed text-[#86909C] md:text-center md:text-[18px] lg:mb-[36px]">
+            <p className="inter-light mb-[24px] text-left text-[16px] leading-relaxed text-[#86909C] md:text-center md:text-[18px] lg:mb-[36px]">
               The settlement infrastructure is the entry point — but the real
               margin in cross-border{" "}
               <br className="hidden lg:flex" />
@@ -328,18 +328,18 @@ export function FxContent() {
                     className="h-auto min-h-[300px] rounded-xl bg-[#F7F5F3] p-[24px] shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg 2xl:py-[32px]"
                   >
                     <div className="mb-6 flex items-center justify-between">
-                      <h2 className="mb-4 text-left text-[18px] text-[#29221D] lg:mb-0">
+                      <h2 className="inter-light mb-4 text-left text-[18px] text-[#29221D] lg:mb-0">
                         {item.title}
                       </h2>
                     </div>
                     <div className="space-y-6">
                       <div>
-                        <p className="text-left text-[16px] leading-relaxed text-[#86909C]">
+                        <p className="inter-light text-left text-[16px] leading-relaxed text-[#86909C]">
                           {item.content}
                         </p>
                       </div>
                       <div>
-                        <p className="text-left text-[16px] leading-relaxed text-[#86909C]">
+                        <p className="inter-light text-left text-[16px] leading-relaxed text-[#86909C]">
                           {item.extContent}
                         </p>
                       </div>
@@ -359,7 +359,7 @@ export function FxContent() {
       >
         <div className="mx-auto max-w-[1024px]">
           <div className="mb-[28px] sm:mb-[36px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
+            <h2 className="inter-medium mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
               Exchange Express
             </h2>
           </div>
@@ -371,7 +371,7 @@ export function FxContent() {
                 <span className="h-[20px] w-[4px] bg-[#FF6900]" /> Same-Name
                 Fiat On/Off-Ramps in Minutes
               </h3>
-              <p className="text-[16px] leading-relaxed text-[#86909C] md:text-[18px]">
+              <p className="inter-light text-[16px] leading-relaxed text-[#86909C] md:text-[18px]">
                 Remi provides the infrastructure for member institutions to
                 offer robust OTC On/Off Ramp and settlement services. Verified
                 settlement infrastructure — enabling global corridors and
@@ -382,13 +382,13 @@ export function FxContent() {
               {exchangeExpress.map((item) => (
                 <div key={item.title} className="h-auto p-[16px] md:p-[24px]">
                   <div className="flex items-center justify-between border-b border-b-[#EBE8E5]">
-                    <h2 className="flex items-center gap-[10px] pb-[10px] text-[16px] text-[#29221D] sm:text-[18px] lg:mb-0">
+                    <h2 className="inter-medium flex items-center gap-[10px] pb-[10px] text-[16px] text-[#29221D] sm:text-[18px] lg:mb-0">
                       <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />{" "}
                       {item.title}
                     </h2>
                   </div>
                   <div className="pt-[10px] sm:pt-[12px]">
-                    <p className="text-[14px] leading-relaxed text-[#86909C] sm:text-[16px]">
+                    <p className="inter-light text-[14px] leading-relaxed text-[#86909C] sm:text-[16px]">
                       {item.desc}
                     </p>
                   </div>
@@ -401,9 +401,9 @@ export function FxContent() {
 
       {/* ===== CTA ===== */}
       <Cta>
-        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
-          &ldquo;Most infrastructure plays capture the rail. REMI captures the
-          rail and the spread.&rdquo;
+        <h2 className="inter-light mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+          "Most infrastructure plays capture the rail. REMI captures the
+          rail and the spread."
         </h2>
       </Cta>
     </>

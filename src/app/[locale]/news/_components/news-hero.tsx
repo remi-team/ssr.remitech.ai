@@ -70,6 +70,10 @@ export function NewsHero() {
           <img
             src={`${NEWS_IMAGES.hero.image640}@1x_compressed.webp`}
             alt="Remi Network"
+            width={640}
+            height={980}
+            loading="eager"
+            decoding="async"
             className="h-full w-full object-cover"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
@@ -81,11 +85,11 @@ export function NewsHero() {
       {/* Content */}
       <div className="relative z-10 flex h-full pb-12 pt-[140px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px]">
         <div className="mx-auto w-full max-w-[1536px] px-6 sm:px-8 md:px-12 lg:px-16">
-          <h1 className="mb-4 text-[32px] font-light uppercase text-white sm:mb-5 sm:text-[36px] md:mb-6 md:text-[42px] lg:text-[48px]">
+          <h1 className="mb-4 text-[32px] inter-light uppercase text-white sm:mb-5 sm:text-[36px] md:mb-6 md:text-[42px] lg:text-[48px]">
             News &amp; Events
           </h1>
           <div className="max-w-[838px] space-y-3 md:space-y-4">
-            <p className="text-[15px] font-light leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+            <p className="text-[15px] inter-light leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
               Press releases, industry insights, and global events. Follow our journey as we build the
               regulated clearing infrastructure for digital finance.
             </p>

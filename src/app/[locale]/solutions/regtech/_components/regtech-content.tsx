@@ -538,6 +538,10 @@ export function RegtechContent() {
             <img
               src="/images/solution-bg2_640x.jpg"
               alt="Remi Network"
+              width={1280}
+              height={1880}
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </picture>
@@ -696,7 +700,7 @@ export function RegtechContent() {
       </div>
 
       {/* Regulatory Dashboard System */}
-      <div data-scroll="dashboard" className="bg-[#FAF8F7] px-[24px] lg:px-0">
+      <div data-scroll="dashboard" className="bg-[#FFFFFF] px-[24px] lg:px-0">
         <div className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
             <h2 className="inter-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
@@ -828,7 +832,7 @@ export function RegtechContent() {
       </section>
 
       {/* Financial Market Monitoring */}
-      <div data-scroll="financial-market" className="bg-[#FAF8F7] px-[24px] lg:px-0">
+      <div data-scroll="financial-market" className="bg-[#FFFFFF] px-[24px] lg:px-0">
         <div className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
             <h2 className="inter-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
@@ -864,12 +868,12 @@ export function RegtechContent() {
         <div className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
             <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
-              Seamless Integration with <br className="hidden md:flex" />
+              Seamless Integration with <br className="md:flex" />
               Existing Systems
             </h2>
             <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
               Without altering the existing regulatory system and its processes,
-              <br className="hidden md:flex" />
+              <br className="md:flex" />
               Remi can be systematically integrated with the bank&apos;s existing systems.
             </p>
           </div>
@@ -899,7 +903,7 @@ export function RegtechContent() {
       </div>
 
       {/* Global Regulatory Alignment */}
-      <div data-scroll="global-alignment" className="bg-[#FAF8F7] px-[24px] lg:px-0">
+      <div data-scroll="global-alignment" className="bg-[#FFFFFF] px-[24px] lg:px-0">
         <div className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
             <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">

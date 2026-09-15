@@ -70,9 +70,11 @@ function AnnouncementBody({ onClose }: { onClose: () => void }) {
         <img
           src="/images/logo-mini.svg"
           alt="Remi Logo"
+          width={18}
+          height={18}
           className="h-[24px] w-[24px]"
         />
-        <h2 className="text-center text-[28px] font-semibold text-[#69584E]">
+        <h2 className="text-center text-[28px] inter-semibold text-[#69584E]">
           {t("title")}
         </h2>
       </div>
@@ -80,7 +82,7 @@ function AnnouncementBody({ onClose }: { onClose: () => void }) {
       <div className="space-y-6">
         {ANNOUNCEMENT && (
           <div className="space-y-[12px] text-left text-[14px] text-[#9C9086] xl:text-[16px]">
-            <p className="pb-[12px] font-medium text-[#69584E]">
+            <p className="pb-[12px] inter-medium text-[#69584E]">
               {ANNOUNCEMENT.heading}
             </p>
             {ANNOUNCEMENT.paragraphs.map((paragraph, i) => (
@@ -104,6 +106,7 @@ function AnnouncementBody({ onClose }: { onClose: () => void }) {
 /** PC variant — centered card over a frosted mask (legacy parity). */
 export function PcAnnouncementModal({ show }: { show: boolean }) {
   const closeAll = useModalStore((s) => s.closeAll);
+  const t = useTranslations("Announcement");
   const [mounted, setMounted] = React.useState(false);
   const [entered, setEntered] = React.useState(false);
 
@@ -128,7 +131,7 @@ export function PcAnnouncementModal({ show }: { show: boolean }) {
   if (!mounted) return null;
 
   return createPortal(
-    <div role="presentation">
+    <div role="presentation" {...(!show ? { inert: true } : {})}>
       {/* Mask */}
       <div
         aria-hidden={!show}
@@ -142,17 +145,20 @@ export function PcAnnouncementModal({ show }: { show: boolean }) {
       <div
         role="dialog"
         aria-modal="true"
+        aria-label={t("title")}
         className={cn(
           "fixed left-1/2 top-1/2 z-[1001] h-auto w-[90%] max-w-[680px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-300 max-md:max-h-[95vh] max-md:w-[95%]",
           entered ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0",
         )}
+        tabIndex={show ? 0 : -1}
       >
         {/* Close */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-5 top-5 z-10 flex h-6 w-6 cursor-pointer items-center justify-center rounded transition-colors duration-200 hover:bg-black/50"
+          tabIndex={show ? 0 : -1}
+          className="absolute right-5 top-5 z-10 flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded transition-colors duration-200 hover:bg-black/50"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

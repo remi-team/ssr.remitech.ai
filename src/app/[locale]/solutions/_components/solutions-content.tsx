@@ -187,7 +187,7 @@ export function SolutionsContent() {
               <div key={m.title} className="shrink-0">
                 <div
                   className={cn(
-                    "text-[54px] font-medium uppercase leading-none tracking-[-0.05em] lg:text-[62px] xl:text-[68px]",
+                    "text-[54px] inter-medium uppercase leading-none tracking-[-0.05em] lg:text-[62px] xl:text-[68px]",
                     m.emphasis ? "text-[#ff7a1a]" : "text-[#2f2823]",
                   )}
                 >
@@ -222,7 +222,7 @@ export function SolutionsContent() {
             {/* Content */}
             <div className="relative">
               <div className="pb-[54px] pt-[90px] text-center lg:mx-0 lg:p-0 lg:pt-[83px] lg:text-left">
-                <h2 className="text-[28px] font-medium uppercase leading-none text-[#2d2722] md:text-[36px] lg:pl-[30px] lg:text-[42px] xl:text-[46px]">
+                <h2 className="text-[28px] inter-medium uppercase leading-none text-[#2d2722] md:text-[36px] lg:pl-[30px] lg:text-[42px] xl:text-[46px]">
                   Key Technical Components
                 </h2>
                 <p className="mt-2 text-[11px] leading-[1.45] text-[#8f867f] lg:pl-[30px] md:text-[12px] lg:text-[13px]">
@@ -237,7 +237,7 @@ export function SolutionsContent() {
                 >
                   {components.map((item) => (
                     <article
-                      key={item.title}
+                      key={item.icon}
                       className="flex w-[calc(50%-5px)] min-h-[260px] flex-col rounded-[4px] bg-[#f4f2f0] px-4 py-6 md:h-[360px] md:w-[280px] md:py-8"
                     >
                       <div className="flex h-[44px] w-[44px] items-center justify-center md:h-[60px] md:w-[60px]">
@@ -247,7 +247,7 @@ export function SolutionsContent() {
                           className="h-7 w-7 object-contain md:h-auto md:w-auto"
                         />
                       </div>
-                      <h3 className="mt-2.5 text-[14px] font-medium leading-[1.2] text-[#2d2722] md:mt-3 md:text-[18px]">
+                      <h3 className="mt-2.5 text-[14px] inter-medium leading-[1.2] text-[#2d2722] md:mt-3 md:text-[18px]">
                         {item.title}
                       </h3>
                       <p className="mt-1.5 flex-1 text-[12px] leading-[1.45] text-[#86909C] md:mt-5 md:text-[18px]">

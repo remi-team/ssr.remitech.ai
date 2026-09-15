@@ -108,7 +108,7 @@ export function ChequeContent() {
           className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px] reveal-item"
         >
           <div className="bg-[#FFF0E5] px-[40px] py-[60px] md:rounded-[4px]">
-            <p className="md:pr-[60px] text-[18px] leading-[32px] text-[#86909C] text-left font-light">
+            <p className="md:pr-[60px] text-[18px] leading-[32px] text-[#86909C] text-left inter-light">
               Each e-cheque embeds KYC/AML context and issuer license verification
               for bank-grade legal standing. Structured digital signatures plus a
               unique hash prevents forgery and double redemption. Funds settle
@@ -122,10 +122,10 @@ export function ChequeContent() {
       <section className="bg-[#FAF8F7] px-[24px] lg:px-0">
         <div className="lg:max-w-[1024px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="font-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
+            <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
               Features
             </h2>
-            <p className="font-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
+            <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
               Smart, Regulated Digital Checks
             </p>
           </div>
@@ -138,13 +138,13 @@ export function ChequeContent() {
                 className="h-auto p-[24px] 2xl:py-[32px] reveal-item"
               >
                 <div className="flex justify-between items-center border-b border-b-[#EBE8E5]">
-                  <h3 className="flex gap-[10px] items-center text-[18px] font-medium text-[#29221D] pb-[12px] lg:mb-0">
+                  <h3 className="flex gap-[10px] items-center text-[18px] inter-medium text-[#29221D] pb-[12px] lg:mb-0">
                     <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                     {f.title}
                   </h3>
                 </div>
                 <div className="pt-[12px]">
-                  <p className="font-light text-[16px] text-[#86909C]">
+                  <p className="inter-light text-[16px] text-[#86909C]">
                     {f.description}
                   </p>
                 </div>
@@ -157,10 +157,10 @@ export function ChequeContent() {
       {/* Use Cases Section */}
       <section className="bg-white px-[24px] lg:px-0">
         <div className="lg:max-w-[1024px] mx-auto py-[48px] md:py-[64px] overflow-hidden">
-          <h2 className="font-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
             Use Cases
           </h2>
-          <p className="font-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
+          <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
             Built for Real-World Payments
           </p>
 
@@ -172,10 +172,10 @@ export function ChequeContent() {
                   data-cheque-reveal
                   className="h-auto min-h-[240px] bg-[#F7F5F3] rounded-[4px] p-[24px] 2xl:py-[32px] hover:shadow-lg shadow-[#F1E3DA] transition-shadow duration-300 reveal-item"
                 >
-                  <h3 className="text-[18px] font-light text-[#29221D] mb-6">
+                  <h3 className="text-[18px] inter-light text-[#29221D] mb-6">
                     {item.title}
                   </h3>
-                  <p className="font-light text-[16px] text-[#86909C] text-left">
+                  <p className="inter-light text-[16px] text-[#86909C] text-left">
                     {item.content}
                   </p>
                 </div>

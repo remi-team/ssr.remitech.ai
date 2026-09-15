@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { mainNav, type NavItem } from "@/config/navigation";
 import { cn } from "@/lib/utils";
+import { AppLink } from "@/components/layout/app-link";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -30,7 +31,7 @@ export function MainNav() {
           <NavigationMenuItem key={item.labelKey}>
             {item.children ? (
               <>
-                <NavigationMenuTrigger className="h-9 bg-transparent px-3 text-sm font-medium text-foreground/80 hover:text-foreground data-[state=open]:bg-transparent data-[state=open]:text-foreground">
+                <NavigationMenuTrigger className="h-9 bg-transparent px-3 text-sm inter-medium text-foreground/80 hover:text-foreground data-[state=open]:bg-transparent data-[state=open]:text-foreground">
                   {t(item.labelKey as never)}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -48,10 +49,10 @@ export function MainNav() {
                 asChild
                 className={cn(
                   navigationMenuTriggerStyle(),
-                  "h-9 bg-transparent px-3 text-sm font-medium text-foreground/80 hover:text-foreground data-[state=open]:bg-transparent data-[state=open]:text-foreground"
+                  "h-9 bg-transparent px-3 text-sm inter-medium text-foreground/80 hover:text-foreground data-[state=open]:bg-transparent data-[state=open]:text-foreground"
                 )}
               >
-                <a href={item.href}>{t(item.labelKey as never)}</a>
+                <AppLink href={item.href}>{t(item.labelKey as never)}</AppLink>
               </NavigationMenuLink>
             )}
           </NavigationMenuItem>
@@ -69,7 +70,7 @@ function MegaMenuItem({
   const t = useTranslations("Nav");
   const Icon = item.icon;
   return (
-    <a
+    <AppLink
       href={item.href}
       className="group flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-accent"
     >
@@ -77,7 +78,7 @@ function MegaMenuItem({
         <Icon className="h-[1.1rem] w-[1.1rem]" aria-hidden="true" />
       </span>
       <span className="flex flex-col gap-0.5">
-        <span className="text-sm font-semibold leading-tight">
+        <span className="text-sm inter-medium leading-tight">
           {t(item.labelKey as never)}
         </span>
         {item.descriptionKey && (
@@ -86,6 +87,6 @@ function MegaMenuItem({
           </span>
         )}
       </span>
-    </a>
+    </AppLink>
   );
 }

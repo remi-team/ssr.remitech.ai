@@ -32,7 +32,7 @@ export function MobileRegCallbackModal({ show }: { show: boolean }) {
     >
       <div className="bg-white px-6 py-12">
         <div className="mx-auto max-w-md">
-          <h2 className="mb-8 text-left text-[28px] font-light leading-tight text-gray-800">
+          <h2 className="mb-8 text-left text-[28px] inter-light leading-tight text-gray-800">
             {isReg ? t("callback.regTitle") : t("callback.resetTitle")}
           </h2>
           <div className="space-y-6 text-left">

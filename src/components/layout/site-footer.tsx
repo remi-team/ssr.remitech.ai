@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { footerNav } from "@/config/navigation";
 import { Logo } from "@/components/layout/logo";
 import { Link } from "@/i18n/navigation";
+import { AppLink } from "@/components/layout/app-link";
 
 /**
  * Site footer — migrated from the legacy Vue `footer.vue`.
@@ -31,7 +32,7 @@ export function SiteFooter() {
           <div className="flex h-full flex-col justify-between">
             <div className="flex flex-col items-start gap-[30px]">
               <Logo variant="dark" />
-              <p className="max-w-[280px] text-[15px] leading-[1.6] text-[#6B7280]">
+              <p className="inter-light max-w-[280px] text-[15px] leading-[1.6] text-[#6B7280]">
                 {t("Footer.tagline")}
               </p>
             </div>
@@ -40,30 +41,30 @@ export function SiteFooter() {
 
           {/* Navigation */}
           <nav className="flex flex-col gap-[16px]" aria-label="Site navigation">
-            <h3 className="border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
+            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
               {t("Footer.col.navigation")}
             </h3>
             {footerNav[0].links.map((link) => (
-              <a
+              <AppLink
                 key={link.labelKey}
                 href={link.href}
-                className="text-[15px] text-[#6B7280] no-underline transition-colors duration-200 hover:text-[#FF6900]"
+                className="inter-light text-[15px] text-[#6B7280] no-underline transition-colors duration-200 hover:text-[#FF6900]"
               >
                 {t(link.labelKey as never)}
-              </a>
+              </AppLink>
             ))}
           </nav>
 
           {/* Contact Us */}
           <div className="flex flex-col gap-[16px]">
-            <h3 className="border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
+            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
               {t("Footer.col.contact")}
             </h3>
             {siteConfig.contacts.map((contact) => (
               <a
                 key={contact.email}
                 href={`mailto:${contact.email}`}
-                className="flex w-fit items-start gap-[12px] text-[15px] no-underline transition-colors duration-200 hover:text-[#FF6900]"
+                className="inter-light flex w-fit items-start gap-[12px] text-[15px] no-underline transition-colors duration-200 hover:text-[#FF6900]"
               >
                 <svg
                   className="h-[18px] w-[18px] flex-shrink-0"
@@ -76,10 +77,10 @@ export function SiteFooter() {
                   <path d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <div className="flex flex-col gap-[8px]">
-                  <span className="text-[15px] font-[500] text-[#4E5969]">
+                  <span className="inter-light text-[15px] font-[500] text-[#4E5969]">
                     {t(contact.titleKey as never)}
                   </span>
-                  <span className="text-[#6B7280]">{contact.email}</span>
+                  <span className="inter-light text-[#6B7280]">{contact.email}</span>
                 </div>
               </a>
             ))}
@@ -90,17 +91,17 @@ export function SiteFooter() {
         <div className="flex flex-col gap-[32px] pb-[32px] pt-[40px] md:hidden">
           <div className="flex flex-col gap-[16px]">
             <Logo variant="dark" />
-            <p className="max-w-[280px] text-[15px] leading-[1.6] text-[#6B7280]">
+            <p className="inter-light max-w-[280px] text-[15px] leading-[1.6] text-[#6B7280]">
               {t("Footer.tagline")}
             </p>
-            <h3 className="border-b border-[#E5E7EB] pb-[12px] text-[16px] font-[500] text-[#4E5969]">
+            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[16px] font-[500] text-[#4E5969]">
               {t("Footer.col.contact")}
             </h3>
             {siteConfig.contacts.map((contact) => (
               <a
                 key={contact.email}
                 href={`mailto:${contact.email}`}
-                className="flex w-fit items-start gap-[12px] text-[14px] no-underline text-[#6B7280]"
+                className="inter-light flex w-fit items-start gap-[12px] text-[14px] no-underline text-[#6B7280]"
               >
                 <svg
                   className="h-[18px] w-[18px] flex-shrink-0"
@@ -113,10 +114,10 @@ export function SiteFooter() {
                   <path d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <div className="flex flex-col gap-[4px]">
-                  <span className="text-[14px] font-[500] text-[#4E5969]">
+                  <span className="inter-light text-[14px] font-[500] text-[#4E5969]">
                     {t(contact.titleKey as never)}
                   </span>
-                  <span className="text-[#6B7280]">{contact.email}</span>
+                  <span className="inter-light text-[#6B7280]">{contact.email}</span>
                 </div>
               </a>
             ))}
@@ -134,19 +135,19 @@ export function SiteFooter() {
           <div className="flex items-center gap-[16px]">
             <Link
               href="/privacy-policy"
-              className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
+              className="inter-light text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
             >
               {t("Footer.privacy")}
             </Link>
             <span className="text-[12px] text-[#9CA3AF] md:text-[13px]">|</span>
             <Link
               href="/cookie-policy"
-              className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
+              className="inter-light text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] transition-colors hover:text-[#FF6900] md:text-[13px]"
             >
               {t("Footer.cookie")}
             </Link>
           </div>
-          <p className="text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] md:text-[13px]">
+          <p className="inter-light text-[12px] font-[400] tracking-[0.02em] text-[#9CA3AF] md:text-[13px]">
             {t("Footer.rights", { year })}
           </p>
         </div>
@@ -164,11 +165,15 @@ function SocialLinks() {
         aria-label="X (Twitter)"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-[30px] w-auto items-center justify-center"
+        className="inline-flex h-[44px] w-[44px] items-center justify-center"
       >
         <img
           src="/images/icon-sns-X.png"
           alt="X (Twitter)"
+          width={84}
+          height={60}
+          loading="lazy"
+          decoding="async"
           className="h-[24px] w-auto object-contain"
         />
       </a>
@@ -177,11 +182,15 @@ function SocialLinks() {
         aria-label="LinkedIn"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-[30px] w-auto items-center justify-center"
+        className="inline-flex h-[44px] w-[44px] items-center justify-center"
       >
         <img
           src="/images/icon-sns-LinkedIn.png"
           alt="LinkedIn"
+          width={160}
+          height={60}
+          loading="lazy"
+          decoding="async"
           className="h-[24px] w-auto object-contain"
         />
       </a>

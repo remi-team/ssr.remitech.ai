@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/layout/logo";
 import { MenuDropdown } from "@/components/layout/menu-dropdown";
+import { AppLink } from "@/components/layout/app-link";
 import { MobileNav } from "@/components/layout/mobile-nav";
 // import { ThemeToggle } from "@/components/layout/theme-toggle"; // disabled: light-only for launch
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
@@ -18,7 +19,7 @@ import { mainNav } from "@/config/navigation";
  * Routes whose dark hero sits underneath a frosted transparent header —
  * mirrors the legacy Vue router meta (`headerOverlay: true`).
  *
- * Every other route (/player, /contact, /news/[id], /reset-password, …)
+ * Every other route (/player, /contactUs, /news/[id], /reset-password, …)
  * gets a solid white header from the very top, exactly like the legacy
  * site, so dark-on-light text stays readable on light page backgrounds.
  */
@@ -32,7 +33,7 @@ const OVERLAY_HEADER_PATHS = [
   "/solutions/lc",
   "/solutions/cheque",
   "/membership",
-  "/about",
+  "/aboutUs",
   "/news",
   "/resources",
   "/compliance",
@@ -88,13 +89,13 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     >
       <div className="mx-auto flex h-[72px] max-w-[1536px] items-center px-[20px] py-[16px] 2xl:px-[32px]">
         {/* Logo */}
-        <a
+        <AppLink
           href="/#top"
           aria-label="Remi"
           className="flex w-[120px] shrink-0 items-center pt-[15px] pb-[20px]"
         >
           <Logo variant={useDarkStyle ? "light" : "dark"} />
-        </a>
+        </AppLink>
 
         {/* Desktop nav (xl+) */}
         <nav className="ml-[40px] hidden h-full items-center gap-[24px] xl:flex">
@@ -105,8 +106,8 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
         {/* Right cluster */}
         <div className="relative flex min-w-[130px] items-center justify-end gap-4">
-          <a
-            href="/contact"
+          <AppLink
+            href="/contactUs"
             className={cn(
               "hidden cursor-pointer border px-[16px] py-[6px] text-[14px] font-[500] transition-colors xl:block",
               useDarkStyle
@@ -115,20 +116,16 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             )}
           >
             {t("Nav.cta")}
-          </a>
+          </AppLink>
 
-          {/* Language switcher (zh/en bilingual). */}
-          <LanguageSwitcher dark={useDarkStyle} />
-          {/* ThemeToggle disabled — light-only for launch. Re-enable when dark mode is needed. */}
-          <UserMenu dark={useDarkStyle} />
-
-          {/* Animated hamburger (below xl) */}
+          {/* Animated hamburger (below xl) — legacy parity: sits between the
+              Contact Us link and the user icon. */}
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileOpen}
-            className="relative z-50 flex flex-col gap-1 p-2 xl:hidden"
+            className="relative z-50 flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-1 p-2 xl:hidden"
           >
             {[0, 1, 2].map((i) => (
               <span
@@ -136,13 +133,18 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                 className={cn(
                   "block h-0.5 w-[18px] transition-all duration-300",
                   useDarkStyle ? "bg-white" : "bg-[#29221D]",
-                  mobileOpen && i === 0 && "translate-y-[7px] rotate-45",
+                  mobileOpen && i === 0 && "translate-y-1.5 rotate-45",
                   mobileOpen && i === 1 && "opacity-0",
-                  mobileOpen && i === 2 && "-translate-y-[7px] -rotate-45"
+                  mobileOpen && i === 2 && "-translate-y-1.5 -rotate-45"
                 )}
               />
             ))}
           </button>
+
+          {/* Language switcher (zh/en bilingual). */}
+          <LanguageSwitcher dark={useDarkStyle} />
+          {/* ThemeToggle disabled — light-only for launch. Re-enable when dark mode is needed. */}
+          <UserMenu dark={useDarkStyle} />
         </div>
       </div>
 

@@ -1,13 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import localFont from "next/font/local";
+import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 
 import "../globals.css";
 
-import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/seo";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/config/site";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
@@ -18,59 +20,89 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { Toaster } from "@/components/ui/sonner";
 import { Toaster as LegacyToaster } from "@/components/ui/toaster";
 
-// ── Inter font (self-hosted) ──────────────────────────────────────────────
+// ── Inter font (self-hosted, independent font-family per weight) ─────────
 //
-// Performance strategy per Next.js best practices:
-//  1. All 5 weights declared in one `localFont` call → single font-family
-//     stack so the browser can match any `font-weight: 300–700` correctly.
-//  2. `preload: false` — automatic preloading of all five files would push
-//     ~600 KB into the critical path. Instead only the two first-paint
-//     weights (Regular 400 + Bold 700) are preloaded manually in <head>
-//     below; the remaining weights load on demand via their @font-face
-//     rules (`display: swap` keeps text visible meanwhile).
-//  3. `adjustFontFallback: "Arial"` tells Next.js to measure Arial metrics
-//     at build time and inject `size-adjust` + `ascent-override` CSS so
-//     fallback text occupies the same bounding box as Inter, eliminating
-//     CLS during the swap period.
-//  4. CJK runs on system fonts (PingFang / Hiragino / Microsoft YaHei);
-//     Inter only covers Latin, keeping each file small.
+// Aligns with the legacy Vue site's strategy: each weight is an independent
+// font-family (Inter_Bold, Inter_Light, …) whose @font-face declares
+// font-weight: normal. The visual weight is baked into the font file itself,
+// so the browser never applies synthetic bolding/lightening.
 //
-// Further optimisation (manual step):
-//  • Subset to Latin-only with fonttools `pyftsubset` if the current
-//    .woff2 files include unused ranges (Greek, Cyrillic, Vietnamese).
+// Each weight gets its own CSS variable (--font-inter-*) so the .inter-*
+// classes in globals.css set font-family directly (never font-weight).
+//
+// Other settings:
+//  • preload:false — avoids pushing ~600 KB into the critical path; each
+//    weight loads on demand via its @font-face rule (display:swap).
+//  • No adjustFontFallback — the legacy site uses plain @font-face rules
+//    without size-adjust / ascent-override metric overrides; keeping the
+//    SSR version identical avoids metric-induced visual drift.
+//  • CJK falls back to system fonts (PingFang / Hiragino / Microsoft YaHei).
 
-const inter = localFont({
-  src: [
-    {
-      path: "../../../public/fonts/Inter-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../../public/fonts/Inter-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../../public/fonts/Inter-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../../public/fonts/Inter-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../../public/fonts/Inter-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-inter",
+const interLight = localFont({
+  src: "../../../public/fonts/Inter-Light.woff2",
+  variable: "--font-inter-light",
   display: "swap",
   preload: false,
-  adjustFontFallback: "Arial",
+  fallback: [
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "system-ui",
+    "sans-serif",
+  ],
+});
+
+const interRegular = localFont({
+  src: "../../../public/fonts/Inter-Regular.woff2",
+  variable: "--font-inter-regular",
+  display: "swap",
+  preload: false,
+  fallback: [
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "system-ui",
+    "sans-serif",
+  ],
+});
+
+const interMedium = localFont({
+  src: "../../../public/fonts/Inter-Medium.woff2",
+  variable: "--font-inter-medium",
+  display: "swap",
+  preload: false,
+  fallback: [
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "system-ui",
+    "sans-serif",
+  ],
+});
+
+const interSemiBold = localFont({
+  src: "../../../public/fonts/Inter-SemiBold.woff2",
+  variable: "--font-inter-semibold",
+  display: "swap",
+  preload: false,
+  fallback: [
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "system-ui",
+    "sans-serif",
+  ],
+});
+
+const interBold = localFont({
+  src: "../../../public/fonts/Inter-Bold.woff2",
+  variable: "--font-inter-bold",
+  display: "swap",
+  preload: false,
   fallback: [
     "PingFang SC",
     "Hiragino Sans GB",
@@ -86,7 +118,11 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
-/** Statically render both supported locales for best performance. */
+/**
+ * Prerender every *routed* locale. Locales that exist in `messages/` but are
+ * disabled in `routing.locales` must NOT be emitted — the page body 404s them
+ * (see `LocaleLayout`), so prerendering would bake out error pages.
+ */
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -112,53 +148,42 @@ export const viewport: Viewport = {
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
-  // Guard: unsupported locales fall back to the default locale's home.
-  // (The middleware normally prevents this, but we stay defensive.)
-  const validLocale = hasLocale(AVAILABLE_LOCALES, locale)
-    ? locale
-    : routing.defaultLocale;
+  // Hard guard: only *routed* locales render. Anything else is a real 404.
+  //
+  // This is what stops paths carrying a dot — `/sitemap.xml.gz`, `/foo.png`,
+  // `/icon.svg` — from matching the `[locale]` segment (a dynamic segment
+  // accepts any non-`/` character, dots included) and silently serving the home
+  // page with HTTP 200. The locale middleware excludes such paths from its
+  // matcher, so the layout is the last line of defence (QA BUG-05).
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
 
   // Enable static rendering for the active locale.
-  setRequestLocale(validLocale);
+  setRequestLocale(locale);
 
-  const messages = await getMessages({ locale: validLocale });
+  const messages = await getMessages({ locale });
 
   return (
-    <html lang={validLocale} suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang={locale} suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         {/* Brand favicon — same asset as the legacy site's index.html. */}
         <link rel="icon" type="image/png" href="/images/logo-icon.png" />
-        {/* First-paint font weights only — the rest load on demand (swap). */}
-        <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* Font preloads removed — localFont with preload:false + display:swap
+            handles loading via @font-face rules. Manual <link rel=preload> caused
+            duplicate requests (QA: 2026-09-04). */}
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased`}
+        className={`${interLight.variable} ${interRegular.variable} ${interMedium.variable} ${interSemiBold.variable} ${interBold.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {/* Organization structured data — boosts rich-result eligibility.
-            Rendered via next/script to avoid React 19 "script tag in
-            component" warnings (raw <script> is not executed on the client). */}
-        <Script
-          id="ld-json-organization"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: siteConfig.name,
-              url: siteConfig.url,
-              logo: new URL("/icon.svg", siteConfig.url).toString(),
-              sameAs: [siteConfig.social.x, siteConfig.social.linkedin],
-              contactPoint: siteConfig.contacts.map((c) => ({
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                email: c.email,
-              })),
-            }),
-          }}
-        />
-        <NextIntlClientProvider locale={validLocale} messages={messages}>
+        {/* Entity structured data — Organization + WebSite on every route
+            (QA BUG-02). Rendered as a plain server `<script>` so it survives
+            into the raw HTML; `next/script` never does. Per-page
+            BreadcrumbList / Service / NewsArticle blocks are emitted by the
+            pages themselves. */}
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider
             attribute="class"
             forcedTheme="light"
@@ -168,10 +193,18 @@ export default async function LocaleLayout({ children, params }: Props) {
             <QueryProvider>
               {/* Root flex column → guarantees sticky-to-bottom footer. */}
               <div className="flex min-h-screen flex-col">
+                {/* Keyboard skip link — first focusable element on every route
+                    (QA BUG-13: 83 focusable nodes used to precede `<main>` on
+                    /news). Visible only while focused. */}
+                <a href="#main-content" className="skip-link">
+                  Skip to main content
+                </a>
                 {/* `overlay` enables the frosted-dark transparent header
                     on pages whose hero sits underneath it (e.g. home). */}
                 <SiteHeader overlay />
-                <main className="flex-1">{children}</main>
+                <main id="main-content" className="flex-1" tabIndex={-1}>
+                  {children}
+                </main>
                 <SiteFooter />
               </div>
               {/* Global auth modals (login/register/forgot/callback) —

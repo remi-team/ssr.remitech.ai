@@ -56,24 +56,25 @@ export function UserMenu({ dark = false }: { dark?: boolean }) {
         onClick={onIconClick}
         aria-label={isLoggedIn ? t("greeting", { name: username }) : t("login")}
         className={cn(
-          "flex h-6 w-6 items-center justify-center transition-colors",
+          "flex min-h-[44px] min-w-[44px] items-center justify-center transition-colors",
           dark ? "text-white hover:text-brand" : "text-[#29221D] hover:text-brand"
         )}
       >
         <img
           src="/images/icon-user.svg"
-          alt=""
+          alt="User"
+          width={24}
+          height={24}
           className={cn(
-            "h-5 w-5",
+            "h-6 w-6",
             dark ? "brightness-0 invert" : "",
           )}
-          aria-hidden="true"
         />
       </button>
 
       {/* Logged-in dropdown */}
       {isLoggedIn && dropdownOpen && (
-        <div className="absolute right-0 top-8 z-50 w-[140px] rounded-[4px] bg-white px-[12px] py-[8px] shadow-[0_0_15px_0_rgba(0,0,0,0.10)]">
+        <div className="absolute right-0 top-8 z-50 w-[110px] rounded-[4px] bg-white px-[12px] py-[8px] shadow-[0_0_15px_0_rgba(0,0,0,0.10)]">
           <div className="absolute -top-[5px] right-[5px] h-0 w-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-white" />
           <div className="mb-[8px] border-b border-gray-100 pb-[8px]">
             <div className="line-clamp-1 text-[12px] font-semibold text-gray-900">

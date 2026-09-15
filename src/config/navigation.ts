@@ -86,12 +86,15 @@ export const mainNav: NavItem[] = [
   { labelKey: "Nav.home", href: "/#top", icon: Home },
   {
     labelKey: "Nav.solutions.label",
-    href: "/solutions",
+    // Legacy parity: the Vue header/footer both point the Solutions entry at
+    // the first sub-item (`/solution-Cross-border-payment`), not an overview
+    // page — mirrored here as `/solutions/cross-border-payment`.
+    href: "/solutions/cross-border-payment",
     icon: Layers,
     children: solutionItems,
   },
   { labelKey: "Nav.membership", href: "/membership", icon: Award },
-  { labelKey: "Nav.about", href: "/about", icon: Info },
+  { labelKey: "Nav.about", href: "/aboutUs", icon: Info },
   { labelKey: "Nav.news", href: "/news", icon: Newspaper },
   { labelKey: "Nav.resources", href: "/resources", icon: BookOpen },
   { labelKey: "Nav.compliance", href: "/compliance", icon: Scale },

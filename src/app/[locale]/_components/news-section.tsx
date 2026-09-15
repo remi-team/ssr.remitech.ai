@@ -1,17 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
 
 import { newsService } from "@/services/client/client-news-service";
 import type { NewsItem } from "@/lib/api/types";
+import { articlePathFor } from "@/lib/news-id";
+import { AppLink } from "@/components/layout/app-link";
 import { IMAGES } from "./images";
 
 /** Website API payloads use `imageUrl` / `externalUrl`; legacy `cover` / `link` kept as fallbacks. */
 const coverOf = (item: NewsItem) => (item.imageUrl as string | undefined) ?? item.cover;
 const hrefOf = (item: NewsItem) => (item.externalUrl as string | undefined) ?? item.link;
 /** Internal article detail page — every card gets a standalone indexable URL. */
-const detailHref = (item: NewsItem) => (item.id != null ? `/news/${item.id}` : "/news");
+const detailHref = (item: NewsItem) => articlePathFor(item) ?? "/news";
 
 /**
  * NewsSection — migrated from the legacy "News section".
@@ -72,18 +73,18 @@ export function NewsSection() {
               const href = detailHref(card);
               return (
               <div key={i} className="max-w-[680px]">
-                <h2 className="pt-4 text-left text-[20px] font-medium text-[#29221D] md:text-[28px] lg:text-[32px]">
+                <h2 className="pt-4 text-left text-[20px] inter-light text-[#29221D] md:text-[28px] lg:text-[32px]">
                   {card.title}
                 </h2>
-                <p className="pb-3 pt-4 text-left text-[16px] text-[#86909C] md:pb-4 md:pt-6">
+                <p className="pb-3 pt-4 text-left text-[16px] inter-light text-[#86909C] md:pb-[17px] md:pt-6">
                   {card.summary}
                 </p>
-                <a
+                <AppLink
                   href={href}
-                  className="inline-block rounded-full border border-[#86909C] px-8 py-2 text-left text-[14px] text-[#86909C] transition-colors hover:bg-[#FF6900] hover:text-white hover:border-[#FF6900] md:px-12 md:py-2.5 md:text-[16px]"
+                  className="inline-block rounded-full border border-[#86909C] px-8 py-2 text-left text-[14px] inter-light text-[#86909C] transition-colors hover:bg-[#FF6900] hover:text-white hover:border-[#FF6900] md:px-12 md:py-2.5 md:text-[16px]"
                 >
                   Read More
-                </a>
+                </AppLink>
               </div>
               );
             })
@@ -120,7 +121,7 @@ export function NewsSection() {
                   )}
                   <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-7">
                     <h3
-                      className="text-[18px] text-[#29221D]"
+                      className="text-[18px] inter-light text-[#29221D]"
                       style={{
                         display: "-webkit-box",
                         WebkitBoxOrient: "vertical",
@@ -132,7 +133,7 @@ export function NewsSection() {
                       {card.title}
                     </h3>
                     <p
-                      className="my-5 text-[14px] text-[#86909C] md:my-8"
+                      className="my-5 text-[14px] inter-light text-[#86909C] md:my-8"
                       style={{
                         display: "-webkit-box",
                         WebkitBoxOrient: "vertical",
@@ -143,13 +144,13 @@ export function NewsSection() {
                     >
                       {card.summary}
                     </p>
-                    <a
+                    <AppLink
                       href={href}
                       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      className="mx-auto inline-flex w-full items-center justify-center rounded border border-[#FF6900] bg-white px-5 py-2.5 text-[13px] font-medium text-[#FF6900] transition-colors duration-200 hover:bg-[#FF6B00] hover:text-white sm:min-h-[48px] sm:py-3 sm:text-[14px] lg:max-w-[210px]"
+                      className="mx-auto inline-flex w-full items-center justify-center rounded border border-[#FF6900] bg-white px-5 py-2.5 text-[13px] inter-light text-[#FF6900] transition-colors duration-200 hover:bg-[#FF6B00] hover:text-white sm:min-h-[48px] sm:py-3 sm:text-[14px] lg:max-w-[210px]"
                     >
                       View More
-                    </a>
+                    </AppLink>
                   </div>
                 </div>
                 );
@@ -160,15 +161,26 @@ export function NewsSection() {
       {/* View all */}
       <div className="relative mx-auto max-w-[1024px] px-6 lg:px-[123px]">
         <div className="pb-6 pt-12 text-center md:pb-12">
-          <a
+          <AppLink
             href="/news"
-            className="group mx-auto flex max-w-[320px] items-center justify-center rounded-[62px] border border-[#FF6900] px-6 py-3 transition-all duration-300 hover:bg-[#FF6900]"
+            className="group mx-auto flex max-w-[320px] items-center justify-center rounded-[62px] border border-[#FF6900] px-6 py-3 inter-light transition-all duration-300 hover:bg-[#FF6900]"
           >
             <span className="text-[16px] text-[#FF6900] transition-colors duration-300 group-hover:text-white md:text-[20px]">
               View All News &amp; Events
             </span>
-            <ArrowRight className="ml-2 h-5 w-5 text-[#FF6900] transition-colors duration-300 group-hover:text-white" aria-hidden="true" />
-          </a>
+            <span className="relative ml-[8px] h-[32px] w-[32px]">
+              <img
+                src="/images/icon-news-more.png"
+                alt="News more icon"
+                className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 group-hover:opacity-0"
+              />
+              <img
+                src="/images/icon-news-more_hover.png"
+                alt="News more hover icon"
+                className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+            </span>
+          </AppLink>
         </div>
       </div>
     </section>

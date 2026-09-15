@@ -107,6 +107,10 @@ function HeroSection() {
             src="/images/about_banner_640.jpg"
             srcSet="/images/about_banner_640.jpg 1x, /images/about_banner_640_2x.jpg 2x"
             alt="Remi Network"
+            width={1280}
+            height={1960}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         </picture>
@@ -115,14 +119,18 @@ function HeroSection() {
       {/* Content */}
       <div className="relative z-10 h-full flex pt-[140px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px] pb-[48px]">
         <div className="max-w-[1536px] mx-auto px-[24px] sm:px-[32px] md:px-[48px] lg:px-[64px] w-full">
+          {/* Page-specific H1. It used to copy the home page verbatim
+              ("Orchestrating the Future of Digital Finance"), leaving /aboutUs
+              without a unique heading and out of step with its own
+              <title> (QA BUG-10). */}
           <h1 className="inter-light text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] uppercase mb-[16px] sm:mb-[20px] md:mb-[24px]">
-            Orchestrating the Future of Digital Finance
+            About Remi — Regulated Stablecoin Infrastructure
           </h1>
           <div className="max-w-[838px] space-y-[12px] sm:space-y-[14px] md:space-y-[16px]">
             <p className="text-white/80 text-[15px] sm:text-[16px] lg:text-[20px] inter-light leading-relaxed">
-              Singapore fintech company with cutting-edge solutions based on
-              blockchain technologies for compliance payment network. One group.
-              Three engines. Full value chain.
+              A Singapore fintech company building blockchain-based solutions
+              for a compliant payment network. One group. Three engines. Full
+              value chain.
             </p>
           </div>
         </div>
@@ -162,7 +170,7 @@ function EnginesSection() {
               }`}
             >
               <div className="w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] lg:w-[64px] lg:h-[64px] rounded-[12px] flex items-center justify-center mb-[16px] sm:mb-[20px]">
-                <img src={item.icon} alt={item.title} />
+                <img src={item.icon} alt={item.title} width={120} height={120} loading="lazy" decoding="async" />
               </div>
               <div className="mb-[30px]">
                 <h3 className="py-[10px] text-[18px] font-[500] text-[#29221D]">
@@ -243,7 +251,7 @@ export default function AboutContent() {
       <VisionSection />
       <Cta>
         <h2 className="inter-light text-[24px] md:text-[28px] lg:text-[32px] text-white leading-[1.3] mb-[36px] max-w-[860px] mx-auto">
-          &ldquo;Those who adapt will define the next era of global finance.&rdquo;
+          "Those who adapt will define the next era of global finance."
         </h2>
       </Cta>
     </>

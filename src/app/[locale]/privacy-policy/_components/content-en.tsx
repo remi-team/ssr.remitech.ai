@@ -52,7 +52,7 @@ export const privacySectionsEn: PolicySection[] = [
         type: "ul",
         items: [
           <>
-            <L>Identity Data</L> includes first name, middle name, maiden name, last name, title,
+            <L>Identity Data</L>{" "}includes first name, middle name, maiden name, last name, title,
             tax ID, marital status, date of birth, gender, identity document number, nationality
             and any other information contained in any identification documents you provide to us
             (e.g. your passport or driver&apos;s license).

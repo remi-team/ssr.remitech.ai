@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import ComplianceContent from "./_components/compliance-content";
 
 type Props = {
@@ -36,6 +37,7 @@ export default async function CompliancePage({ params }: Props) {
 
   return (
     <>
+      <PageJsonLd page="compliance" />
       <ComplianceContent />
     </>
   );

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { PlayerContent } from "./_components/player-content";
 
 type Props = {
@@ -32,8 +33,11 @@ export default async function PlayerPage({ params, searchParams }: Props) {
   setRequestLocale(validLocale);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F7] text-[#2c2520]">
-      <PlayerContent initialId={id} />
-    </div>
+    <>
+      <PageJsonLd page="player" />
+      <div className="min-h-screen bg-[#FAF8F7] text-[#2c2520]">
+        <PlayerContent initialId={id} />
+      </div>
+    </>
   );
 }

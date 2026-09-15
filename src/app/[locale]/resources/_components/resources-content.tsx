@@ -264,16 +264,20 @@ export function ResourcesContent() {
             <img
               src="/images/res_banner_640.jpg"
               alt="Remi Network"
+              width={1280}
+              height={1880}
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </picture>
         </div>
         <div className="relative z-10 h-full flex pt-[140px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px] pb-[48px]">
           <div className="max-w-[1536px] mx-auto px-[24px] sm:px-[32px] lg:px-[40px] xl:px-[48px] w-full">
-            <h1 className="font-light text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] uppercase mb-[16px] sm:mb-[20px] md:mb-[24px]">
+            <h1 className="inter-light text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] uppercase mb-[16px] sm:mb-[20px] md:mb-[24px]">
               RESOURCE CENTER
             </h1>
-            <p className="text-white/80 text-[15px] sm:text-[16px] lg:text-[20px] font-light leading-relaxed">
+            <p className="text-white/80 text-[15px] sm:text-[16px] lg:text-[20px] inter-light leading-relaxed">
               All the documentation, guides and tools you need to integrate,
               deploy and scale bank-grade compliant stablecoin payments
             </p>
@@ -290,15 +294,16 @@ export function ResourcesContent() {
           {/* Category Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-[24px] mb-[24px]">
             {categories.map((cat) => (
-              <div
+              <button
                 key={cat.id}
+                type="button"
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex flex-col items-center justify-start bg-[#F7F5F3] rounded-[4px] border p-[20px] transition-colors duration-200 cursor-pointer hover:shadow-lg ${
+                aria-pressed={activeCategory === cat.id}
+                className={`flex flex-col items-center justify-start bg-[#F7F5F3] rounded-[4px] border p-[20px] transition-colors duration-200 cursor-pointer hover:shadow-lg shadow-[#F1E3DA] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6900] ${
                   activeCategory === cat.id
                     ? "border-[#ff7a1a]"
                     : "border-[#f4f2f0] hover:border-[#ff7a1a]"
                 }`}
-                style={{ boxShadow: "0 0 0 transparent" }}
               >
                 <div className="w-[80px] h-[80px] flex items-center justify-center mb-[12px] flex-shrink-0">
                   <img
@@ -314,7 +319,7 @@ export function ResourcesContent() {
                 <span className="text-[12px] md:text-[14px] text-center leading-tight text-[#29221D]">
                   {cat.name}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
 
@@ -349,10 +354,10 @@ export function ResourcesContent() {
                   className="flex items-center justify-between border-b border-[#EBE8E5] p-[16px_12px] last:border-b-0"
                 >
                   <div className="mr-[16px] flex min-w-0 flex-1 items-center">
-                    <div className="mr-[14px] h-[20px] w-[20px] shrink-0 animate-pulse rounded-[4px] bg-[#EBE8E5]" />
-                    <div className="h-[14px] w-[70%] animate-pulse rounded-[4px] bg-[#EBE8E5]" />
+                    <div className="mr-[14px] h-[20px] w-[20px] shrink-0 rounded-[4px] bg-[linear-gradient(90deg,#F7F5F3_25%,#EBE8E5_50%,#F7F5F3_75%)] bg-[length:200%_100%] animate-[doc-skeleton-loading_1.5s_infinite]" />
+                    <div className="h-[14px] w-[70%] rounded-[4px] bg-[linear-gradient(90deg,#F7F5F3_25%,#EBE8E5_50%,#F7F5F3_75%)] bg-[length:200%_100%] animate-[doc-skeleton-loading_1.5s_infinite]" />
                   </div>
-                  <div className="h-[36px] w-[36px] shrink-0 animate-pulse rounded-full border border-[#EBE8E5]" />
+                  <div className="h-[36px] w-[36px] shrink-0 rounded-full border border-[#EBE8E5] bg-[linear-gradient(90deg,#F7F5F3_25%,#EBE8E5_50%,#F7F5F3_75%)] bg-[length:200%_100%] animate-[doc-skeleton-loading_1.5s_infinite]" />
                 </div>
               ))}
             </div>
@@ -369,15 +374,15 @@ export function ResourcesContent() {
                         key={`${doc.id ?? doc.title}-${i}`}
                         type="button"
                         onClick={() => handleDocClick(doc)}
-                        className="bg-[#F7F5F3] rounded-[4px] p-[24px] flex flex-col cursor-pointer text-left transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(241,227,218,0.6)] hover:-translate-y-[2px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6900]"
+                        className="group bg-[#F7F5F3] rounded-[4px] p-[24px] flex flex-col cursor-pointer text-left [transition:box-shadow_0.3s_ease,transform_0.2s_ease] hover:shadow-[0_8px_24px_rgba(241,227,218,0.6)] hover:-translate-y-[2px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6900]"
                       >
                         <div className="text-[11px] font-[600] uppercase tracking-[0.05em] text-[#FF6900] mb-[12px]">
                           {doc.type_level2 || doc.type?.toUpperCase()}
                         </div>
-                        <h4 className="text-[15px] md:text-[16px] font-[500] text-[#29221D] leading-[1.4] mb-[10px] line-clamp-2 transition-colors duration-200 group-hover:text-[#FF6900]">
+                        <h4 className="inter-light text-[15px] md:text-[16px] font-[500] text-[#29221D] leading-[1.4] mb-[10px] min-h-[42px] md:min-h-[44.8px] line-clamp-2 transition-colors duration-200 ease-[ease] group-hover:text-[#FF6900]">
                           {doc.title}
                         </h4>
-                        <p className="text-[13px] sm:text-[14px] text-[#86909C] leading-[1.55] mb-[16px] flex-1 line-clamp-3">
+                        <p className="inter-light text-[13px] sm:text-[14px] text-[#86909C] leading-[1.55] mb-[16px] flex-1 line-clamp-3">
                           {doc.description}
                         </p>
                         <div className="text-[12px] text-[#86909C] mt-auto">
@@ -385,21 +390,20 @@ export function ResourcesContent() {
                             .filter(Boolean)
                             .join(" · ")}
                         </div>
-                        <div className="mt-[12px] flex items-center">
-                          {(doc.format === "pdf" || doc.type === "pdf") && (
+                        <div className="doc-actions inter-light mt-[12px] flex items-center">
+                          {doc.type === "pdf" ? (
                             <img
                               src="/images/icon-pdf.svg"
                               className="w-[18px] h-[18px] object-contain"
                               alt="PDF"
                             />
-                          )}
-                          {(doc.format === "mp4" || doc.type === "mp4") && (
+                          ) : doc.type === "mp4" ? (
                             <img
                               src="/images/icon-video.svg"
                               className="w-[18px] h-[18px] object-contain"
                               alt="Video"
                             />
-                          )}
+                          ) : null}
                         </div>
                       </button>
                     ))}
@@ -429,10 +433,10 @@ export function ResourcesContent() {
       >
         <div className="mx-auto max-w-[1024px] px-[24px] sm:px-[32px] lg:px-[40px]">
           <div className="mb-[36px] lg:mb-[48px]">
-            <h2 className="font-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
+            <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
               FAQ
             </h2>
-            <p className="font-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
+            <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
               Are These Your Concerns To Choose Remi?
             </p>
           </div>
@@ -445,15 +449,34 @@ export function ResourcesContent() {
                   aria-controls={`faq-answer-${index}`}
                   className="group flex w-full cursor-pointer items-start justify-between gap-[16px]"
                 >
-                  <h3
-                    className={`flex-1 text-left font-light text-[18px] leading-[1.2] transition-colors duration-200 ${
-                      expandedQA === index
-                        ? "text-[#ff7a1a]"
-                        : "text-[#2d2722] group-hover:text-[#ff7a1a]"
-                    }`}
+                  <div
+                    id={`faq-answer-${index}`}
+                    className="flex-1 text-left"
                   >
-                    {qa.title}
-                  </h3>
+                    <h3
+                      className={`inter-light text-[18px] leading-[1.2] transition-colors duration-200 ${
+                        expandedQA === index
+                          ? "text-[#ff7a1a]"
+                          : "text-[#2d2722] group-hover:text-[#ff7a1a]"
+                      }`}
+                    >
+                      {qa.title}
+                    </h3>
+                    {expandedQA === index && (
+                      <ul
+                        className="mt-[12px] ml-[20px] space-y-[8px] list-disc"
+                      >
+                        {qa.content.map((item, i) => (
+                          <li
+                            key={i}
+                            className="inter-light text-[16px] leading-[1.45] text-[#86909C]"
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                   <ChevronRight
                     className={`mt-[2px] h-5 w-5 flex-shrink-0 transition-all duration-200 ${
                       expandedQA === index
@@ -462,21 +485,6 @@ export function ResourcesContent() {
                     }`}
                   />
                 </button>
-                {expandedQA === index && (
-                  <ul
-                    id={`faq-answer-${index}`}
-                    className="mt-[12px] ml-[20px] space-y-[8px] list-disc"
-                  >
-                    {qa.content.map((item, i) => (
-                      <li
-                        key={i}
-                        className="font-light text-[16px] leading-[1.45] text-[#86909C]"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             ))}
           </div>
@@ -485,10 +493,10 @@ export function ResourcesContent() {
 
       {/* ═══ CTA ═══ */}
       <Cta>
-        <h2 className="font-light text-[24px] md:text-[28px] lg:text-[32px] text-white leading-[1.3] mb-[24px] max-w-[860px] mx-auto">
+        <h2 className="inter-light text-[24px] md:text-[28px] lg:text-[32px] text-white leading-[1.3] mb-[24px] max-w-[860px] mx-auto">
           Need help finding a document?
         </h2>
-        <p className="font-light text-[16px] md:text-[18px] text-white mb-[36px] max-w-[860px] mx-auto">
+        <p className="inter-light text-[16px] md:text-[18px] text-white mb-[36px] max-w-[860px] mx-auto">
           Our team is happy to assist with any questions about documentation,
           compliance, or integration.
         </p>

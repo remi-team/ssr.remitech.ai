@@ -2,11 +2,38 @@
 
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
-import { mainNav, solutionItems } from "@/config/navigation";
+import { solutionItems } from "@/config/navigation";
 import { Drawer } from "@/components/ui/drawer-panel";
+import { AppLink } from "@/components/layout/app-link";
 import { cn } from "@/lib/utils";
+
+/**
+ * Drawer menu row content — port of the legacy Vue
+ * `AnimatedMenuItemContent.vue`: label + dashed leader + chevron.
+ *
+ * The legacy version flips a JS `isHovered` flag; here the parent's Tailwind
+ * `group/item` hover state drives the same visuals purely in CSS (the
+ * `.menu-dash::after` orange fill lives in globals.css).
+ */
+function AnimatedMenuItemContent({ title }: { title: string }) {
+  return (
+    <span className="[display:contents]">
+      <span className="transition-colors duration-200 group-hover/item:text-[#FF8C2E]">
+        {title}
+      </span>
+      <span className="menu-dash flex-1" />
+      <span className="text-[#29221D] transition-colors duration-200 group-hover/item:text-[#FF8C2E]">
+        <ChevronRight
+          className="size-[16px] transition-all duration-300 group-hover/item:translate-x-[3px]"
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+      </span>
+    </span>
+  );
+}
 
 /**
  * Mobile / tablet navigation — migrated from the legacy Vue header's nested
@@ -33,23 +60,21 @@ export function MobileNav({
     if (!visible) setShowSolutions(false);
   }, [visible]);
 
+  // Legacy parity: every drawer row is `inter-medium font-[600]` and renders
+  // the label + dashed leader + chevron triplet (see AnimatedMenuItemContent).
   const renderItem = (href: string, labelKey: string, accent = false) => (
-    <a
+    <AppLink
       href={href}
       onClick={onClose}
       className={cn(
-        "group/item flex items-center justify-between gap-2 text-[20px] font-[600] transition-all duration-200 md:text-[24px]",
+        "group/item inter-medium flex items-center justify-between gap-[8px] text-[20px] font-[600] transition-all duration-200 md:gap-[12px] md:text-[24px] lg:gap-[8px]",
         accent
           ? "text-[#FF8C2E]"
           : "text-[#29221D] hover:text-[#FF6900]"
       )}
     >
-      <span>{t(labelKey as never)}</span>
-      <ArrowRight
-        className="h-5 w-5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
-        aria-hidden="true"
-      />
-    </a>
+      <AnimatedMenuItemContent title={t(labelKey as never)} />
+    </AppLink>
   );
 
   return (
@@ -65,26 +90,24 @@ export function MobileNav({
         aria-label="Mobile navigation"
         onClose={onClose}
       >
-        <div className="flex min-h-full flex-col gap-[12px] px-[24px] pb-[32px] pt-[72px]">
+        <div className="flex min-h-full flex-col gap-[12px] px-[24px] pb-[32px] pt-[72px] text-[24px]">
           {renderItem("/#top", "Nav.home")}
           <button
             type="button"
             onClick={() => setShowSolutions(true)}
-            className="group/item flex items-center justify-between gap-2 text-left text-[20px] font-[600] text-[#29221D] transition-all duration-200 hover:text-[#FF6900] md:text-[24px]"
+            className="group/item inter-medium flex items-center justify-between gap-[8px] text-left text-[20px] font-[600] text-[#29221D] transition-all duration-200 hover:text-[#FF6900] md:gap-[12px] md:text-[24px] lg:gap-[8px]"
           >
-            <span>{t("Nav.solutions.label")}</span>
-            <ArrowRight
-              className="h-5 w-5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
-              aria-hidden="true"
-            />
+            <AnimatedMenuItemContent title={t("Nav.solutions.label")} />
           </button>
           {renderItem("/membership", "Nav.membership")}
-          {renderItem("/about", "Nav.about")}
-          {renderItem("/news", "Nav.news")}
+          {renderItem("/aboutUs", "Nav.about")}
+          {/* Legacy parity: the mobile drawer lists Resources *before* News &
+              Events — the reverse of the desktop `menuItems` order. */}
           {renderItem("/resources", "Nav.resources")}
+          {renderItem("/news", "Nav.news")}
           {renderItem("/compliance", "Nav.compliance")}
           <div className="mb-[34px] mt-[24px] h-px bg-[#9C9086] md:mb-[32px] md:mt-[48px]" />
-          {renderItem("/contact", "Nav.cta", true)}
+          {renderItem("/contactUs", "Nav.cta", true)}
         </div>
       </Drawer>
 
@@ -112,7 +135,7 @@ export function MobileNav({
               className="flex h-[24px] w-[24px] items-center justify-center rounded-full text-[#29221D] transition-colors hover:bg-gray-100 hover:text-[#FF6900]"
               aria-label="Back to main menu"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <img src="/images/icon-back.svg" alt="" aria-hidden="true" />
             </button>
             <h2 className="text-[16px] font-semibold text-[#69584E]">
               {t("Nav.solutions.label")}
@@ -123,28 +146,23 @@ export function MobileNav({
               className="flex h-[24px] w-[24px] items-center justify-center rounded-full transition-colors hover:bg-gray-100"
               aria-label="Close menu"
             >
-              <ArrowLeft className="h-5 w-5 rotate-45" />
+              <img src="/images/icon-close.svg" alt="" aria-hidden="true" />
             </button>
           </div>
           {/* Sub-menu items */}
-          <div className="flex flex-1 flex-col gap-[12px] overflow-y-auto px-[24px] py-[24px]">
-            {solutionItems.map((s) => {
-              const Icon = s.icon;
-              return (
-                <a
-                  key={s.labelKey}
-                  href={s.href}
-                  onClick={onClose}
-                  className="group/item flex items-center gap-3 text-[20px] font-[600] text-[#29221D] transition-all duration-200 hover:text-[#FF6900] md:text-[24px]"
-                >
-                  <Icon
-                    className="h-5 w-5 text-[#29221D] transition-colors group-hover/item:text-[#FF6900]"
-                    aria-hidden="true"
-                  />
-                  <span>{t(s.labelKey as never)}</span>
-                </a>
-              );
-            })}
+          <div className="flex flex-1 flex-col gap-[12px] overflow-y-auto px-[24px] py-[24px] text-[24px]">
+            {/* Legacy parity: sub-items render the same label + dash + chevron
+                row as the main drawer — no leading product icon. */}
+            {solutionItems.map((s) => (
+              <AppLink
+                key={s.labelKey}
+                href={s.href}
+                onClick={onClose}
+                className="group/item inter-medium flex items-center justify-between gap-[8px] text-[20px] font-[600] text-[#29221D] transition-all duration-200 hover:text-[#FF6900] md:gap-[12px] md:text-[24px] lg:gap-[8px]"
+              >
+                <AnimatedMenuItemContent title={t(s.labelKey as never)} />
+              </AppLink>
+            ))}
           </div>
         </div>
       </Drawer>

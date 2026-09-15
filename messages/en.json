@@ -1,8 +1,8 @@
 {
   "Meta": {
-    "title": "Remi — Regulated Stablecoin Infrastructure for Financial Institutions",
+    "title": "Remi — Regulated Stablecoin Infrastructure",
     "titleTemplate": "%s | Remi",
-    "description": "Remi provides regulated stablecoin infrastructure for financial institutions — orchestrating the future of cross-border payment, FX & treasury, RegTech and tokenized trade finance.",
+    "description": "Regulated stablecoin infrastructure for financial institutions: cross-border payment, FX & treasury, RegTech and tokenised trade finance.",
     "keywords": "Remi, stablecoin, cross-border payment, FX, RegTech, tokenized letter of credit, digital finance, financial infrastructure"
   },
   "Nav": {
@@ -152,11 +152,11 @@
     },
     "stablecoin": {
       "title": "Stablecoin Issuance",
-      "desc": "Launch regulated stablecoin programs with end-to-end issuance, control and distribution rails."
+      "desc": "Launch regulated stablecoin programs with end-to-end issuance, control, and distribution rails."
     },
     "regtech": {
       "title": "RegTech",
-      "desc": "Embed programmable compliance, monitoring and reporting into every regulated transaction journey."
+      "desc": "Embed programmable compliance, monitoring, and reporting into every regulated transaction journey."
     },
     "lc": {
       "title": "Tokenized Letter of Credit",
@@ -164,7 +164,7 @@
     },
     "cheque": {
       "title": "E-Cheque",
-      "desc": "Transform traditional checks into digital, trackable and compliant payment instruments."
+      "desc": "Transform traditional checks into digital, trackable, and compliant payment instruments."
     },
     "learnMore": "Learn more"
   },

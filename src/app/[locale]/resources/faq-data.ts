@@ -40,9 +40,9 @@ export const qaItems: QAItem[] = [
     ],
   },
   {
-    title: "Q5: What makes Remi's infrastructure compliant for regulated financial institutions?",
+    title: "Q5: What makes Remi’s infrastructure compliant for regulated financial institutions?",
     content: [
-      "Remi's network is built with compliance at its core, fully aligned with FATF standards, EU MiCA regulatory requirements, and global anti-money laundering (AML) and sanctions regimes. ",
+      "Remi’s network is built with compliance at its core, fully aligned with FATF standards, EU MiCA regulatory requirements, and global anti-money laundering (AML) and sanctions regimes. ",
       "Our infrastructure natively integrates the FATF Travel Rule, real-time sanctions screening, end-to-end encrypted information exchange, and immutable on-chain audit trails for all transactions, meeting the strictest bank-grade compliance requirements.",
     ],
   },
@@ -50,7 +50,7 @@ export const qaItems: QAItem[] = [
     title: "Q6: How does Remi reduce pre-funding requirements for partner institutions?",
     content: [
       "Traditional cross-border payments require institutions to maintain pre-funded liquidity accounts in multiple jurisdictions and with multiple correspondent banks, locking up large amounts of working capital. ",
-      "Remi's peer-to-peer network eliminates the need for multi-correspondent pre-funding, allowing partners to centralize liquidity and significantly reduce idle capital requirements across global markets.",
+      "Remi’s peer-to-peer network eliminates the need for multi-correspondent pre-funding, allowing partners to centralize liquidity and significantly reduce idle capital requirements across global markets.",
     ],
   },
   {
@@ -62,7 +62,7 @@ export const qaItems: QAItem[] = [
   {
     title: "Q8: Which countries and regions does Remi support?",
     content: [
-      "Remi's network currently covers core markets across Europe, Asia Pacific, Latin America, and North America, with active live clearing corridors in all key regions.",
+      "Remi’s network currently covers core markets across Europe, Asia Pacific, Latin America, and North America, with active live clearing corridors in all key regions.",
       "Our global network is continuously expanding, and we can support customized corridor access for partner institutions based on their business needs.",
     ],
   },

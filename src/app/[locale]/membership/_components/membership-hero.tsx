@@ -29,7 +29,7 @@ export function MembershipHero() {
 
       <div className="relative mx-auto max-w-[1536px] px-6 pb-[60px] sm:px-8 lg:px-10 xl:px-12">
         <div className="max-w-[840px] pt-[42px] lg:pt-[56px]">
-          <h1 className="text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-white sm:text-[36px] md:text-[42px] lg:text-[48px]">
+          <h1 className="text-[32px] inter-light leading-[1.08] tracking-[-0.03em] text-white sm:text-[36px] md:text-[42px] lg:text-[48px]">
             {t("membership")}
           </h1>
           <p className="mt-6 max-w-[747px] text-[15px] leading-[1.6] text-white/72 sm:text-[16px] md:text-[18px]">

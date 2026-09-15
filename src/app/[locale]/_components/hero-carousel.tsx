@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { AppLink } from "@/components/layout/app-link";
 import { IMAGES } from "./images";
 
 /**
@@ -61,6 +62,8 @@ export function HeroCarousel() {
   const sectionRef = React.useRef<HTMLElement | null>(null);
   const [active, setActive] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
+  // Auto-rotation enabled — matches legacy Vue hero (isPaused=false on mount).
+  // Pauses on hover, out-of-viewport, or manual toggle (click/spacebar).
   const [paused, setPaused] = React.useState(false);
 
   // Refs for the rAF loop (kept outside React state to avoid re-renders).
@@ -342,7 +345,9 @@ export function HeroCarousel() {
                     src={`${slide.image768}@1x_compressed.jpg`}
                     srcSet={`${slide.image768}@1x_compressed.jpg 1x, ${slide.image768}@2x_compressed.jpg 2x`}
                     alt={slide.tag}
-                    loading={index === 0 ? "eager" : "lazy"}
+                    width={768}
+                    height={734}
+                    loading={index < 2 ? "eager" : "lazy"}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     decoding="async"
                     onError={(e) => {
@@ -372,36 +377,41 @@ export function HeroCarousel() {
       {/* ----------------------------------------------------------------- */}
       {/* Slide content (title + subtitle + quote + CTA)                     */}
       {/* ----------------------------------------------------------------- */}
-      <div className="hero-slide-content absolute inset-0 z-10 mx-auto flex max-w-[1536px] flex-col items-start justify-center px-8 lg:pr-44 min-[1600px]:pr-8">
+      <div className="hero-slide-content absolute inset-0 z-10 mx-auto flex max-w-[1536px] flex-col items-start justify-center px-8">
         <div className="hero-slide-text max-w-[1280px]">
-          <h1
-            id="hero-title"
-            className="pb-4 text-[36px] font-bold text-white md:text-[56px]"
-            style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
-          >
-            {t("title")}
-          </h1>
-          <h4
-            className="mb-10 pb-10 text-[24px] font-light text-[#F2F3F5] md:text-[36px]"
-            style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
-          >
-            {t("subtitle")}
-          </h4>
-          <p
-            className="text-[16px] font-light text-[#F2F3F5] md:text-[24px]"
-            style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
-          >
-            &ldquo;The network where every participant becomes more powerful<br className="hidden md:flex" /> from each other — compounding in<br className="hidden md:flex" /> strength as we grow&rdquo;
-          </p>
+          <div className="hero-slide-title">
+            <h1
+              id="hero-title"
+              className="pb-4 text-[36px] inter-bold text-white md:text-[56px]"
+              style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
+            >
+              {t("title")}
+            </h1>
+            {/* Was an <h4>: jumping h1 -> h4 broke the document outline for
+                screen readers (QA BUG-14). Tailwind preflight inherits
+                font-size/weight, so the heading level is purely semantic. */}
+            <h2
+              className="pb-10 text-[24px] inter-light text-[#F2F3F5] md:pb-[60px] md:text-[36px]"
+              style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
+            >
+              {t("subtitle")}
+            </h2>
+            <p
+              className="text-[16px] inter-light text-[#F2F3F5] md:text-[24px]"
+              style={{ textShadow: "0 4px 4px rgba(0,0,0,0.25)" }}
+            >
+              "The network where every participant becomes more{" "}<br className="hidden md:block" />{" "}powerful from each other — compounding in{" "}<br className="hidden md:block" />{" "}strength as we grow"
+            </p>
+          </div>
         </div>
-        <a
-          href="/contact"
-          className="hero-slide-cta mt-8 inline-flex items-center rounded bg-[#FF6B00] px-9 py-3.5 text-[16px] font-semibold tracking-wide text-[#FFF0E5] transition-colors hover:bg-[#e55a2b]"
+        <AppLink
+          href="/contactUs"
+          className="hero-slide-cta inter-light mt-8"
           onClick={(e) => e.stopPropagation()}
         >
           {t("secondaryCta")}
-        </a>
-        <p className="hero-slide-bottom-quote absolute bottom-[90px] left-8 right-8 text-[16px] font-light text-white/80 md:text-[18px]">
+        </AppLink>
+        <p className="hero-slide-bottom-quote absolute bottom-[calc(90px+var(--cookie-h,0px))] left-8 right-8 text-[12px] inter-light text-white/80 md:text-[18px]">
           {t("quote")}
         </p>
       </div>
@@ -409,10 +419,12 @@ export function HeroCarousel() {
       {/* ----------------------------------------------------------------- */}
       {/* Top controls (counter + progress + arrows) — desktop only          */}
       {/* ----------------------------------------------------------------- */}
-      <div className="hero-top-controls absolute left-0 right-0 top-0 z-20 hidden items-center justify-between px-10 pt-40 lg:flex">
+      {/* Top controls — hidden in the legacy Vue version (display:none).
+          Counter, progress bar, and arrows are never shown. */}
+      <div className="hero-top-controls absolute left-0 right-0 top-0 z-20 hidden items-center justify-between px-10 pt-40">
         <div className="flex items-center gap-4">
           <div className="hero-slide-counter flex items-baseline">
-            <span className="current text-[1.25rem] font-bold text-white">
+            <span className="current text-[1.25rem] inter-bold text-white">
               {active + 1}
             </span>
             <span className="separator mx-1 text-[1rem] text-white/30">/</span>
@@ -465,11 +477,10 @@ export function HeroCarousel() {
       {/* ----------------------------------------------------------------- */}
       <a
         href="#solutions"
-        className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1 text-xs text-white/50 transition-colors hover:text-white"
+        className="absolute bottom-[calc(24px+var(--cookie-h,0px))] left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-1 text-xs text-white/50 transition-all hover:text-white md:flex"
         aria-label={t("scroll")}
         onClick={(e) => e.stopPropagation()}
       >
-        <span>{t("scroll")}</span>
         <ChevronDown className="h-4 w-4 animate-bounce" aria-hidden="true" />
       </a>
     </section>

@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
 import { PolicyPageLayout } from "../_components/policy-page-layout";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { cookieIntroEn, cookieSectionsEn } from "./_components/content-en";
 import { cookieIntroZh, cookieSectionsZh } from "./_components/content-zh";
 
@@ -30,12 +31,15 @@ export default async function CookiePolicyPage({ params }: Props) {
   const zh = validLocale === "zh";
 
   return (
-    <PolicyPageLayout
-      title={zh ? "Cookie 政策" : "Cookie Policy"}
-      updated={zh ? "最后更新：2026 年 6 月" : "Last updated: June 2026"}
-      intro={zh ? cookieIntroZh : cookieIntroEn}
-      sections={zh ? cookieSectionsZh : cookieSectionsEn}
-      ctaTitle={zh ? "对 Cookie 有疑问？" : "Questions about cookies?"}
-    />
+    <>
+      <PageJsonLd page="cookiePolicy" />
+      <PolicyPageLayout
+        title={zh ? "Cookie 政策" : "Cookie Policy"}
+        updated={zh ? "最后更新：2026 年 6 月" : "Last updated: June 2026"}
+        intro={zh ? cookieIntroZh : cookieIntroEn}
+        sections={zh ? cookieSectionsZh : cookieSectionsEn}
+        ctaTitle={zh ? "对 Cookie 有疑问？" : "Questions about cookies?"}
+      />
+    </>
   );
 }

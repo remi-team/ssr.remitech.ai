@@ -11,15 +11,18 @@ import { IMAGES } from "./images";
  */
 export function WhoWeAre() {
   return (
-    <section data-scroll="who-we-are" className="pb-[80px] pt-5 lg:pb-[133px] lg:pt-[100px]">
-      <div className="relative mx-auto max-w-[1536px] bg-white px-6 lg:px-[123px]">
-        <div className="pb-10 text-left md:pb-20 md:text-center">
-          <h2 className="text-[32px] font-medium text-[#29221D]">Who We Are</h2>
-          <p className="mx-auto py-3 text-[18px] text-[#86909C]">
+    <section data-scroll="who-we-are" className="pt-[20px] pb-[80px] lg:pb-[133px] lg:pt-[100px]">
+      <div className="relative mx-auto max-w-[1536px] bg-white px-[24px] lg:px-[123px]">
+        <div className="pb-[40px] text-left md:pb-[80px] md:text-center">
+          <h2 className="inter-medium text-[32px] text-[#29221D]">
+            Who We Are
+          </h2>
+          <p className="mx-auto max-w-[1536px] py-[12px] text-[18px] inter-light text-[#86909C]">
             One Group. Three Engines. Full Value Chain.
           </p>
+          <div className="inline-flex" />
         </div>
-        <div className="flex flex-col gap-0 overflow-hidden rounded-xl shadow-[0_0_8px_1px_#F1E3DA] lg:h-[580px] lg:flex-row lg:gap-10">
+        <div className="flex h-auto flex-col gap-0 overflow-hidden rounded-[12px] shadow-[0_0_8px_1px_#F1E3DA] lg:h-[580px] lg:flex-row lg:w-full lg:gap-[40px]">
           {/* Image side — canonical image path with grid fallback */}
           <div className="relative h-[180px] w-full overflow-hidden bg-[#0E0B09] md:h-[200px] lg:h-full lg:w-[454px] lg:flex-shrink-0">
             {/* Grid fallback layer (always rendered beneath the image) */}
@@ -39,6 +42,10 @@ export function WhoWeAre() {
             <img
               src={IMAGES.whoWeAre.image}
               alt="Remi three-engine architecture"
+              width={625}
+              height={638}
+              loading="lazy"
+              decoding="async"
               className="relative h-full w-full object-cover"
               onError={(e) => {
                 // Image not yet in /public/images/ — hide it so the grid
@@ -48,26 +55,21 @@ export function WhoWeAre() {
             />
           </div>
           {/* Text side */}
-          <div className="flex flex-1 flex-col gap-5 px-6 pb-6 pt-6 md:gap-6 md:pb-10 md:pt-10 lg:gap-10 lg:px-0 lg:pb-0 lg:pt-20 lg:pr-[69px]">
-            <p className="text-[16px] leading-[1.8] text-[#4E5969] lg:text-[18px]">
-              <span className="mr-1 inline-block text-[20px] leading-[1] align-bottom lg:text-[24px]">Remi</span>
-              is a Singapore-based technology company under Bison FinTech Ecosystem. We work in strategic
+          <div className="flex flex-1 flex-col gap-[20px] px-[24px] pt-[24px] pb-[24px] md:gap-[24px] md:pt-[40px] md:pb-[40px] lg:gap-[40px] lg:px-0 lg:pt-[80px] lg:pb-0 lg:pr-[69px]">
+            <p className="inter-light text-[#4E5969] text-[16px] leading-[1.8] lg:text-[18px]">
+              <span className="inline-block text-[20px] leading-[1] align-baseline mr-[4px] lg:text-[24px]">Remi</span>is a Singapore-based technology company under Bison FinTech Ecosystem. We work in strategic
               partnership with Bison Bank — a licensed Portuguese institution with 30+ years of history —
               to deliver regulated stablecoin infrastructure to financial institutions worldwide.
             </p>
-            <p className="text-[16px] leading-[1.8] text-[#4E5969] lg:text-[18px]">
-              <span className="mr-1 inline-block text-[20px] leading-[1] align-bottom lg:text-[24px]">Bison Bank</span>
-              serves as our strategic partner, providing the licensed foundation for stablecoin issuance,
+            <p className="inter-light text-[#4E5969] text-[16px] leading-[1.8] lg:text-[18px]">
+              <span className="inline-block inter-light text-[20px] leading-[1] align-baseline mr-[4px] lg:text-[24px]">Bison Bank</span>serves as our strategic partner, providing the licensed foundation for stablecoin issuance,
               custody, and settlement under ECB and MiCA authorization. Remi Technology operates the clearing
               network, compliance framework, and product innovation.
             </p>
-            <p className="text-[16px] leading-[1.8] text-[#4E5969] lg:text-[18px]">
-              <span className="mr-1 inline-block text-[20px] leading-[1] align-bottom lg:text-[24px]">
-                Bison FX & Treasury
-              </span>
-              captures the FX spread and treasury margin on every transaction.
+            <p className="inter-light text-[#4E5969] text-[16px] leading-[1.8] lg:text-[18px]">
+              <span className="inline-block inter-light text-[20px] leading-[1] align-baseline mr-[4px] lg:text-[24px]">Bison FX & Treasury</span>captures the FX spread and treasury margin on every transaction.
             </p>
-            <p className="text-[16px] leading-[1.8] text-[#4E5969] lg:text-[18px]">
+            <p className="inter-light text-[#4E5969] text-[16px] leading-[1.8] lg:text-[18px]">
               This three-engine architecture — Bank + Network + Treasury — gives Remi a structural advantage
               no competitor can replicate: a licensed bank as strategic partner, a real-time clearing network,
               and a regulated markets division capturing the full value chain.

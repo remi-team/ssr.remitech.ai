@@ -40,6 +40,10 @@ export function CbpHero() {
           <img
             src={CBP_IMAGES.hero.bg640}
             alt="Remi Network"
+            width={1280}
+            height={1880}
+            loading="eager"
+            decoding="async"
             className="h-full w-full object-cover"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
@@ -51,17 +55,17 @@ export function CbpHero() {
       {/* Content */}
       <div className="relative z-10 flex h-full pt-[140px] pb-[48px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px]">
         <div className="mx-auto w-full max-w-[1536px] px-[24px] sm:px-[48px] lg:px-[120px]">
-          <h1 className="mb-[16px] text-[32px] uppercase text-white sm:mb-[20px] sm:text-[36px] md:mb-[24px] md:text-[42px] lg:text-[48px]">
+          <h1 className="inter-light mb-[16px] text-[32px] uppercase text-white sm:mb-[20px] sm:text-[36px] md:mb-[24px] md:text-[42px] lg:text-[48px]">
             CROSS-BORDER<br className="lg:hidden" /> PAYMENT
           </h1>
           <div className="max-w-[810px] space-y-[12px] sm:space-y-[14px] md:space-y-[16px]">
-            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+            <p className="inter-light text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
               Remi Inter-bank Cross-border Clearing and Settlement System
               creates an efficient, secure, highly compliant, and
               cost-effective network for peer-to-peer transactions among
               regulated institutions globally.
             </p>
-            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+            <p className="inter-light text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
               SWIFT-compatible, light-touch integration — live in weeks. Banks
               can route transactions via Remi or traditional networks with zero
               disruption.

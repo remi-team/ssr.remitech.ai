@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authService } from "@/lib/auth/auth-service";
 import { checkPassword } from "@/lib/auth/validation";
+import { AppLink } from "@/components/layout/app-link";
 
 /**
  * ResetPassword content — migrated from legacy Vue `resetPassword.vue`.
@@ -79,12 +80,12 @@ export function ResetPasswordContent() {
         <div className="w-full max-w-sm mx-auto sm:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
           {/* Logo */}
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-            <a
+            <AppLink
               href="/"
               className="inline-flex items-center justify-center h-[60px] mb-4 cursor-pointer transition-transform hover:scale-105"
             >
-              <img src="/images/logo-remi.svg" alt="Remi" />
-            </a>
+              <img src="/images/logo-remi.svg" alt="Remi" width={72} height={30} />
+            </AppLink>
           </div>
 
           {/* Form Card */}

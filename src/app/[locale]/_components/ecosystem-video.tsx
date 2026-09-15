@@ -15,9 +15,9 @@ const VIDEO_SRC = "https://s.remitech.ai/static/video/m3u8/xc/master.m3u8";
  *
  * Uses the M3u8Player in banner mode (hideControls, muted) and auto-plays
  * when scrolled into view via IntersectionObserver (matching the legacy
- * `initVideoViewportObserver`).
+ * `initVideoViewportObserver`). The player is always mounted — no
+ * click-to-load poster — exactly like the original Vue version.
  */
-
 export function EcosystemVideo() {
   const playerRef = React.useRef<M3u8PlayerHandle>(null);
   const wrapperRef = React.useRef<HTMLElement | null>(null);
@@ -27,7 +27,10 @@ export function EcosystemVideo() {
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          playerRef.current?.play();
+          const playPromise = playerRef.current?.play();
+          if (playPromise && typeof (playPromise as Promise<void>).catch === "function") {
+            (playPromise as Promise<void>).catch(() => {});
+          }
         } else {
           playerRef.current?.pause();
         }
@@ -42,14 +45,14 @@ export function EcosystemVideo() {
     <section
       ref={wrapperRef}
       data-scroll="ecosystem"
-      className="bg-white py-12 sm:py-14 md:py-16 lg:py-20 xl:py-24"
+      className="bg-white py-[48px] sm:py-[56px] md:py-[64px] lg:py-[80px] xl:py-[96px]"
     >
-      <div className="mx-auto max-w-[1024px] px-6 sm:px-8 md:px-12 lg:px-16">
-        <div className="mb-8 text-center sm:mb-10 md:mb-12 lg:mb-14">
-          <h2 className="mb-3 mt-3 text-left text-[32px] font-medium text-[#29221D] md:mt-4 lg:mt-6 md:text-center">
+      <div className="mx-auto max-w-[1024px] px-[24px] sm:px-[32px] md:px-[48px] lg:px-[64px]">
+        <div className="mb-[32px] text-center sm:mb-[40px] md:mb-[48px] lg:mb-[56px]">
+          <h2 className="mx-auto mb-[12px] mt-[12px] text-left text-[32px] inter-medium text-[#29221D] lg:mt-[16px] 2xl:mt-6 md:text-center">
             See Our Ecosystem In Action
           </h2>
-          <p className="mb-6 text-left text-[16px] text-[#86909C] lg:mb-9 lg:text-[18px] md:text-center">
+          <p className="mb-[24px] text-left inter-light text-[16px] text-[#86909C] md:text-[18px] md:text-center lg:mb-[36px]">
             "Rewrite the Game" — How REMI is orchestrating the future of digital finance.
           </p>
         </div>

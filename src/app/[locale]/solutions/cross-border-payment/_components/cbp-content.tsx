@@ -42,12 +42,12 @@ const comparisonData: ComparisonRow[] = [
   },
   {
     feature: "Time Used",
-    current: "2–3 days",
+    current: "2-3 days",
     remi: "Minutes on active corridors",
   },
   {
     feature: "Fee per Transaction",
-    current: "$30–100",
+    current: "$30-100",
     remi: "Low flat fees",
   },
   {
@@ -152,13 +152,13 @@ function FeatureList({
       {items.map((item) => (
         <div key={item.title} className="h-auto p-[24px] 2xl:py-[32px]">
           <div className="flex items-center justify-between border-b border-b-[#EBE8E5]">
-            <h2 className="flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
+            <h2 className="inter-medium flex items-center gap-[10px] pb-[12px] text-[18px] text-[#29221D] lg:mb-0">
               <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />{" "}
               {item.title}
             </h2>
           </div>
           <div className="pt-[12px]">
-            <p className="text-[16px] leading-relaxed text-[#86909C]">
+            <p className="inter-light text-[16px] leading-relaxed text-[#86909C]">
               {item.desc}
             </p>
           </div>
@@ -180,10 +180,10 @@ export function CbpContent() {
       >
         {/* Heading */}
         <div className="mb-12 lg:mb-16">
-          <h2 className="mx-auto mb-[12px] mt-[12px] text-left text-[32px] text-[#29221D] md:text-center lg:mt-[16px] 2xl:mt-[24px]">
+          <h2 className="inter-medium mx-auto mb-[12px] mt-[12px] text-left text-[32px] text-[#29221D] md:text-center lg:mt-[16px] 2xl:mt-[24px]">
             Why Banks Choose Remi
           </h2>
-          <p className="mb-[24px] text-left text-[16px] text-[#86909C] md:text-center md:text-[18px] lg:mb-[36px]">
+          <p className="inter-light mb-[24px] text-left text-[16px] text-[#86909C] md:text-center md:text-[18px] lg:mb-[36px]">
             The regulated settlement rail built exclusively for financial
             institutions.
           </p>
@@ -199,13 +199,13 @@ export function CbpContent() {
                   className="h-auto min-h-[240px] rounded-[4px] bg-[#F7F5F3] p-[24px] shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg"
                 >
                   <div className="mb-6 flex items-center justify-between">
-                    <h2 className="mb-[12px] text-[18px] text-[#29221D]">
+                    <h2 className="inter-light mb-[12px] text-[18px] text-[#29221D]">
                       {item.title}
                     </h2>
                   </div>
                   <div className="space-y-6">
                     <div>
-                      <p className="text-[16px] text-[#86909C]">
+                      <p className="inter-light text-[16px] text-[#86909C]">
                         {item.content}
                       </p>
                     </div>
@@ -224,7 +224,7 @@ export function CbpContent() {
       >
         <div className="mx-auto max-w-[1024px]">
           <div className="py-[30px]">
-            <h2 className="mx-auto text-left text-[32px] text-[#29221D] md:text-center">
+            <h2 className="inter-medium mx-auto text-left text-[32px] text-[#29221D] md:text-center">
               A comparison for cross-border remittances
             </h2>
 
@@ -258,13 +258,15 @@ export function CbpContent() {
                           {row.current}
                         </td>
                         <td className="border-b border-[#EBE8E5] p-[8px] text-center text-sm text-[#69584e]">
-                          {row.feature === "Time Used" ||
-                          row.feature === "Fee per Transaction" ||
+                          {row.feature === "Time Used" ? (
+                            <>
+                              <span className="text-[#FF6900]">Minutes</span>
+                              <span> on active corridors</span>
+                            </>
+                          ) : row.feature === "Fee per Transaction" ||
                           row.feature === "Complexity" ||
                           row.feature === "Real-time Monitoring Dashboard" ? (
                             <span className="text-[#FF6900]">{row.remi}</span>
-                          ) : row.feature === "KYC/AML" ? (
-                            <span>{row.remi}</span>
                           ) : (
                             row.remi
                           )}
@@ -278,7 +280,7 @@ export function CbpContent() {
                 <div className="divide-y divide-[#EBE8E5] md:hidden">
                   {comparisonData.map((row) => (
                     <div key={row.feature} className="px-[16px] py-[16px]">
-                      <p className="mb-[12px] text-[14px] text-[#29221D]">
+                      <p className="inter-light mb-[12px] text-[14px] text-[#29221D]">
                         {row.feature}
                       </p>
                       <div className="grid grid-cols-2 gap-[12px]">
@@ -291,11 +293,18 @@ export function CbpContent() {
                           </p>
                         </div>
                         <div className="rounded-[4px] border border-[#FFE0C2] bg-[#FFF7F0] px-[12px] py-[10px]">
-                          <p className="mb-[4px] text-[11px] text-[#FF6900]">
+                          <p className="inter-light mb-[4px] text-[11px] text-[#FF6900]">
                             Remi
                           </p>
-                          <p className="text-[14px] text-[#29221D]">
-                            {row.remi}
+                          <p className={`text-[14px] inter-light ${row.feature === "Time Used" || row.feature === "Fee per Transaction" || row.feature === "Complexity" || row.feature === "Real-time Monitoring Dashboard" ? "text-[#FF6900]" : "text-[#29221D]"}`}>
+                            {row.feature === "Time Used" ? (
+                              <>
+                                <span className="text-[#FF6900]">Minutes</span>
+                                <span className="text-[#69584e]"> on active corridors</span>
+                              </>
+                            ) : (
+                              row.remi
+                            )}
                           </p>
                         </div>
                       </div>
@@ -315,7 +324,7 @@ export function CbpContent() {
       >
         <div className="mx-auto max-w-[1024px]">
           <div className="mb-[48px] text-left md:mb-[64px] md:text-center lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="mb-[12px] text-[32px] text-[#29221D]">
+            <h2 className="inter-medium mb-[12px] text-[32px] text-[#29221D]">
               How Institutions Use Remi
             </h2>
           </div>
@@ -323,10 +332,10 @@ export function CbpContent() {
           {/* For Banks */}
           <div className="mb-[48px] lg:mb-[64px]">
             <div className="mb-[24px] lg:mb-[36px]">
-              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-bold text-[#29221D] md:text-[24px] lg:text-[28px]">
+              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-[700] text-[#29221D] md:text-[24px] lg:text-[28px]">
                 <span className="h-[20px] w-[4px] bg-[#FF6900]" /> For Banks
               </h3>
-              <p className="text-[16px] text-[#86909C] md:text-[18px]">
+              <p className="inter-light text-[16px] text-[#86909C] md:text-[18px]">
                 Bank Direct — Real-time cross-border payments with embedded
                 compliance, flat pricing, and SWIFT-compatible integration.
               </p>
@@ -337,11 +346,11 @@ export function CbpContent() {
           {/* For Fintechs */}
           <div className="mb-[48px] lg:mb-[64px]">
             <div className="mb-[24px] lg:mb-[36px]">
-              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-bold text-[#29221D] md:text-[24px] lg:text-[28px]">
+              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-[700] text-[#29221D] md:text-[24px] lg:text-[28px]">
                 <span className="h-[20px] w-[4px] bg-[#FF6900]" /> For
                 Fintechs
               </h3>
-              <p className="text-[16px] text-[#86909C] md:text-[18px]">
+              <p className="inter-light text-[16px] text-[#86909C] md:text-[18px]">
                 POBO Direct — Cross-border payments on behalf of clients, with
                 full compliance, direct crediting, and operational simplicity.
               </p>
@@ -358,7 +367,7 @@ export function CbpContent() {
       >
         <div className="mx-auto max-w-[1024px]">
           <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-            <h2 className="mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
+            <h2 className="inter-medium mb-[12px] text-left text-[32px] text-[#29221D] md:text-center">
               Exchange Express
             </h2>
           </div>
@@ -366,11 +375,11 @@ export function CbpContent() {
           {/* For licensed web3 institutions */}
           <div className="mb-[48px] lg:mb-[64px]">
             <div className="mb-[24px] lg:mb-[36px]">
-              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-bold text-[#29221D] md:text-[24px] lg:text-[28px]">
+              <h3 className="mb-[12px] flex items-center gap-[10px] text-[20px] font-[700] text-[#29221D] md:text-[24px] lg:text-[28px]">
                 <span className="h-[20px] w-[4px] bg-[#FF6900]" /> For
                 licensed web3 institutions
               </h3>
-              <p className="text-[16px] text-[#86909C] md:text-[18px]">
+              <p className="inter-light text-[16px] text-[#86909C] md:text-[18px]">
                 Same-name fiat on/off-ramps in minutes. Built for crypto
                 exchanges and digital asset platforms.
               </p>
@@ -382,7 +391,7 @@ export function CbpContent() {
 
       {/* ===== CTA ===== */}
       <Cta>
-        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+        <h2 className="inter-light mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
           Ready to modernize your cross-border infrastructure?
         </h2>
       </Cta>

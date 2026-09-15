@@ -4,6 +4,7 @@ import * as React from "react";
 import { Link } from "@/i18n/navigation";
 import { newsService } from "@/services/client/client-news-service";
 import type { NewsItem } from "@/lib/api/types";
+import { articlePathFor } from "@/lib/news-id";
 import { cn } from "@/lib/utils";
 
 /**
@@ -44,6 +45,14 @@ function externalUrl(item: NewsItem): string | undefined {
 }
 function resolveImage(item: NewsItem): string {
   return imageUrl(item) || PLACEHOLDER_IMAGE;
+}
+
+/**
+ * Detail route for a card. Id-less records (the LinkedIn feed) fall back to the
+ * list rather than producing `/news/undefined` — see `src/lib/news-id.ts`.
+ */
+function detailHref(item: NewsItem): string {
+  return articlePathFor(item) ?? "/news";
 }
 
 function formatDate(dateStr?: string): string {
@@ -319,7 +328,7 @@ function DateStamp({ value, className }: { value?: string; className?: string })
   if (!text) return null;
   return (
     <span className={cn("inter-light flex items-center gap-[4px] text-[13px] text-[#999]", className)}>
-      <img src="/images/icon-date.png" alt="Date" className="h-[24px] w-[24px] object-contain" />
+      <img src="/images/icon-date.png" alt="Date" width={48} height={48} loading="lazy" decoding="async" className="h-[24px] w-[24px] object-contain" />
       {text}
     </span>
   );
@@ -327,10 +336,11 @@ function DateStamp({ value, className }: { value?: string; className?: string })
 
 /** Left primary card: cover image + inner white panel. */
 function FeaturedCard({ item }: { item: NewsItem }) {
+  const href = detailHref(item);
   return (
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-[#FFF5EE] shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg">
       <div className="h-[220px] w-full overflow-hidden bg-[#f0ebe6] sm:h-[280px] lg:h-[320px]">
-        <img src={resolveImage(item)} alt={item.title} decoding="async" className="h-full w-full object-cover" />
+        <img src={resolveImage(item)} alt={item.title} width={400} height={300} loading="lazy" decoding="async" className="h-full w-full object-cover" />
       </div>
       <div className="flex flex-1 flex-col p-[12px]">
         <div className="mb-[12px] flex items-center gap-[10px]">
@@ -348,7 +358,7 @@ function FeaturedCard({ item }: { item: NewsItem }) {
           )}
           <div className="mt-auto pb-[12px] pt-[4px]">
             <Link
-              href={`/news/${item.id}`}
+              href={href}
               className="inter-light inline-flex items-center gap-[6px] text-[14px] font-bold text-[#FF8C2E] transition-colors hover:text-[#e07820]"
             >
               Read more <span>&rsaquo;</span>
@@ -363,6 +373,7 @@ function FeaturedCard({ item }: { item: NewsItem }) {
 /** Right stacked text-only cards. */
 function SideCard({ item }: { item: NewsItem }) {
   const featured = item.type === "featured";
+  const href = detailHref(item);
   return (
     <div
       className={cn(
@@ -386,7 +397,7 @@ function SideCard({ item }: { item: NewsItem }) {
         )}
         <div className="mt-auto pb-[18px] pt-[4px] sm:pb-[22px]">
           <Link
-            href={`/news/${item.id}`}
+            href={href}
             className="inter-light inline-flex items-center gap-[6px] text-[14px] font-bold text-[#FF8C2E] transition-colors hover:text-[#e07820]"
           >
             Read more <span>&rsaquo;</span>
@@ -399,10 +410,11 @@ function SideCard({ item }: { item: NewsItem }) {
 
 /** News tab: horizontal card (image left, text right). */
 function RowCard({ item }: { item: NewsItem }) {
+  const href = detailHref(item);
   return (
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-white shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg sm:flex-row sm:items-start">
       <div className="shrink-0 bg-[#f0ebe6] sm:w-[373px]" style={{ aspectRatio: "16/9" }}>
-        <img src={resolveImage(item)} alt={item.title} loading="lazy" decoding="async" className="h-full w-full object-contain" />
+        <img src={resolveImage(item)} alt={item.title} width={373} height={210} loading="lazy" decoding="async" className="h-full w-full object-contain" />
       </div>
       <div className="flex flex-1 flex-col p-[20px] sm:p-[24px]">
         <div className="mb-[12px] h-[68px]">
@@ -421,7 +433,7 @@ function RowCard({ item }: { item: NewsItem }) {
         </div>
         <div className="h-[22px]">
           <Link
-            href={`/news/${item.id}`}
+            href={href}
             className="inter-light inline-flex items-center gap-[6px] text-[14px] font-bold text-[#2d2722] transition-colors hover:text-[#FF8C2E]"
           >
             Read more <span>&rarr;</span>
@@ -439,7 +451,7 @@ function LinkedInCard({ card }: { card: NewsItem }) {
     <div className="card-hidden flex flex-col overflow-hidden rounded-lg bg-white shadow-[#F1E3DA] transition-shadow duration-300 hover:shadow-lg">
       {imageUrl(card) && (
         <div className="h-[180px] w-full overflow-hidden sm:h-[200px]">
-          <img src={imageUrl(card)} alt={card.title} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+          <img src={imageUrl(card)} alt={card.title} width={400} height={200} loading="lazy" decoding="async" className="h-full w-full object-cover" />
         </div>
       )}
       <div className="flex flex-1 flex-col px-[18px] pt-[18px] sm:px-[22px] sm:pt-[22px]">
@@ -465,7 +477,7 @@ function LinkedInCard({ card }: { card: NewsItem }) {
             </a>
           ) : (
             <Link
-              href={`/news/${card.id}`}
+              href={detailHref(card)}
               className="inter-light inline-flex items-center gap-[6px] text-[12px] text-[#FF8C2E] transition-colors hover:text-[#e07820]"
             >
               View More <span>&rsaquo;</span>

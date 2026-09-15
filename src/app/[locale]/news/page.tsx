@@ -7,6 +7,7 @@ import { BUSINESS_CODE } from "@/lib/api/config";
 import type { NewsItem } from "@/lib/api/types";
 import { newsServerService } from "@/services/server/news-server-service";
 import { buildPageMetadata } from "@/lib/seo";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { NewsHero } from "./_components/news-hero";
 import { NewsGrid } from "./_components/news-grid";
 import { NewsCta } from "./_components/news-cta";
@@ -64,10 +65,13 @@ export default async function NewsPage({ params }: Props) {
   const { events, linkedin } = await loadInitialNews();
 
   return (
-    <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
-      <NewsHero />
-      <NewsGrid initialEvents={events} initialLinkedin={linkedin} />
-      <NewsCta />
-    </div>
+    <>
+      <PageJsonLd page="news" />
+      <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
+        <NewsHero />
+        <NewsGrid initialEvents={events} initialLinkedin={linkedin} />
+        <NewsCta />
+      </div>
+    </>
   );
 }

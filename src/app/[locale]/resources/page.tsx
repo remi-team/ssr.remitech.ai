@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { FaqJsonLd, PageJsonLd } from "@/components/seo/json-ld";
 import ResourcesContent from "./_components/resources-content";
 import { qaItems } from "./faq-data";
 
@@ -32,23 +33,13 @@ export default async function ResourcesPage({ params }: Props) {
 
   return (
     <>
+      <PageJsonLd page="resources" />
       {/* FAQPage structured data — mirrors the visible FAQ accordion. */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: qaItems.map((qa) => ({
-              "@type": "Question",
-              name: qa.title,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: qa.content.map((s) => s.trim()).join(" "),
-              },
-            })),
-          }),
-        }}
+      <FaqJsonLd
+        entries={qaItems.map((qa) => ({
+          question: qa.title,
+          answer: qa.content.map((s) => s.trim()).join(" "),
+        }))}
       />
       <ResourcesContent />
     </>

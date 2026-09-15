@@ -29,7 +29,7 @@ interface RegForm {
 
 const ErrorMsg = ({ msg }: { msg: string }) =>
   msg ? (
-    <div className="min-h-[1rem] text-xs text-red-500">{msg}</div>
+    <div className="inter-light min-h-[1rem] text-xs text-red-500">{msg}</div>
   ) : (
     <div className="min-h-[1rem]" />
   );
@@ -52,7 +52,7 @@ const EMPTY: RegForm = {
  *
  * Full-screen top drawer. The header contains only a back arrow (the Drawer
  * component itself provides the close button at top-right). The form body has
- * an `<h1>` title, first/last name in a 2-col grid, then the remaining fields
+ * an `<h2>` title, first/last name in a 2-col grid, then the remaining fields
  * stacked vertically. Submit → RegCallback modal.
  *
  * Field order matches the original exactly:
@@ -64,6 +64,9 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
   const closeAll = useModalStore((s) => s.closeAll);
   const showLogin = useModalStore((s) => s.showLogin);
   const showRegCallback = useModalStore((s) => s.showRegCallback);
+  // Drawer stays mounted while closed, so its heading must not be an <h1>
+  // (QA BUG-12); this id backs the dialog's aria-labelledby.
+  const titleId = React.useId();
 
   const [form, setForm] = React.useState<RegForm>(EMPTY);
   const [touched, setTouched] = React.useState<Record<string, boolean>>({});
@@ -144,7 +147,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
   const fieldClass = (err: string) =>
     cn(
-      "h-10 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+      "h-10 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
       err && "border-red-500 focus:border-red-500"
     );
 
@@ -156,6 +159,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
       zIndex={1000}
       closeButtonColor="#000"
       aria-label={t("register.title")}
+      labelledBy={titleId}
       onClose={closeAll}
     >
       <div className="reg-drawer-inner flex h-full flex-col bg-white">
@@ -184,15 +188,15 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
           className="reg-scroll flex-1 overflow-y-auto px-6 pb-6 pt-4"
           style={{ paddingBottom: "max(env(safe-area-inset-bottom, 20px), 40px)" }}
         >
-          <h1 className="mb-6 text-xl font-medium text-[#29221D]">
+          <h2 id={titleId} className="mb-6 text-xl inter-medium text-[#29221D]">
             {t("register.title")}
-          </h1>
+          </h2>
 
           <form className="space-y-4" onSubmit={onSubmit}>
             {/* First & Last name — 2-col grid */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="block text-sm text-[#4E5969]">{t("register.firstname")}</label>
+                <label className="inter-light block text-sm text-[#4E5969]">{t("register.firstname")}</label>
                 <input
                   type="text"
                   value={form.firstname}
@@ -203,7 +207,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
                 <ErrorMsg msg={errors.firstname} />
               </div>
               <div className="space-y-1">
-                <label className="block text-sm text-[#4E5969]">{t("register.lastname")}</label>
+                <label className="inter-light block text-sm text-[#4E5969]">{t("register.lastname")}</label>
                 <input
                   type="text"
                   value={form.lastname}
@@ -217,7 +221,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Email */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.email")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.email")}</label>
               <input
                 type="email"
                 value={form.email}
@@ -230,7 +234,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Password */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.password")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.password")}</label>
               <input
                 type="password"
                 value={form.password}
@@ -243,7 +247,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Repeat Password */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.repeatPassword")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.repeatPassword")}</label>
               <input
                 type="password"
                 value={form.repeatPassword}
@@ -256,7 +260,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Contact Number */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.contact")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.contact")}</label>
               <input
                 type="tel"
                 value={form.contactNumber}
@@ -268,7 +272,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Company Name */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.companyName")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.companyName")}</label>
               <input
                 type="text"
                 value={form.companyName}
@@ -281,12 +285,12 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Company Type */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.companyType")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.companyType")}</label>
               <div className="relative">
                 <select
                   value={form.companyType}
                   onChange={(e) => set("companyType", e.target.value)}
-                  className="h-10 w-full cursor-pointer appearance-none border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors focus:border-orange-500 focus:outline-none"
+                  className="inter-light h-10 w-full cursor-pointer appearance-none border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors focus:border-orange-500 focus:outline-none"
                 >
                   <option value="" disabled>
                     {t("register.companyTypePlaceholderMobile")}
@@ -311,7 +315,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Country */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.country")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.country")}</label>
               <input
                 type="text"
                 value={form.country}
@@ -323,7 +327,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
 
             {/* Relevant Authorities */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.authorities")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.authorities")}</label>
               <input
                 type="text"
                 value={form.relevantAuthorities}
@@ -338,7 +342,7 @@ export function MobileRegisterModal({ show }: { show: boolean }) {
               <button
                 type="submit"
                 disabled={!isFormValid || submitting}
-                className="h-11 w-full rounded-full bg-orange-500 text-sm text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-500"
+                className="inter-light h-11 w-full rounded-full bg-orange-500 text-sm text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-500"
               >
                 {submitting ? t("register.submitting") : t("register.submit")}
               </button>

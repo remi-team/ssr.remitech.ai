@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { SolutionPageJsonLd } from "@/components/seo/json-ld";
 import { RegtechContent } from "./_components/regtech-content";
 
 type Props = {
@@ -33,7 +34,8 @@ export default async function RegtechPage({ params }: Props) {
   setRequestLocale(validLocale);
 
   return (
-    <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
+    <div className="min-h-screen bg-[#FAF8F7]">
+      <SolutionPageJsonLd page="solutionsRegtech" locale={validLocale} />
       <RegtechContent />
     </div>
   );

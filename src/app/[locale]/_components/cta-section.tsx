@@ -14,12 +14,12 @@ export function CtaSection() {
     <Cta wrapperBg="bg-[#f2efec]" id="contact" aria-labelledby="cta-title">
       <h2
         id="cta-title"
-        className="mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]"
+        className="mx-auto mb-4 max-w-[860px] text-[24px] inter-light leading-[1.3] text-white md:mb-6 md:text-[28px] lg:text-[32px]"
       >
         The corridor you open today is the client{" "}
-        <br className="hidden lg:flex" /> relationship you own tomorrow.
+        <br className="hidden lg:block" />{" "}relationship you own tomorrow.
       </h2>
-      <p className="mx-auto mb-[36px] max-w-[860px] text-[16px] text-white md:text-[18px]">
+      <p className="mx-auto mb-6 max-w-[860px] text-[16px] inter-light text-white md:mb-9 md:text-[18px]">
         30 minutes to walk through what emerging market access looks like for
         your institution — and what products open up from there.
       </p>

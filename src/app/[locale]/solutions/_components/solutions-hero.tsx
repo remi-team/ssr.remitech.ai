@@ -49,9 +49,12 @@ export function SolutionsHero() {
           <source media="(min-width:768px)" srcSet={HERO_BG_1536} />
           <img
             src={HERO_BG_768}
-            alt=""
+            alt="Remi Solutions"
+            width={768}
+            height={980}
+            loading="eager"
+            decoding="async"
             className="h-full w-full object-cover"
-            aria-hidden="true"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
             }}

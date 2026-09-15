@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
 import { PolicyPageLayout } from "../_components/policy-page-layout";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { privacyIntroEn, privacySectionsEn } from "./_components/content-en";
 import { privacyIntroZh, privacySectionsZh } from "./_components/content-zh";
 
@@ -30,12 +31,15 @@ export default async function PrivacyPolicyPage({ params }: Props) {
   const zh = validLocale === "zh";
 
   return (
-    <PolicyPageLayout
-      title={zh ? "隐私政策" : "Privacy Policy"}
-      updated={zh ? "最后更新：2026 年 6 月" : "Last updated: June 2026"}
-      intro={zh ? privacyIntroZh : privacyIntroEn}
-      sections={zh ? privacySectionsZh : privacySectionsEn}
-      ctaTitle={zh ? "对您的隐私有疑问？" : "Questions about your privacy?"}
-    />
+    <>
+      <PageJsonLd page="privacyPolicy" />
+      <PolicyPageLayout
+        title={zh ? "隐私政策" : "Privacy Policy"}
+        updated={zh ? "最后更新：2026 年 6 月" : "Last updated: June 2026"}
+        intro={zh ? privacyIntroZh : privacyIntroEn}
+        sections={zh ? privacySectionsZh : privacySectionsEn}
+        ctaTitle={zh ? "对您的隐私有疑问？" : "Questions about your privacy?"}
+      />
+    </>
   );
 }

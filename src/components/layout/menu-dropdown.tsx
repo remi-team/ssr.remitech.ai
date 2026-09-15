@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { AppLink } from "@/components/layout/app-link";
 import type { NavItem } from "@/config/navigation";
 
 export interface MenuDropdownProps {
@@ -188,7 +189,7 @@ export function MenuDropdown({
             onMouseEnter={() => hasSub && handleGroupEnter(item.labelKey)}
             onMouseLeave={handleGroupLeave}
           >
-            <a
+            <AppLink
               href={item.href}
               ref={(el) => {
                 if (el) itemRefs.current.set(item.labelKey, el);
@@ -216,7 +217,7 @@ export function MenuDropdown({
                   aria-hidden="true"
                 />
               )}
-            </a>
+            </AppLink>
 
             {/* Full-width overlay + dropdown panel */}
             {hasSub && activeMenu === item.labelKey && (
@@ -238,10 +239,9 @@ export function MenuDropdown({
                     </p>
                     <div className="mt-[32px] grid grid-cols-3 gap-x-[64px] gap-y-[44px]">
                       {item.children!.map((sub) => {
-                        const Icon = sub.icon;
                         const subActive = isActiveRoute(sub.href);
                         return (
-                          <a
+                          <AppLink
                             key={sub.labelKey}
                             href={sub.href}
                             className="group/item flex min-h-[108px] flex-col"
@@ -254,21 +254,17 @@ export function MenuDropdown({
                                   : "border-[#29221D]/20 group-hover/item:border-[#FF8C2E]"
                               )}
                             >
-                              <span className="flex items-center gap-2">
-                                <Icon
-                                  className="h-4 w-4 text-[#29221D] transition-colors group-hover/item:text-brand"
-                                  aria-hidden="true"
-                                />
-                                <span
-                                  className={cn(
-                                    "text-[16px] font-[600] leading-[1.2] transition-colors duration-200",
-                                    subActive
-                                      ? "text-[#29221D]"
-                                      : "text-[#29221D] group-hover/item:text-[#FF8C2E]"
-                                  )}
-                                >
-                                  {t(sub.labelKey as never)}
-                                </span>
+                              {/* Legacy parity: the desktop panel renders the
+                                  label alone — no leading product icon. */}
+                              <span
+                                className={cn(
+                                  "text-[16px] font-[600] leading-[1.2] transition-colors duration-200",
+                                  subActive
+                                    ? "text-[#29221D]"
+                                    : "text-[#29221D] group-hover/item:text-[#FF8C2E]"
+                                )}
+                              >
+                                {t(sub.labelKey as never)}
                               </span>
                               <ChevronRight
                                 className={cn(
@@ -277,6 +273,7 @@ export function MenuDropdown({
                                     ? "translate-x-[2px] text-[#29221D]"
                                     : "group-hover/item:translate-x-[2px] group-hover/item:text-[#FF8C2E]"
                                 )}
+                                strokeWidth={1.8}
                                 aria-hidden="true"
                               />
                             </div>
@@ -285,7 +282,7 @@ export function MenuDropdown({
                                 ? t(sub.descriptionKey as never)
                                 : ""}
                             </p>
-                          </a>
+                          </AppLink>
                         );
                       })}
                     </div>

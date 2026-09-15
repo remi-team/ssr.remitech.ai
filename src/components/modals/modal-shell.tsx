@@ -42,6 +42,8 @@ export interface ModalShellProps {
   size?: "md" | "lg";
   /** ARIA dialog label. */
   "aria-label"?: string;
+  /** `id` of the visible heading that names the dialog (aria-labelledby). */
+  labelledBy?: string;
   children: React.ReactNode;
 }
 
@@ -51,6 +53,7 @@ export function ModalShell({
   welcomePanel,
   size = "md",
   "aria-label": ariaLabel,
+  labelledBy,
   children,
 }: ModalShellProps) {
   const [mounted, setMounted] = React.useState(false);
@@ -142,7 +145,8 @@ export function ModalShell({
         ref={cardRef}
         role="dialog"
         aria-modal="true"
-        aria-label={ariaLabel}
+        aria-label={labelledBy ? undefined : ariaLabel}
+        aria-labelledby={labelledBy}
         aria-hidden={!show}
         inert={!show}
         tabIndex={-1}
@@ -218,16 +222,16 @@ export function WelcomePanel({
 }) {
   return (
     <div className="mx-auto max-w-[350px] p-2 px-10 text-center">
-      <h2 className="mb-[48px] text-[28px] font-light leading-tight tracking-tight text-white max-md:mb-10 max-md:text-[32px]"
+      <h2 className="mb-[48px] text-[28px] inter-light leading-tight tracking-tight text-white max-md:mb-10 max-md:text-[32px]"
           style={{ textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>
         Welcome to REMI
       </h2>
-      <div className="text-base leading-relaxed text-white/95 max-md:text-sm">
+      <div className="inter-light text-base leading-relaxed text-white/95 max-md:text-sm">
         <span>{notMemberLabel} </span>
         <button
           type="button"
           onClick={onRegister}
-          className="font-medium text-white underline underline-offset-[3px] decoration-1 transition-opacity hover:opacity-80"
+          className="inter-light text-white underline underline-offset-[3px] decoration-1 transition-opacity hover:opacity-80"
         >
           {registerLabel}
         </button>

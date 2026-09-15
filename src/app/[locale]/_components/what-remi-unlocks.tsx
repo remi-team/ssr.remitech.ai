@@ -35,8 +35,8 @@ export function WhatRemiUnlocks() {
     <section id="solutions" data-scroll="system" className="scroll-mt-[80px] bg-white pb-[80px] pt-[60px] lg:pb-[133px] lg:pt-[100px]">
       <div className="mx-auto max-w-[1536px] px-6 lg:px-[123px]">
         <div className="text-left md:text-center">
-          <h2 className="mb-3 text-[32px] font-medium text-[#29221D]">What Remi Unlocks</h2>
-          <p className="mx-auto mt-4 max-w-[1536px] text-[18px] text-[#86909C]">
+          <h2 className="mb-3 text-[32px] inter-medium text-[#29221D]">What Remi Unlocks</h2>
+          <p className="mx-auto mt-4 max-w-[1536px] text-[18px] inter-light text-[#86909C]">
             Why financial institutions choose Remi
           </p>
         </div>
@@ -49,8 +49,8 @@ export function WhatRemiUnlocks() {
               <div className="mb-4 flex h-[60px] w-[60px] items-center justify-center">
                 <SmartImg src={f.icon} alt={f.title} className="h-[60px] w-[60px] object-contain" />
               </div>
-              <h3 className="mb-3 text-[18px] text-[#29221D]">{f.title}</h3>
-              <p className="mt-2 flex-1 text-[16px] leading-relaxed text-[#86909C]">{f.desc}</p>
+              <h3 className="mb-3 text-[18px] inter-light text-[#29221D]">{f.title}</h3>
+              <p className="mt-2 flex-1 text-[16px] inter-light leading-relaxed text-[#86909C]">{f.desc}</p>
             </div>
           ))}
         </div>

@@ -9,7 +9,7 @@ const whyRemiData = [
   {
     title: "Global E-Money Token(EMT) Network",
     content:
-      "Remi has established a regulated E-Money Token(EMT) network with active corridors across Vietnam, Philippines, Indonesia, Bangladesh, the UAE and key Latin American markets. More than 15 member institutions have been secured. Notably, in the United States, as a Singapore-based technology company — Remi leads BAFT's working group on providing comment letter to OCC's GENIUS Act",
+      "Remi has established a regulated E-Money Token(EMT) network with active corridors across Vietnam, Philippines, Indonesia, Bangladesh, the UAE and key Latin American markets. More than 15 member institutions have been secured. Notably, in the United States, as a Singapore-based technology company — Remi leads BAFT’s working group on providing comment letter to OCC’s GENIUS Act",
   },
   {
     title: "Regulated Digital Asset Trading Platform",
@@ -179,17 +179,21 @@ function HeroSection() {
           <img
             src="/images/membership_640@2x_compressed.jpg"
             alt="Remi Network"
+            width={1280}
+            height={1880}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         </picture>
       </div>
       <div className="relative z-10 h-full flex pt-[140px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px] pb-[48px]">
         <div className="max-w-[1536px] mx-auto px-[24px] sm:px-[48px] lg:px-[120px] w-full">
-          <h1 className="font-light text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] uppercase mb-[16px] sm:mb-[20px] md:mb-[24px]">
+          <h1 className="inter-light text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] uppercase mb-[16px] sm:mb-[20px] md:mb-[24px]">
             REMI NETWORK MEMBERSHIP
           </h1>
           <div className="max-w-[810px] space-y-[12px] sm:space-y-[14px] md:space-y-[16px]">
-            <p className="text-white/80 text-[15px] sm:text-[16px] lg:text-[20px] font-light leading-relaxed">
+            <p className="text-white/80 text-[15px] sm:text-[16px] lg:text-[20px] inter-light leading-relaxed">
               Join the bank-consortium-governed blockchain settlement
               infrastructure, enabling real-time interbank settlement using
               regulated payment stablecoins.
@@ -206,10 +210,10 @@ function WhyRemiSection() {
     <section data-scroll="why-remi" className="bg-white px-[24px] lg:px-[0]">
       <div className="max-w-[1024px] mx-auto pt-[48px] overflow-hidden">
         <div className="text-center lg:text-left mb-12 lg:mb-16">
-          <h2 className="font-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
             Why Remi
           </h2>
-          <p className="font-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
+          <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
             Remi is answering the challenges of our time with leading solutions.
           </p>
         </div>
@@ -228,12 +232,12 @@ function WhyRemiSection() {
                     }`}
                   >
                     <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-[18px] font-light text-[#29221D] mb-[12px]">
+                      <h3 className="text-[18px] inter-light text-[#29221D] mb-[12px]">
                         {item.title}
                       </h3>
                     </div>
                     <div className="space-y-6">
-                      <p className="font-light text-[16px] text-[#86909C]">
+                      <p className="inter-light text-[16px] text-[#86909C]">
                         {item.content}
                       </p>
                     </div>
@@ -256,16 +260,16 @@ function MembershipCategoriesSection() {
     >
       <div className="mx-auto max-w-[1024px]">
         <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px] text-center">
-          <h2 className="font-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mx-auto mt-[12px] lg:mt-[16px] 2xl:mt-[24px] text-left md:text-center mb-[12px]">
             Membership Categories &amp; Function Matrix
           </h2>
-          <p className="font-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
+          <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] text-left md:text-center mb-[24px] lg:mb-[36px]">
             The Network operates on a{" "}
             <strong className="font-[500]">function-driven model</strong>. Each
-            Member activates
-            <br className="hidden md:flex" />a defined combination of the four
+            Member activates{" "}
+            <br className="hidden md:flex" />{" "}a defined combination of the four
             core functions, tailored to{" "}
-            <br className="hidden md:flex" /> its regulatory authorization and
+            <br className="hidden md:flex" />{" "}its regulatory authorization and
             business needs.
           </p>
         </div>
@@ -277,23 +281,24 @@ function MembershipCategoriesSection() {
             Four Membership Categories
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mt-[24px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[35px]">
             {membershipCategories.map((cat) => (
-              <div
-                key={cat.title}
-                className="bg-[#F7F5F3] rounded-[4px] p-[24px] border border-[#f4f2f0] hover:shadow-lg transition-shadow duration-300"
-              >
-                <h4 className="flex gap-[10px] items-center text-[18px] font-medium text-[#29221D] pb-[12px] border-b border-b-[#EBE8E5] mb-[12px]">
-                  <span className="h-[8px] w-[8px] bg-[#FF6900] shrink-0" />
-                  {cat.title}
-                </h4>
-                <p className="font-light text-[16px] text-[#86909C] mb-[8px]">
-                  <strong className="font-[500] text-[#2d2722]">Functions:</strong>{" "}
-                  {cat.functions}
-                </p>
-                <p className="font-light text-[16px] text-[#86909C]">
-                  {cat.desc}
-                </p>
+              <div key={cat.title} className="h-auto p-[24px] 2xl:py-[32px]">
+                <div className="flex justify-between items-center border-b border-b-[#EBE8E5]">
+                  <h4 className="flex gap-[10px] items-center text-[18px] inter-medium text-[#29221D] pb-[12px]">
+                    <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
+                    {cat.title}
+                  </h4>
+                </div>
+                <div className="pt-[12px]">
+                  <p className="inter-light text-[16px] text-[#86909C] mb-[8px]">
+                    <strong className="text-[#2d2722]">Functions:</strong>{" "}
+                    {cat.functions}
+                  </p>
+                  <p className="inter-light text-[16px] text-[#86909C]">
+                    {cat.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -308,38 +313,50 @@ function MembershipCategoriesSection() {
           <div className="mt-[48px] max-w-[1024px] mx-auto">
             <div className="table-container bg-white border border-[#EBE8E5] overflow-hidden rounded-[0.75rem]">
               {/* Desktop table */}
-              <table className="hidden md:table w-full border-collapse border-separate">
-                <thead>
+              <table className="hidden md:table w-full border-separate border-spacing-0">
+                <thead className="relative z-10">
                   <tr className="bg-[#69584E] shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
-                    <th className="p-[8px] border-r border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Core Function
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] border-r border-r-[#EBE8E5] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Core Function
+                        </span>
+                      </div>
                     </th>
-                    <th className="p-[8px] border-r border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Official Definition
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] border-r border-r-[#EBE8E5] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Official Definition
+                        </span>
+                      </div>
                     </th>
-                    <th className="p-[8px] border-r border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Issuing
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] border-r border-r-[#EBE8E5] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Issuing
+                        </span>
+                      </div>
                     </th>
-                    <th className="p-[8px] border-r border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Custodian
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] border-r border-r-[#EBE8E5] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Custodian
+                        </span>
+                      </div>
                     </th>
-                    <th className="p-[8px] border-r border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Transaction
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] border-r border-r-[#EBE8E5] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Transaction
+                        </span>
+                      </div>
                     </th>
-                    <th className="p-[8px] border-b border-[#EBE8E5]">
-                      <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
-                        Messaging
-                      </span>
+                    <th className="relative p-[8px] border-b border-b-[#f4f2f0] transition-all duration-300">
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-white tracking-[0.025em] [text-shadow:0_1px_2px_rgba(0,0,0,0.1)]">
+                          Messaging
+                        </span>
+                      </div>
                     </th>
                   </tr>
                 </thead>
@@ -440,7 +457,7 @@ function BenefitsSection() {
     >
       <div className="mx-auto max-w-[1024px]">
         <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-          <h2 className="font-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
             Member Exclusive Benefits
           </h2>
         </div>
@@ -451,7 +468,7 @@ function BenefitsSection() {
               className="h-auto min-h-[120px] border border-[#FF6900] bg-[#F7F5F3] rounded-[4px] p-[24px] 2xl:py-[32px] hover:shadow-lg shadow-[#F1E3DA] transition-shadow duration-300"
             >
               <div className="space-y-6">
-                <p className="font-light text-[16px] text-[#86909C]">
+                <p className="inter-light text-[16px] text-[#86909C]">
                   {item.text}
                 </p>
               </div>
@@ -471,7 +488,7 @@ function GovernanceSection() {
     >
       <div className="mx-auto max-w-[1024px]">
         <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-          <h2 className="font-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
             Transparent Governance Framework
           </h2>
         </div>
@@ -487,6 +504,10 @@ function GovernanceSection() {
                 <img
                   src="/images/Governance_Structure_640@2x_compressed.jpg"
                   alt="Governance Structure"
+                  width={2580}
+                  height={630}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto md:h-full object-contain md:object-cover"
                 />
               </picture>
@@ -495,7 +516,7 @@ function GovernanceSection() {
 
           {/* Governance Content */}
           <div>
-            <p className="font-light text-[16px] md:text-[18px] text-[#86909C] mb-[24px] lg:mb-[36px]">
+            <p className="inter-light text-[16px] md:text-[18px] text-[#86909C] mb-[24px] lg:mb-[36px]">
               Remi operates under a{" "}
               <strong className="text-[#2d2722]">
                 tri-regional corporate governance structure
@@ -506,7 +527,7 @@ function GovernanceSection() {
             {/* Regional Operating Entities */}
             <div className="mb-[32px]">
               <h4 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
-                <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900] font-light" />
+                <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900] inter-light" />
                 Regional Operating Entities
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-[16px] mt-[16px]">
@@ -516,10 +537,10 @@ function GovernanceSection() {
                     className="bg-white p-[16px] rounded-[4px]"
                   >
                     <p
-                      className="font-light text-[18px] text-[#2d2722] mb-[8px]"
+                      className="inter-light text-[18px] text-[#2d2722] mb-[8px]"
                       dangerouslySetInnerHTML={{ __html: entity.name }}
                     />
-                    <p className="font-light text-[16px] text-[#86909C]">
+                    <p className="inter-light text-[16px] text-[#86909C]">
                       {entity.desc}
                     </p>
                   </div>
@@ -533,7 +554,7 @@ function GovernanceSection() {
                 <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                 Tri-Regional Board
               </h4>
-              <p className="font-light text-[16px] text-[#86909C] mt-[16px]">
+              <p className="inter-light text-[16px] text-[#86909C] mt-[16px]">
                 Composed of 9 directors (3 per region), including at least 1
                 independent director per region. Meets annually for substantial
                 network-level operational and structural decisions.
@@ -548,12 +569,12 @@ function GovernanceSection() {
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mt-[16px]">
                 <div className="bg-white p-[16px] rounded-[4px]">
-                  <p className="font-light text-[16px] text-[#86909C] mb-[8px]">
+                  <p className="inter-light text-[16px] text-[#86909C] mb-[8px]">
                     Normal Pipeline Operational and product feedback
                   </p>
                 </div>
                 <div className="bg-white p-[16px] rounded-[4px]">
-                  <p className="font-light text-[16px] text-[#86909C] mb-[8px]">
+                  <p className="inter-light text-[16px] text-[#86909C] mb-[8px]">
                     24/7 Urgent Escalation Security, compliance and regulatory
                     matters
                   </p>
@@ -563,7 +584,7 @@ function GovernanceSection() {
 
             {/* Quote */}
             <div className="border-l-4 border-[#FF6900] pl-[20px] mt-[30px]">
-              <p className="font-light text-[16px] text-[#86909C] italic">
+              <p className="inter-light text-[16px] text-[#86909C] italic">
                 Member input is consultative and considered in good faith for
                 all network decisions. Material changes to the Core Protocol
                 require cryptographic authorization from a threshold of
@@ -585,40 +606,38 @@ function HowToJoinSection() {
     >
       <div className="mx-auto max-w-[1024px]">
         <div className="mb-[48px] md:mb-[64px] lg:mb-[72px] xl:mb-[96px]">
-          <h2 className="font-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
+          <h2 className="inter-medium text-[32px] text-[#29221D] mb-[12px] text-left md:text-center">
             How to Join Remi Network
           </h2>
         </div>
 
         {/* Timeline */}
         <div className="relative max-w-[800px] mx-auto">
-          {/* Vertical center line */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-[#EBE8E5] z-0 -translate-x-px" />
-          {/* Mobile line */}
-          <div className="md:hidden absolute left-[16px] top-0 bottom-0 w-[2px] bg-[#EBE8E5] z-0" />
+          {/* Vertical line (mobile left, desktop center) */}
+          <div className="absolute left-[16px] md:left-1/2 top-0 bottom-0 w-[2px] bg-[#EBE8E5] z-0 md:-translate-x-px" />
 
           {joinSteps.map((step, index) => {
             const isRight = index % 2 !== 0;
             return (
               <div
                 key={step.title}
-                className={`relative w-full md:w-1/2 pb-[40px] md:pb-[48px] last:pb-0 ${
+                className={`relative w-full pl-[48px] pb-[40px] last:pb-0 md:w-1/2 md:pb-[48px] ${
                   isRight
                     ? "md:ml-[50%] md:pl-[40px] md:pr-0"
-                    : "md:pr-[40px] md:pl-0"
-                } pl-[48px] md:pl-0`}
+                    : "md:pl-0 md:pr-[40px]"
+                }`}
               >
                 {/* Dot */}
                 <div
-                  className={`absolute top-[20px] w-[18px] h-[18px] bg-white border-[3px] border-[#FF6900] rounded-full z-[2] ${
+                  className={`absolute left-[8px] top-[20px] w-[18px] h-[18px] bg-white border-[3px] border-[#FF6900] rounded-full z-[2] ${
                     isRight
-                      ? "left-[-9px] md:left-[-9px]"
-                      : "left-[8px] md:left-auto md:right-[-9px]"
+                      ? "md:left-[-9px] md:right-auto"
+                      : "md:left-auto md:right-[-9px]"
                   }`}
                 />
 
                 {/* Card */}
-                <div className="relative bg-[#f4f2f0] border border-[#EBE8E5] rounded-[4px] p-[20px] sm:p-[24px] transition-shadow duration-300 hover:shadow-[0_4px_16px_rgba(241,227,218,0.8)]">
+                <div className="relative bg-[#f4f2f0] border border-[#EBE8E5] rounded-[4px] py-[20px] px-[24px] transition-shadow duration-300 hover:shadow-[0_4px_16px_rgba(241,227,218,0.8)]">
                   {/* Arrow (desktop) */}
                   {!isRight && (
                     <div className="hidden md:block absolute right-[-8px] top-[22px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-[#f4f2f0]" />
@@ -630,10 +649,10 @@ function HowToJoinSection() {
                   <div className="text-[18px] tracking-[0.05em] uppercase mb-[12px] text-[#FF6900]">
                     Step {index + 1}
                   </div>
-                  <h4 className="font-light text-[18px] text-[#2d2722] mb-[12px]">
+                  <h4 className="inter-light text-[18px] text-[#2d2722] mb-[12px]">
                     {step.title}
                   </h4>
-                  <p className="font-light text-[16px] text-[#86909C]">
+                  <p className="inter-light text-[16px] text-[#86909C]">
                     {step.desc}
                   </p>
                 </div>
@@ -659,8 +678,8 @@ export function MembershipContent() {
       <HowToJoinSection />
 
       {/* CTA */}
-      <Cta wrapperBg="bg-[#f2efec]">
-        <h2 className="font-light text-[24px] md:text-[28px] lg:text-[32px] text-white leading-[1.3] mb-[36px] max-w-[860px] mx-auto">
+      <Cta>
+        <h2 className="inter-light text-[24px] md:text-[28px] lg:text-[32px] text-white leading-[1.3] mb-[36px] max-w-[860px] mx-auto">
           Ready to join the next generation of cross-border settlement infrastructure?
         </h2>
       </Cta>

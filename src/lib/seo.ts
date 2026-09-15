@@ -20,14 +20,14 @@ import { siteConfig } from "@/config/site";
 export const SITE_ENV = process.env.SITE_ENV ?? "sit";
 export const isIndexable = SITE_ENV === "production";
 
-type PageKey =
+export type PageKey =
   | "home"
-  | "about"
+  | "aboutUs"
   | "membership"
   | "news"
   | "resources"
   | "compliance"
-  | "contact"
+  | "contactUs"
   | "privacyPolicy"
   | "cookiePolicy"
   | "solutions"
@@ -48,24 +48,30 @@ interface PageMeta {
   zh: { title: string; description: string };
 }
 
-/** Titles intentionally carry the brand suffix ("… — Remi") once. */
+/** Titles intentionally carry the brand suffix ("… — Remi") once.
+ *
+ * `en.title` is kept ≤ 60 characters and `en.description` ≤ 160 so the SERP
+ * snippet is never truncated mid-word (QA BUG-15). CJK copies are measured in
+ * display width rather than code points, so they follow the same intent with a
+ * shorter absolute length.
+ */
 export const PAGE_META: Record<PageKey, PageMeta> = {
   home: {
     path: "/",
     indexable: true,
     en: {
-      title: "Remi — Regulated Stablecoin Infrastructure for Financial Institutions",
+      title: "Remi — Regulated Stablecoin Infrastructure",
       description:
-        "Remi provides regulated stablecoin infrastructure for financial institutions — orchestrating cross-border payment, FX & treasury, RegTech and tokenized trade finance.",
+        "Regulated stablecoin infrastructure for financial institutions: cross-border payment, FX & treasury, RegTech and tokenised trade finance.",
     },
     zh: {
-      title: "Remi — 面向金融机构的受监管稳定币基础设施",
+      title: "Remi — 受监管稳定币基础设施",
       description:
         "Remi 为金融机构提供受监管的稳定币基础设施，编排跨境支付、外汇与司库、监管科技与代币化贸易融资。",
     },
   },
-  about: {
-    path: "/about",
+  aboutUs: {
+    path: "/aboutUs",
     indexable: true,
     en: {
       title: "About Us — Remi",
@@ -129,8 +135,8 @@ export const PAGE_META: Record<PageKey, PageMeta> = {
       description: "Remi 的监管框架：牌照、反洗钱与反恐融资管控、审计报告，以及受监管稳定币服务背后的治理体系。",
     },
   },
-  contact: {
-    path: "/contact",
+  contactUs: {
+    path: "/contactUs",
     indexable: true,
     en: {
       title: "Contact Us — Remi",
@@ -170,12 +176,14 @@ export const PAGE_META: Record<PageKey, PageMeta> = {
     path: "/solutions",
     indexable: true,
     en: {
-      title: "Solutions — Remi",
+      // Carries the hero H1 phrase ("7*24 Instant Stablecoin Exchange
+      // Platform") so <title> and <h1> describe the same thing (QA BUG-11).
+      title: "Solutions — 7*24 Stablecoin Exchange",
       description:
         "From cross-border clearing to tokenized trade finance, Remi weaves settlement, compliance and treasury into every regulated transaction journey.",
     },
     zh: {
-      title: "解决方案 — Remi",
+      title: "解决方案 — 7*24 稳定币兑换",
       description: "从跨境清算到代币化贸易融资，Remi 将结算、合规与国库编织进每一条受监管的交易链路。",
     },
   },
@@ -209,13 +217,16 @@ export const PAGE_META: Record<PageKey, PageMeta> = {
     path: "/solutions/stablecoin",
     indexable: true,
     en: {
-      title: "Stablecoin Exchange Platform — Remi",
+      // Legacy route was `/stablecoin-Issuance` and the hero H1 says
+      // "Stablecoin Issuance" — the old title ("…Exchange Platform") both
+      // contradicted it and cannibalised the /solutions overview (QA BUG-11).
+      title: "Stablecoin Issuance — Remi",
       description:
-        "A 7*24 instant stablecoin exchange platform for regulated institutions — issuance, redemption and settlement in one rail.",
+        "Regulated stablecoin issuance, redemption and settlement for institutions — one rail, bank-grade controls, 7*24 availability.",
     },
     zh: {
-      title: "稳定币兑换平台 — Remi",
-      description: "面向受监管机构的 7*24 即时稳定币兑换平台——发行、赎回与结算一体化。",
+      title: "稳定币发行 — Remi",
+      description: "面向机构的受监管稳定币发行、赎回与结算——统一轨道、银行级管控、7*24 可用。",
     },
   },
   solutionsRegtech: {
@@ -235,12 +246,14 @@ export const PAGE_META: Record<PageKey, PageMeta> = {
     path: "/solutions/cheque",
     indexable: true,
     en: {
-      title: "Digital Cheque — Remi",
+      // Matches the hero H1 ("E CHEQUE") while keeping the "digital clearing"
+      // intent of the previous title (QA BUG-11).
+      title: "E Cheque Digital Clearing — Remi",
       description:
         "Digitised cheque clearing on regulated stablecoin rails — reducing float, accelerating settlement and preserving audit trails.",
     },
     zh: {
-      title: "数字支票 — Remi",
+      title: "E 支票数字清算 — Remi",
       description: "基于受监管稳定币的数字化支票清算——减少在途资金、加速结算并保留完整审计轨迹。",
     },
   },
@@ -292,6 +305,21 @@ export async function buildPageMetadata(
     description?: string;
     /** Absolute path override (e.g. `/news/123`). */
     path?: string;
+    /**
+     * `og:type` — defaults to `website`. Article-like routes MUST pass
+     * `"article"` (QA BUG-16: every page used to declare itself a website).
+     */
+    ogType?: "website" | "article";
+    /** Absolute or site-relative cover image, used for `og:image`/`twitter:image`. */
+    image?: string;
+    /**
+     * ISO 8601 publication / update timestamps. Only meaningful with
+     * `ogType: "article"` — Next renders them as `article:published_time` /
+     * `article:modified_time`, which is how Google News associates a snippet
+     * with its freshness window (QA BUG-03).
+     */
+    publishedTime?: string;
+    modifiedTime?: string;
   },
 ): Promise<Metadata> {
   const meta = PAGE_META[page];
@@ -299,6 +327,10 @@ export async function buildPageMetadata(
   const title = overrides?.title ?? local.title;
   const description = overrides?.description ?? local.description;
   const path = overrides?.path ?? meta.path;
+  const ogType = overrides?.ogType ?? "website";
+  const image = overrides?.image;
+  const publishedTime = overrides?.publishedTime;
+  const modifiedTime = overrides?.modifiedTime;
 
   const canonical = new URL(path, siteConfig.url);
 
@@ -316,17 +348,29 @@ export async function buildPageMetadata(
     description,
     alternates: { canonical: canonical.toString(), languages },
     openGraph: {
-      type: "website",
+      type: ogType,
       locale: locale === "zh" ? "zh_CN" : "en_US",
       url: canonical.toString(),
       siteName: siteConfig.name,
       title,
       description,
+      ...(publishedTime ? { publishedTime } : {}),
+      ...(modifiedTime ? { modifiedTime } : {}),
       images: [
-        { url: "/opengraph-image", width: 1200, height: 630, alt: title },
+        {
+          url: image ?? siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
       ],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/opengraph-image"] },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image ?? siteConfig.ogImage],
+    },
     robots: meta.indexable ? robotsDirective() : { index: false, follow: false },
   };
 }
@@ -352,8 +396,8 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
     publisher: siteConfig.name,
     applicationName: siteConfig.name,
     icons: {
-      icon: "/icon.svg",
-      shortcut: "/icon.svg",
+      icon: siteConfig.logo,
+      shortcut: siteConfig.logo,
       apple: "/apple-touch-icon.png",
     },
   };

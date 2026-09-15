@@ -30,7 +30,7 @@ interface RegForm {
 
 const ErrorMsg = ({ msg }: { msg: string }) =>
   msg ? (
-    <div className="min-h-[1rem] text-xs text-red-500">{msg}</div>
+    <div className="inter-light min-h-[1rem] text-xs text-red-500">{msg}</div>
   ) : (
     <div className="min-h-[1rem]" />
   );
@@ -140,7 +140,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
 
   const fieldClass = (err: string) =>
     cn(
-      "h-10 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+      "h-10 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
       err && "border-red-500 focus:border-red-500"
     );
 
@@ -148,14 +148,14 @@ export function PcRegisterModal({ show }: { show: boolean }) {
     <ModalShell show={show} onClose={closeAll} size="lg" aria-label={t("register.title")}>
       <div className="max-h-[90vh] overflow-y-auto p-8 lg:p-12">
         <form className="mx-auto w-full max-w-3xl space-y-4" onSubmit={onSubmit}>
-          <h2 className="mb-6 text-left text-2xl font-medium text-[#29221D] lg:text-3xl">
+          <h2 className="mb-6 text-left text-2xl inter-medium text-[#29221D] lg:text-3xl">
             {t("register.title")}
           </h2>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             {/* First + Last name */}
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.firstname")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.firstname")}</label>
               <input
                 type="text"
                 value={form.firstname}
@@ -166,7 +166,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <ErrorMsg msg={errors.firstname} />
             </div>
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.lastname")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.lastname")}</label>
               <input
                 type="text"
                 value={form.lastname}
@@ -180,7 +180,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.email")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.email")}</label>
               <input
                 type="email"
                 value={form.email}
@@ -191,7 +191,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <ErrorMsg msg={errors.email} />
             </div>
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.contact")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.contact")}</label>
               <input
                 type="tel"
                 value={form.contactNumber}
@@ -205,7 +205,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.password")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.password")}</label>
               <input
                 type="password"
                 value={form.password}
@@ -216,7 +216,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <ErrorMsg msg={errors.password} />
             </div>
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.repeatPassword")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.repeatPassword")}</label>
               <input
                 type="password"
                 value={form.repeatPassword}
@@ -230,7 +230,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.companyName")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.companyName")}</label>
               <input
                 type="text"
                 value={form.companyName}
@@ -241,12 +241,12 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <ErrorMsg msg={errors.companyName} />
             </div>
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.companyType")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.companyType")}</label>
               <div className="relative">
                 <select
                   value={form.companyType}
                   onChange={(e) => set("companyType", e.target.value)}
-                  className="h-10 w-full cursor-pointer appearance-none border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors focus:border-orange-500 focus:outline-none"
+                  className="inter-light h-10 w-full cursor-pointer appearance-none border-0 border-b border-gray-300 bg-transparent px-0 pb-1 text-sm transition-colors focus:border-orange-500 focus:outline-none"
                 >
                   <option value="" disabled>
                     {t("register.companyTypePlaceholder")}
@@ -273,7 +273,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.country")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.country")}</label>
               <input
                 type="text"
                 value={form.country}
@@ -284,7 +284,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <ErrorMsg msg="" />
             </div>
             <div className="space-y-1">
-              <label className="block text-sm text-[#4E5969]">{t("register.authorities")}</label>
+              <label className="inter-light block text-sm text-[#4E5969]">{t("register.authorities")}</label>
               <input
                 type="text"
                 value={form.relevantAuthorities}
@@ -300,7 +300,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
             <button
               type="submit"
               disabled={!isFormValid || submitting}
-              className="h-12 w-full rounded-full bg-[#FF6900] text-base text-white transition-colors duration-200 hover:bg-[#FF6900]/90 disabled:cursor-not-allowed disabled:bg-[#FF6900]/50"
+              className="inter-light h-12 w-full rounded-full bg-[#FF6900] text-base text-white transition-colors duration-200 hover:bg-[#FF6900]/90 disabled:cursor-not-allowed disabled:bg-[#FF6900]/50"
             >
               {submitting ? t("register.submitting") : t("register.submit")}
             </button>
@@ -308,7 +308,7 @@ export function PcRegisterModal({ show }: { show: boolean }) {
               <button
                 type="button"
                 onClick={() => showLogin()}
-                className="text-sm text-[#4E5969] transition-colors duration-200 hover:text-gray-800"
+                className="inter-light text-sm text-[#4E5969] transition-colors duration-200 hover:text-gray-800"
               >
                 {t("register.backToLogin")}
               </button>

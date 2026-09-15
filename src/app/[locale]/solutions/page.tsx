@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { PageJsonLd } from "@/components/seo/json-ld";
 import { setRequestLocale } from "next-intl/server";
 import { SolutionsHero } from "./_components/solutions-hero";
 import { SolutionsContent } from "./_components/solutions-content";
@@ -29,9 +30,12 @@ export default async function SolutionsPage({ params }: Props) {
   setRequestLocale(validLocale);
 
   return (
-    <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
-      <SolutionsHero />
-      <SolutionsContent />
-    </div>
+    <>
+      <PageJsonLd page="solutions" />
+      <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
+        <SolutionsHero />
+        <SolutionsContent />
+      </div>
+    </>
   );
 }

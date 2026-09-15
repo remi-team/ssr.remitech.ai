@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { SolutionPageJsonLd } from "@/components/seo/json-ld";
 import { Cta } from "@/components/cta";
 import { StablecoinHero } from "./_components/stablecoin-hero";
 import { StablecoinContent } from "./_components/stablecoin-content";
@@ -35,13 +36,14 @@ export default async function StablecoinPage({ params }: Props) {
 
   return (
     <div className="bg-[#FAF8F7]">
+      <SolutionPageJsonLd page="solutionsStablecoin" locale={validLocale} />
       <StablecoinHero />
       <StablecoinContent />
       <Cta>
-        <h2 className="mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
-          &ldquo;The regulatory moat is not a filing. It is a licensed,
+        <h2 className="inter-light mx-auto mb-[36px] max-w-[860px] text-[24px] leading-[1.3] text-white md:text-[28px] lg:text-[32px]">
+          "The regulatory moat is not a filing. It is a licensed,
           operating bank with 30 years of institutional history behind every
-          transaction.&rdquo;
+          transaction."
         </h2>
       </Cta>
     </div>

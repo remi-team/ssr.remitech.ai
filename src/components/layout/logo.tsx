@@ -31,6 +31,9 @@ export function Logo({
       <img
         src={src}
         alt="Remi"
+        width={72}
+        height={30}
+        loading="eager"
         className="h-[48px] lg:hidden"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = "none";
@@ -39,6 +42,9 @@ export function Logo({
       <img
         src={src}
         alt="Remi"
+        width={72}
+        height={30}
+        loading="eager"
         className="hidden w-[120px] h-[64px] lg:block"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = "none";

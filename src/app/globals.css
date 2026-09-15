@@ -6,8 +6,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* Latin uses the loaded Inter font; CJK gracefully falls back to system fonts. */
-  --font-sans: var(--font-inter), "PingFang SC", "Hiragino Sans GB",
+  /* Latin uses the loaded Inter Regular; CJK gracefully falls back to system fonts. */
+  --font-sans: var(--font-inter-regular), "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -129,51 +129,90 @@
     overflow-x: hidden;
   }
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    line-height: normal;
-  }
-  /* Legacy parity: Vue version resets heading/paragraph line-height to
-     `normal` (all vertical rhythm comes from explicit utilities). */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+    @apply bg-background text-foreground font-sans;
     line-height: normal;
   }
   h3::after {
     background: none;
-  }
-  p {
-    line-height: normal;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
 }
 
+/* Legacy parity (old global.css): the Vue build emits this reset OUTSIDE any
+   cascade layer, so it outranks Tailwind's `utilities` layer (unlayered
+   styles beat layered ones). Keeping it unlayered preserves the legacy
+   behaviour where `leading-*` on a heading/paragraph is overridden by
+   `line-height: normal`. Do NOT move it into `@layer base` — utilities would
+   then win and inflate line-height. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: normal;
+}
+p {
+  line-height: normal;
+}
+
 @layer components {
+  /* Keyboard skip link (QA BUG-13).
+     Off-screen until focused, then pinned top-left above the sticky header
+     (z-index must beat the header's). Unlayered rules would outrank Tailwind
+     utilities, so the whole thing lives in `components` and is never combined
+     with competing utilities. */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    background: #29221d;
+    color: #fff;
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    text-decoration: none;
+    transform: translateY(-200%) scale(0.98);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 150ms ease-out,
+      opacity 150ms ease-out;
+  }
+
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+    outline: 2px solid #ff6900;
+    outline-offset: 2px;
+  }
   /* Legacy parity: the Vue site picks Inter weights via dedicated font
-     families (Inter_Bold, Inter_Light, …). This build loads one Inter
-     variable stack instead, so these classes map to font weights. The
-     page-level markup keeps the original class names 1:1. */
+     families (Inter_Bold, Inter_Light, …). Each weight is an independent
+     font-family whose @font-face declares font-weight: normal, so the
+     visual weight is baked into the font file itself and the browser
+     never applies synthetic bolding/lightening. These classes set
+     font-family directly (never font-weight). */
   .inter,
   .inter-regular {
-    font-weight: 400;
+    font-family: var(--font-inter-regular);
   }
   .inter-light {
-    font-weight: 300;
+    font-family: var(--font-inter-light);
   }
   .inter-medium {
-    font-weight: 500;
+    font-family: var(--font-inter-medium);
   }
   .inter-semibold {
-    font-weight: 600;
+    font-family: var(--font-inter-semibold);
   }
   .inter-bold {
-    font-weight: 700;
+    font-family: var(--font-inter-bold);
   }
 
   /* Reusable section heading eyebrow (small uppercase label). */
@@ -329,6 +368,17 @@
     }
   }
 
+  /* Resources doc-list skeleton shimmer — mirrors legacy
+     `@keyframes doc-skeleton-loading` in resources/index.vue. */
+  @keyframes doc-skeleton-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
   /* Reduced-motion: stop the spinner animation */
   @media (prefers-reduced-motion: reduce) {
     .player-spinner {
@@ -464,7 +514,7 @@
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-start;
-      padding: 72px 24px 130px;
+      padding: 72px 24px 160px;
       background: linear-gradient(
         180deg,
         rgba(0, 0, 0, 0.22) 0%,
@@ -474,11 +524,24 @@
       );
     }
     .hero-slide-bottom-quote {
-      bottom: 32px !important;
+      bottom: calc(32px + var(--cookie-h, 0px)) !important;
       left: 24px !important;
       right: 24px !important;
       font-size: 13px;
       line-height: 1.5;
+    }
+  }
+
+  /* Extra-small mobile adjustments (matches legacy Vue 480px breakpoint) */
+  @media (max-width: 480px) {
+    .hero-slide-content {
+      padding: 72px 20px 130px;
+    }
+    .hero-slide-bottom-quote {
+      left: 20px !important;
+      right: 20px !important;
+      bottom: calc(20px + var(--cookie-h, 0px)) !important;
+      font-size: 12px;
     }
   }
 
@@ -504,6 +567,58 @@
       opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
       transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
+
+  /* Cheque page — scroll reveal animation (replaces legacy GSAP). */
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .animate-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ----------------------------------------------------------------- */
+  /* Mobile nav — dashed leader between label and arrow                 */
+  /* (legacy `AnimatedMenuItemContent.vue` `.menu-dash`).               */
+  /* ----------------------------------------------------------------- */
+  .menu-dash {
+    position: relative;
+    min-width: 20px;
+    height: 1px;
+    background: repeating-linear-gradient(
+      90deg,
+      #d4cec9 0,
+      #d4cec9 4px,
+      transparent 4px,
+      transparent 8px
+    );
+    overflow: hidden;
+  }
+  .menu-dash::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      #ff8c2e 0,
+      #ff8c2e 4px,
+      transparent 4px,
+      transparent 8px
+    );
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Legacy drives this with a JS `isHovered` flag; here the Tailwind
+     `group/item` hover state triggers the same fill animation. */
+  .group\/item:hover .menu-dash::after {
+    width: 100%;
+  }
 }
 
 @layer utilities {
@@ -519,5 +634,85 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+/* --------------------------------------------------------------------- */
+/* Hero — legacy Vue parity. These rules are UNLAYERED so they outrank    */
+/* Tailwind utilities, mirroring the Vue build's plain SFC CSS cascade    */
+/* (the legacy `.slide-title` / `.slide-cta` / mobile `.slide-content`    */
+/* overrides all beat utilities in the old site).                         */
+/* --------------------------------------------------------------------- */
+.hero-slide-title {
+  margin-bottom: 20px;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.hero-slide-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 6px;
+  background: #ff6b00;
+  color: #fff0e5;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+.hero-slide-cta:hover {
+  background: #e55a2b;
+}
+.hero-slide-cta:active {
+  transform: scale(0.96) !important;
+}
+
+@media (max-width: 767px) {
+  .hero-slide-content {
+    justify-content: flex-end;
+    padding: 72px 24px 160px;
+  }
+  .hero-slide-text {
+    max-width: 85vw;
+  }
+  .hero-slide-title {
+    margin-bottom: 16px;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: 0.02em;
+  }
+  .hero-slide-cta {
+    justify-content: center;
+    width: 100%;
+    max-width: 200px;
+    min-height: 52px;
+    padding: 14px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    letter-spacing: 0;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-slide-content {
+    padding: 72px 20px 130px;
+  }
+  .hero-slide-text {
+    max-width: 90vw;
+  }
+  .hero-slide-cta {
+    max-width: 180px;
+    min-height: 48px;
+    margin-top: 20px;
+    font-size: 14px;
   }
 }

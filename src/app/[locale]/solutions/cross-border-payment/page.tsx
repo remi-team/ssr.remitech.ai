@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { SolutionPageJsonLd } from "@/components/seo/json-ld";
 import { CbpHero } from "./_components/cbp-hero";
 import { CbpContent } from "./_components/cbp-content";
 
@@ -36,6 +37,7 @@ export default async function CrossBorderPaymentPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
+      <SolutionPageJsonLd page="solutionsCrossBorder" locale={validLocale} />
       <CbpHero />
       <CbpContent />
     </div>

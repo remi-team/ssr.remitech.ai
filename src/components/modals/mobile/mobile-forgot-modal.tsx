@@ -61,7 +61,7 @@ export function MobileForgotModal({ show }: { show: boolean }) {
     >
       <div className="relative z-[5] mt-5 bg-white px-6 pb-[34px] pt-8">
         <div className="mx-auto max-w-md">
-          <h2 className="mb-8 text-[28px] font-medium leading-tight text-[#29221D]">
+          <h2 className="mb-8 text-[28px] inter-medium leading-tight text-[#29221D]">
             {t("forgot.title")}
           </h2>
           <form className="space-y-6" onSubmit={onSubmit}>
@@ -76,19 +76,19 @@ export function MobileForgotModal({ show }: { show: boolean }) {
                 onBlur={() => setTouched(true)}
                 placeholder={t("forgot.emailPlaceholder")}
                 className={cn(
-                  "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
+                  "h-12 w-full border-0 border-b border-gray-300 bg-transparent px-0 pb-2 text-[14px] inter-light transition-colors placeholder:text-[#86909C] focus:border-orange-500 focus:outline-none",
                   emailError && "border-red-500 focus:border-red-500"
                 )}
               />
               {emailError && (
-                <div className="text-[12px] text-red-500">{emailError}</div>
+                <div className="inter-light text-[12px] text-red-500">{emailError}</div>
               )}
             </div>
 
             <button
               type="submit"
               disabled={!isFormValid || submitting}
-              className="mb-2 h-12 w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+              className="inter-light mb-2 h-12 w-full rounded-[24px] bg-orange-500 text-base text-white transition-colors duration-200 hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-gray-300"
             >
               {submitting ? t("forgot.submitting") : t("forgot.submit")}
             </button>
@@ -97,7 +97,7 @@ export function MobileForgotModal({ show }: { show: boolean }) {
               <button
                 type="button"
                 onClick={() => showLogin()}
-                className="text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
+                className="inter-light text-sm text-[#29221D] underline transition-colors duration-200 hover:text-gray-700"
               >
                 {t("forgot.backToLogin")}
               </button>

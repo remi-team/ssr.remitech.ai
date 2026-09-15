@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { routing, AVAILABLE_LOCALES } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
+import { SolutionPageJsonLd } from "@/components/seo/json-ld";
 import { FxHero } from "./_components/fx-hero";
 import { FxContent } from "./_components/fx-content";
 
@@ -33,6 +34,7 @@ export default async function FxPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#f2efec] text-[#2c2520]">
+      <SolutionPageJsonLd page="solutionsFx" locale={validLocale} />
       <FxHero />
       <FxContent />
     </div>

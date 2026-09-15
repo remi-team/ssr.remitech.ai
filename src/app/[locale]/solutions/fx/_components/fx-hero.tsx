@@ -39,7 +39,11 @@ export function FxHero() {
           />
           <img
             src="/images/solution_768x.webp"
-            alt=""
+            alt="Remi Network"
+            width={768}
+            height={980}
+            loading="eager"
+            decoding="async"
             className="h-full w-full object-cover"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
@@ -51,15 +55,15 @@ export function FxHero() {
       {/* Content */}
       <div className="relative z-10 flex h-full pt-[140px] pb-[48px] sm:pt-[160px] md:pt-[180px] lg:pt-[219px]">
         <div className="mx-auto w-full max-w-[1536px] px-[24px] sm:px-[48px] lg:px-[120px]">
-          <h1 className="mb-[16px] text-[32px] uppercase leading-[1.08] tracking-[-0.03em] text-white sm:mb-[20px] sm:text-[36px] md:mb-[24px] md:text-[42px] lg:text-[48px]">
+          <h1 className="inter-light mb-[16px] text-[32px] uppercase leading-[1.08] tracking-[-0.03em] text-white sm:mb-[20px] sm:text-[36px] md:mb-[24px] md:text-[42px] lg:text-[48px]">
             FX & Treasury
           </h1>
           <div className="max-w-[940px] space-y-[12px] sm:space-y-[14px] md:space-y-[16px]">
-            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+            <p className="inter-light text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
               Every cross-border transaction touches a currency conversion —
               and the capital that sits behind it.
             </p>
-            <p className="text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
+            <p className="inter-light text-[15px] leading-relaxed text-white/80 sm:text-[16px] lg:text-[20px]">
               Capture the full FX spread and unlock treasury-grade capital
               markets, 24/7.
             </p>
