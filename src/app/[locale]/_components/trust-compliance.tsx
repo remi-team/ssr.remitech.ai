@@ -9,17 +9,32 @@ import { IMAGES } from "./images";
  * `/images/*` paths. onError hides a missing icon gracefully.
  */
 const cards = [
-  { icon: IMAGES.trust.certifications, title: "Certifications", desc: "ISO 27001 · SOC 2 Type II · ISAE 3000" },
-  { icon: IMAGES.trust.global, title: "Global Patent Coverage", desc: "US – EU – Singapore – Hong Kong" },
-  { icon: IMAGES.trust.stablecoin, title: "Regulatory Alignment", desc: "Fully aligned with MiCA, GENIUS Act, FATF Recommendation 16" },
-  { icon: IMAGES.trust.bison, title: "Bison Bank Foundation", desc: "A licensed Portuguese bank with 30+ years of institutional history. Among the first banks licensed under MiCA to issue Electronic Money Tokens." },
+  { icon: IMAGES.trust.certifications, w: 424, h: 424, title: "Certifications", desc: "ISO 27001 · SOC 2 Type II · ISAE 3000" },
+  { icon: IMAGES.trust.global, w: 424, h: 424, title: "Global Patent Coverage", desc: "US – EU – Singapore – Hong Kong" },
+  { icon: IMAGES.trust.stablecoin, w: 424, h: 424, title: "Regulatory Alignment", desc: "Fully aligned with MiCA, GENIUS Act, FATF Recommendation 16" },
+  { icon: IMAGES.trust.bison, w: 430, h: 386, title: "Bison Bank Foundation", desc: "A licensed Portuguese bank with 30+ years of institutional history. Among the first banks licensed under MiCA to issue Electronic Money Tokens." },
 ];
 
-function SmartImg({ src, alt, className }: { src: string; alt: string; className?: string }) {
+function SmartImg({
+  src,
+  alt,
+  className,
+  width,
+  height,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  /** Intrinsic pixel size — reserves the layout box (技术SEO-6). */
+  width: number;
+  height: number;
+}) {
   return (
     <img
       src={src}
       alt={alt}
+      width={width}
+      height={height}
       className={className}
       loading="lazy"
       onError={(e) => {
@@ -58,6 +73,8 @@ export function TrustCompliance() {
                 <SmartImg
                   src={c.icon}
                   alt={`${c.title} icon`}
+                  width={c.w}
+                  height={c.h}
                   className="h-full w-full object-contain object-right opacity-40 transition-opacity duration-300 group-hover:opacity-60"
                 />
               </div>

@@ -1,19 +1,28 @@
-import type { Metadata } from "next";
+import { connection } from "next/server";
 
 /**
  * Global 404 — rendered for ANY unmatched route, including extension paths
  * (`.png`, `.css`, `.js`, `.xml`, `.txt`, `favicon.ico`, …) that bypass the
  * locale middleware. Prevents the historical "soft 404" where missing files
  * returned the home page HTML with HTTP 200.
+ *
+ * Deliberately renders its own `<head>` and exports **no** `metadata`: this
+ * route has no root layout, so React's metadata hoisting writes a second set of
+ * tags on top of the manual ones — the 2026-09-15 re-test found two
+ * `<meta name="robots">` on every file 404. One source of truth, the JSX.
  */
-export const metadata: Metadata = {
-  title: "Page not found — Remi",
-  description:
-    "The page or file you are looking for on remitech.ai does not exist.",
-  robots: { index: false, follow: false },
-};
+export const dynamic = "force-dynamic";
 
-export default function NotFound() {
+export default async function NotFound() {
+  // `force-dynamic` alone is ignored for this route: it is served as the
+  // `/_not-found` fallback and Next still folds it into the Full Route Cache,
+  // which is where `/missing.css` and `/sitemap.xml.gz` picked up
+  // `s-maxage=31536000` — a dead file being un-reachable from the CDN for a
+  // year (2026-09-15 re-test, 技术SEO-4). Touching a dynamic API opts the
+  // render out of that cache for real, so the response reverts to Next's
+  // dynamic default (`private, no-cache, no-store`).
+  await connection();
+
   return (
     <html lang="en">
       {/* This route renders its own document (no root layout), so React's

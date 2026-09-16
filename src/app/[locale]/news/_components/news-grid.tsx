@@ -188,7 +188,10 @@ export function NewsGrid({ initialEvents, initialLinkedin }: NewsGridProps) {
         <section className="bg-[#f2efec]">
           <div className="mx-auto max-w-[1200px] px-6 sm:px-8 md:px-12 lg:px-16">
             <div className="mb-[24px]">
-              <h3 className="mb-[6px] text-[22px] font-bold text-[#2d2722]">Press Releases &amp; News</h3>
+              {/* Section title sits directly under the page `h1`, so it is the
+                  `h2` of this branch — as `h3` it skipped a level (QA BUG-14
+                  residual, 2026-09-16 sweep). Styling is unchanged. */}
+              <h2 className="mb-[6px] text-[22px] font-bold text-[#2d2722]">Press Releases &amp; News</h2>
               <p className="inter-light text-[15px] text-[#86909C]">
                 Latest announcements and industry updates from Remi Network
               </p>

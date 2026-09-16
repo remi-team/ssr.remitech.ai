@@ -18,11 +18,31 @@ const partners = [
   { name: "Cregis", src: IMAGES.partners.cregis },
 ];
 
-function SmartImg({ src, alt, className }: { src: string; alt: string; className?: string }) {
+function SmartImg({
+  src,
+  alt,
+  className,
+  width,
+  height,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  /**
+   * Intrinsic pixel size. Without it the browser cannot reserve the box, so
+   * every logo row jumps as the images decode (2026-09-15 re-test, 技术SEO-6);
+   * `logo-goals.png` in particular rendered at `w-full h-auto` with a measured
+   * height of 0 before load.
+   */
+  width: number;
+  height: number;
+}) {
   return (
     <img
       src={src}
       alt={alt}
+      width={width}
+      height={height}
       className={className}
       loading="lazy"
       onError={(e) => {
@@ -40,7 +60,13 @@ export function UNCommitment() {
         <div className="text-center pb-[32px] lg:pb-[48px] max-w-[997px] mx-auto">
           <div className="flex justify-center items-center gap-[16px] sm:gap-[25px] mb-[12px]">
             <div className="w-[60px] h-[60px] p-[10px]">
-              <SmartImg src={IMAGES.unCommitment.logoMini} alt="Remi logo" className="w-full h-full object-contain" />
+              <SmartImg
+                src={IMAGES.unCommitment.logoMini}
+                alt="Remi logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" width="2" height="28" viewBox="0 0 2 28" fill="none">
@@ -48,7 +74,13 @@ export function UNCommitment() {
               </svg>
             </div>
             <div className="w-[328px]">
-              <SmartImg src={IMAGES.unCommitment.logoGoals} alt="UN SDGs logo" className="w-full h-auto object-contain" />
+              <SmartImg
+                src={IMAGES.unCommitment.logoGoals}
+                alt="UN SDGs logo"
+                width={656}
+                height={120}
+                className="w-full h-auto object-contain"
+              />
             </div>
           </div>
           <p className="text-center text-[#4E5969] text-[16px] lg:text-[18px] leading-[1.8] inter-light">
@@ -74,7 +106,13 @@ export function UNCommitment() {
         <div className="text-left md:text-center pb-[32px] lg:pb-[48px] max-w-[997px] mx-auto">
           <div className="flex flex-col justify-center items-center gap-[25px] mb-[24px]">
             <div className="w-[214px] h-[64px]">
-              <SmartImg src={IMAGES.unCommitment.logoSdg} alt="SDG logo" className="w-full h-full object-cover" />
+              <SmartImg
+                src={IMAGES.unCommitment.logoSdg}
+                alt="SDG logo"
+                width={428}
+                height={128}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="text-[#4E5969] text-[18px] leading-[1.8] inter-light">
               By 2030, reduce to less than 3 per cent the transaction costs of migrant remittances and eliminate remittance corridors with costs higher than 5 per cent
@@ -91,7 +129,13 @@ export function UNCommitment() {
         <div className="grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-[5px] lg:gap-[30px]">
           {partners.map((p) => (
             <div key={p.name} className="md:w-[260px] md:h-[126px]">
-              <SmartImg src={p.src} alt={p.name} className="w-full h-full object-contain" />
+              <SmartImg
+                src={p.src}
+                alt={p.name}
+                width={520}
+                height={252}
+                className="w-full h-full object-contain"
+              />
             </div>
           ))}
         </div>

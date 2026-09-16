@@ -16,8 +16,8 @@ import { AppLink } from "@/components/layout/app-link";
  *  • Bottom copyright bar
  *
  * Server Component: no interactivity, fully cacheable, great for SEO.
- * The social icons use inline SVG (X logo) + Lucide (LinkedIn) so we don't
- * need binary assets in /public.
+ * The social icons are the legacy PNG wordmarks (see `SocialLinks` below for
+ * the exact box the Vue build renders).
  */
 export function SiteFooter() {
   const t = useTranslations();
@@ -41,9 +41,16 @@ export function SiteFooter() {
 
           {/* Navigation */}
           <nav className="flex flex-col gap-[16px]" aria-label="Site navigation">
-            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
+            {/*
+              Column headings are `h2`, not `h3`: on /contactUs the footer is the
+              first headed section after the page `h1`, so an `h3` here skipped a
+              level (QA BUG-14 residual, 2026-09-16 sweep). Heading level is a
+              document-outline concern — the visual size comes from the utilities
+              below, which are unchanged.
+            */}
+            <h2 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
               {t("Footer.col.navigation")}
-            </h3>
+            </h2>
             {footerNav[0].links.map((link) => (
               <AppLink
                 key={link.labelKey}
@@ -57,9 +64,9 @@ export function SiteFooter() {
 
           {/* Contact Us */}
           <div className="flex flex-col gap-[16px]">
-            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
+            <h2 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[18px] font-[500] text-[#4E5969]">
               {t("Footer.col.contact")}
-            </h3>
+            </h2>
             {siteConfig.contacts.map((contact) => (
               <a
                 key={contact.email}
@@ -94,9 +101,9 @@ export function SiteFooter() {
             <p className="inter-light max-w-[280px] text-[15px] leading-[1.6] text-[#6B7280]">
               {t("Footer.tagline")}
             </p>
-            <h3 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[16px] font-[500] text-[#4E5969]">
+            <h2 className="inter-light border-b border-[#E5E7EB] pb-[12px] text-[16px] font-[500] text-[#4E5969]">
               {t("Footer.col.contact")}
-            </h3>
+            </h2>
             {siteConfig.contacts.map((contact) => (
               <a
                 key={contact.email}
@@ -156,7 +163,26 @@ export function SiteFooter() {
   );
 }
 
-/** Social icon row — X (Twitter) + LinkedIn. */
+/**
+ * Social icon row — X (Twitter) + LinkedIn.
+ *
+ * Sized to the legacy `footer.vue` box, measured on the live Vue site at
+ * 1920px: anchor `h-[30px] w-auto rounded-[6px] bg-white`, icon drawn at half
+ * its intrinsic pixels — X 42×30, LinkedIn 80×30, 12px gap. The React port had
+ * a 44×44 anchor with a 24px-tall icon, which shrank both marks and pushed the
+ * row off the legacy baseline (2026-09-16 pixel diff).
+ *
+ * Height is pinned on the `<img>` (`h-[30px] w-auto`) rather than inherited via
+ * `h-full w-full` like the legacy CSS: a percentage width inside an auto-width
+ * flex container is a cyclic size that each engine resolves differently, while
+ * `h-[30px] w-auto` derives the same 42/80px from the intrinsic ratio. The
+ * `width`/`height` attributes stay at the PNG's natural pixels so the box is
+ * reserved before load (no CLS).
+ *
+ * Legacy also carries `hover:border-[#FF6900]` on these anchors; with no
+ * `border-width` utility it only sets a colour on a 0px border, so it paints
+ * nothing — not ported.
+ */
 function SocialLinks() {
   return (
     <div className="flex items-center gap-[12px]">
@@ -165,7 +191,7 @@ function SocialLinks() {
         aria-label="X (Twitter)"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-[44px] w-[44px] items-center justify-center"
+        className="inline-flex h-[30px] w-auto items-center justify-center rounded-[6px] bg-white"
       >
         <img
           src="/images/icon-sns-X.png"
@@ -174,7 +200,7 @@ function SocialLinks() {
           height={60}
           loading="lazy"
           decoding="async"
-          className="h-[24px] w-auto object-contain"
+          className="h-[30px] w-auto object-contain"
         />
       </a>
       <a
@@ -182,7 +208,7 @@ function SocialLinks() {
         aria-label="LinkedIn"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-[44px] w-[44px] items-center justify-center"
+        className="inline-flex h-[30px] w-auto items-center justify-center rounded-[6px] bg-white"
       >
         <img
           src="/images/icon-sns-LinkedIn.png"
@@ -191,7 +217,7 @@ function SocialLinks() {
           height={60}
           loading="lazy"
           decoding="async"
-          className="h-[24px] w-auto object-contain"
+          className="h-[30px] w-auto object-contain"
         />
       </a>
     </div>

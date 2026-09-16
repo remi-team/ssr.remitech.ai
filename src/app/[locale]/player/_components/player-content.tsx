@@ -172,12 +172,16 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
         if (cancelled) return;
         if (res.code === "200" && res.data) {
           const data = res.data as { url?: string; chapters?: Array<{ start: number; end: number; title: string }> };
-          // Use the raw video URL returned by the website API directly —
-          // mirrors the legacy Vue `player.vue` which sets `videoUrl = resData.url`.
-          // The BFF proxy (`/api/files/video/[id]`) is not used because the
-          // raw URL is publicly accessible (the old Vite proxy forwarded
-          // <video> requests without auth headers and playback worked).
-          setVideoUrl(data.url ?? "");
+          // Play through our own same-origin BFF, never the absolute URL the
+          // API hands back. That URL is a public file on the legacy host
+          // (`www.remitech.ai/<file>.mp4`) which answers `206` for anonymous
+          // requests — putting it in the DOM leaks it to devtools, referrers and
+          // scrapers (2026-09-15 re-test, 功能-3). `/api/files/video/[id]` now
+          // requires the session cookie and proxies Range requests to the
+          // authenticated `/files/video/{id}` endpoint.
+          //
+          // `data.url` is still the availability signal: no url -> no stream.
+          setVideoUrl(data.url ? `/api/files/video/${encodeURIComponent(String(currentVideo.id))}` : "");
           const list = data.chapters ?? [];
           setChapters(
             list.map((chapter, index) => ({

@@ -34,6 +34,10 @@ function SmartImg({
       src={src}
       alt={alt}
       aria-hidden={ariaHidden || undefined}
+      // 120×120 art inside a 60×60 box; explicit attributes keep the card
+      // height stable while the icon is still in flight (技术SEO-6).
+      width={120}
+      height={120}
       className={className}
       loading="lazy"
       onError={(e) => {

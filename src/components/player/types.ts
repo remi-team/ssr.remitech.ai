@@ -62,6 +62,11 @@ export interface M3u8PlayerHandle {
   getInstance: () => unknown;
   /** The underlying Hls.js instance (advanced use). */
   getHlsInstance: () => unknown;
+  /**
+   * Boot a `lazy` player immediately (user tapped the poster, etc.). No-op once
+   * the player is armed.
+   */
+  load: () => void;
 }
 
 export interface M3u8PlayerProps {
@@ -77,6 +82,18 @@ export interface M3u8PlayerProps {
   loop?: boolean;
   /** Hide the control bar (click-to-fullscreen banner mode). */
   hideControls?: boolean;
+  /**
+   * Do not boot Artplayer + hls.js on mount. Nothing is requested from the
+   * stream until the player scrolls into view (within `lazyRootMargin`) or the
+   * consumer calls `load()` / `play()`.
+   *
+   * Above-the-fold pages used to pay for a full HLS bootstrap they never used:
+   * the homepage fired ~13 manifest/segment requests and a ~7.8s `load` event
+   * without anyone pressing play (2026-09-15 re-test, 技术SEO-5).
+   */
+  lazy?: boolean;
+  /** How far outside the viewport a `lazy` player boots. Default `200px`. */
+  lazyRootMargin?: string;
   /** Override / extend Artplayer options. */
   options?: Record<string, unknown>;
   /** ClassName passthrough. */

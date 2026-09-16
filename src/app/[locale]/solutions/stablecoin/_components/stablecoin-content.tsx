@@ -90,9 +90,11 @@ export function StablecoinContent() {
       <section className="bg-white">
         <div className="lg:max-w-[1040px] mx-auto py-[48px] lg:py-[64px] xl:py-[72px] 2xl:py-[88px] px-[24px] lg:px-0">
           <div className="bg-[#F7F5F3] bg-[url('/images/bison-water.png')] bg-no-repeat bg-right-top bg-[length:310px] px-[40px] py-[60px] md:rounded-[4px]">
-            <h3 className="mb-[20px] text-[24px] inter-light">
+            {/* First headed section after the page `h1` → `h2`; as `h3` it
+                skipped a level (QA BUG-14 residual, 2026-09-16 sweep). */}
+            <h2 className="mb-[20px] text-[24px] inter-light">
               Issued by Bison Bank (Lisbon)
-            </h3>
+            </h2>
             <p className="md:pr-[60px] text-[18px] leading-[32px] text-[#86909C] text-left inter-light">
               A licensed Portuguese bank with 30+ years of institutional
               history. Among the first banks licensed under MiCA to issue

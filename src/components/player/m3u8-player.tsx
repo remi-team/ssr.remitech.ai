@@ -56,6 +56,8 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
       muted = false,
       loop = false,
       hideControls = false,
+      lazy = false,
+      lazyRootMargin = "200px",
       options,
       className,
       onReady,
@@ -77,8 +79,16 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
     // Network-error retry counter (resets on successful playback).
     const netRetryRef = React.useRef(0);
     const MAX_NET_RETRIES = 3;
+    // `lazy` players stay unarmed until they are near the viewport or the
+    // consumer asks for playback; arming is what imports artplayer/hls.js.
+    const [armed, setArmed] = React.useState(!lazy);
+    const armedRef = React.useRef(armed);
+    armedRef.current = armed;
+    // A `play()` that arrived before the player existed (poster tap, banner
+    // viewport observer) — honoured on `ready`.
+    const pendingPlayRef = React.useRef(false);
 
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(!lazy);
     const [error, setError] = React.useState<PlayerError | null>(null);
     const [buffering, setBuffering] = React.useState(false);
     const [qualities, setQualities] = React.useState<QualityLevel[]>([]);
@@ -294,6 +304,15 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
           // Reset the network retry budget on successful init.
           netRetryRef.current = 0;
           if (hideControls) hideControlsFn();
+          // Playback asked for while the player was still booting.
+          if (pendingPlayRef.current) {
+            pendingPlayRef.current = false;
+            try {
+              art.play();
+            } catch {
+              /* autoplay policy — the user can press play */
+            }
+          }
           onReady?.();
         });
 
@@ -392,19 +411,52 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
       onPlaying,
     ]);
 
-    // (Re)initialise on mount and when src changes.
+    // Boot on mount (unless `lazy`), and again whenever `src` changes.
     React.useEffect(() => {
       if (srcRef.current !== src) srcRef.current = src;
+      if (!armed) return;
       initPlayer();
       return destroyPlayer;
        
-    }, [src]);
+    }, [src, armed]);
+
+    // Lazy arming: start fetching only once the player is about to be seen.
+    // Without an IntersectionObserver (SSR-less legacy browsers) we fall back
+    // to booting immediately rather than never showing video.
+    React.useEffect(() => {
+      if (!lazy || armed) return;
+      const el = containerRef.current;
+      if (!el || typeof IntersectionObserver === "undefined") {
+        setArmed(true);
+        return;
+      }
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry?.isIntersecting) {
+            setArmed(true);
+            obs.disconnect();
+          }
+        },
+        { rootMargin: lazyRootMargin },
+      );
+      obs.observe(el);
+      return () => obs.disconnect();
+    }, [lazy, armed, lazyRootMargin]);
 
     // Expose the imperative API via ref.
     React.useImperativeHandle(
       ref,
       (): M3u8PlayerHandle => ({
-        play: () => artRef.current?.play(),
+        play: () => {
+          // A `lazy` player asked to play before it exists: boot it now and let
+          // the `ready` handler start playback.
+          if (!armedRef.current) {
+            pendingPlayRef.current = true;
+            setArmed(true);
+            return;
+          }
+          artRef.current?.play();
+        },
         pause: () => artRef.current?.pause(),
         seek: (time) => {
           if (artRef.current) artRef.current.currentTime = time;
@@ -428,12 +480,14 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
         hideControls: hideControlsFn,
         getInstance: () => artRef.current,
         getHlsInstance: () => hlsRef.current,
+        load: () => setArmed(true),
       }),
       [showControls, hideControlsFn],
     );
 
     const retry = () => {
       setError(null);
+      setArmed(true);
       initPlayer();
     };
 
@@ -449,6 +503,44 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
       >
         {/* Artplayer mount point */}
         <div ref={containerRef} className="artplayer-app h-full w-full" />
+
+        {/* Lazy placeholder — the stream has not been requested yet, so show a
+            plain shell instead of a spinner that would never resolve. */}
+        {lazy && !armed && (
+          <div className="absolute inset-0 z-[1001] flex items-center justify-center bg-black">
+            {poster ? (
+              <img
+                src={poster}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                pendingPlayRef.current = true;
+                setArmed(true);
+              }}
+              aria-label="Play video"
+              className="player-retry-btn relative inline-flex items-center gap-2 rounded-md bg-[#FF6900] px-6 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-[#e55d00]"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M8 5v14l11-7L8 5z" fill="currentColor" />
+              </svg>
+              Play video
+            </button>
+          </div>
+        )}
 
         {/* Loading overlay */}
         {loading && !error && (
@@ -494,7 +586,7 @@ export const M3u8Player = React.forwardRef<M3u8PlayerHandle, M3u8PlayerProps>(
         )}
 
         {/* Banner-mode hint (hideControls) */}
-        {hideControls && !loading && !error && !buffering && (
+        {hideControls && armed && !loading && !error && !buffering && (
           <div className="player-banner-hint pointer-events-none absolute inset-0 flex items-center justify-center">
             <Maximize2 className="h-10 w-10 text-white/70" />
           </div>

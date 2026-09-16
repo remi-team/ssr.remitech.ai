@@ -1,68 +1,34 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+import { buildCsp } from "./src/config/csp";
+
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /**
  * Security response headers applied to every response.
  *
- * CSP note — why `'unsafe-inline'` is still here (QA BUG-18, dispositioned):
- *  • `script-src`: the App Router emits inline `self.__next_f.push(...)` RSC
- *    flight scripts, and our JSON-LD blocks are inline `<script>` elements
- *    (they MUST be inline to reach the raw HTML — see `src/components/seo/json-ld.tsx`).
- *    `nextConfig.scriptNonce` covers only Next's own scripts, so removing
- *    `'unsafe-inline'` without nonceing every JSON-LD node breaks hydration.
- *  • `style-src`: Tailwind injects inline CSS variable declarations.
- * What WAS fixed: Google Analytics (gtag.js, loaded only after cookie
- * consent) is allow-listed in `script-src` / `connect-src` / `img-src`, which
- * removes the per-page CSP console error the QA pass recorded.
+ * The CSP is built in `src/config/csp.ts` and this file only carries its
+ * nonce-less fallback (see there for the full QA BUG-18 rationale): every
+ * document that passes through `src/proxy.ts` gets a per-request nonce and no
+ * `'unsafe-inline'` at all, while dotted paths — which the middleware matcher
+ * deliberately skips, yet still answer with a React 404 document containing
+ * Next's inline flight scripts — keep the legacy allowance so they hydrate.
+ * Everything else (news article HTML, JSON-LD, gtag) stayed allow-listed as
+ * before, which is what removed the CSP console errors the QA pass recorded.
  *
  * Production keeps the strict policy (React never uses eval() there).
  */
-const isDev = process.env.NODE_ENV !== "production";
-
-const cspDirectives = [
-  "default-src 'self'",
-  [
-    "script-src 'self' 'unsafe-inline'",
-    // Dev only: React dev mode rebuilds callstacks with eval().
-    isDev && "'unsafe-eval'",
-    "https://www.googletagmanager.com",
-    "https://www.google-analytics.com",
-  ]
-    .filter(Boolean)
-    .join(" "),
-  "style-src 'self' 'unsafe-inline'",
-  // `https:` covers the S3 bucket that hosts news/LinkedIn cover art.
-  "img-src 'self' data: blob: https:",
-  // `http:` covers legacy HLS manifests still served over plain HTTP by the
-  // resource backend; remove once every media origin is TLS.
-  "media-src 'self' blob: https: http:",
-  "font-src 'self' data:",
-  [
-    "connect-src 'self' https:",
-    // Turbopack/webpack HMR socket.
-    isDev && "ws:",
-    "https://*.google-analytics.com",
-    "https://*.analytics.google.com",
-    "https://*.googletagmanager.com",
-  ]
-    .filter(Boolean)
-    .join(" "),
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-];
+const cspFallback = {
+  key: "Content-Security-Policy",
+  value: buildCsp(),
+};
 
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-  {
-    key: "Content-Security-Policy",
-    value: cspDirectives.join("; "),
-  },
 ];
 
 /**
@@ -126,21 +92,48 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
+      // CSP fallback, scoped to the responses `src/proxy.ts` never sees. A
+      // blanket `/(.*)` rule here would clobber the nonce-bearing CSP that the
+      // middleware sets on its own responses (`headers()` in this file wins
+      // over middleware-set headers); the renderer would then emit nonced
+      // scripts against a policy listing no nonce, and no page would hydrate.
       {
-        // News first, so its 5-minute cadence outranks the blanket rule below
-        // (header entries are applied in order and the last match wins per key).
-        source: "/((?:en|zh)/)?news",
-        headers: [{ key: "Cache-Control", value: NEWS_CACHE }],
+        source: "/((?!api|_next).*\\..*)",
+        headers: [cspFallback],
       },
       {
-        source: "/((?:en|zh)/)?news/:path*",
-        headers: [{ key: "Cache-Control", value: NEWS_CACHE }],
+        source: "/api/:path*",
+        headers: [cspFallback],
       },
       {
-        // Everything else that is a document (API routes and hashed static
-        // assets excluded — the latter already ship immutable headers).
+        // Everything else that is a document (API routes, `_next` and every
+        // path carrying a dot excluded — the latter are `public/` assets and
+        // the generated `/sitemap.xml` + `/robots.txt`, which set their own
+        // headers and must not inherit a 1-hour edge TTL).
         source: "/((?!api|_next|.*\\..*).*)",
         headers: [{ key: "Cache-Control", value: STATIC_HTML_CACHE }],
+      },
+      // News list + articles revalidate every 5 minutes, so their rule is
+      // declared AFTER the blanket one: when several `source`s match, later
+      // wins per key (verified 2026-09-15 — `/en/news/403` shipped
+      // `s-maxage=300` while also matching the document rule above).
+      //
+      // One rule per prefix, NOT `/((?:en|zh)/)?news/:path*`: path-to-regexp
+      // compiles the optional group's trailing `/` into the group, leaving
+      // `news` without its leading slash, so the regex could never match an
+      // unprefixed path — `/news/403` silently kept the 1-hour default and the
+      // 5-minute news cadence never shipped (2026-09-15 re-test, 技术SEO-4).
+      {
+        source: "/news/:path*",
+        headers: [{ key: "Cache-Control", value: NEWS_CACHE }],
+      },
+      {
+        source: "/en/news/:path*",
+        headers: [{ key: "Cache-Control", value: NEWS_CACHE }],
+      },
+      {
+        source: "/zh/news/:path*",
+        headers: [{ key: "Cache-Control", value: NEWS_CACHE }],
       },
     ];
   },

@@ -524,12 +524,15 @@ function GovernanceSection() {
               designed to align with global regulatory requirements:
             </p>
 
+            {/* Governance sub-sections are `h3`: their parent is the `h2` band
+                title, and `h4` skipped a level (QA BUG-14 residual, 2026-09-16
+                sweep). Utilities carry the look, so nothing moves. */}
             {/* Regional Operating Entities */}
             <div className="mb-[32px]">
-              <h4 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
+              <h3 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
                 <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900] inter-light" />
                 Regional Operating Entities
-              </h4>
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-[16px] mt-[16px]">
                 {governanceEntities.map((entity) => (
                   <div
@@ -550,10 +553,10 @@ function GovernanceSection() {
 
             {/* Tri-Regional Board */}
             <div className="mb-[32px]">
-              <h4 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
+              <h3 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
                 <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                 Tri-Regional Board
-              </h4>
+              </h3>
               <p className="inter-light text-[16px] text-[#86909C] mt-[16px]">
                 Composed of 9 directors (3 per region), including at least 1
                 independent director per region. Meets annually for substantial
@@ -563,10 +566,10 @@ function GovernanceSection() {
 
             {/* Member Consultation Channels */}
             <div className="mb-[32px]">
-              <h4 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
+              <h3 className="flex gap-[10px] items-center text-[18px] text-[#2d2722] pb-[12px] border-b border-b-[#EBE8E5] px-[24px] lg:px-[0]">
                 <span className="ml-[-20px] h-[8px] w-[8px] bg-[#FF6900]" />
                 Member Consultation Channels
-              </h4>
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mt-[16px]">
                 <div className="bg-white p-[16px] rounded-[4px]">
                   <p className="inter-light text-[16px] text-[#86909C] mb-[8px]">
@@ -649,9 +652,11 @@ function HowToJoinSection() {
                   <div className="text-[18px] tracking-[0.05em] uppercase mb-[12px] text-[#FF6900]">
                     Step {index + 1}
                   </div>
-                  <h4 className="inter-light text-[18px] text-[#2d2722] mb-[12px]">
+                  {/* Join steps: direct children of the `h2` band → `h3`
+                      (QA BUG-14 residual, 2026-09-16 sweep). */}
+                  <h3 className="inter-light text-[18px] text-[#2d2722] mb-[12px]">
                     {step.title}
-                  </h4>
+                  </h3>
                   <p className="inter-light text-[16px] text-[#86909C]">
                     {step.desc}
                   </p>

@@ -15,8 +15,14 @@ const VIDEO_SRC = "https://s.remitech.ai/static/video/m3u8/xc/master.m3u8";
  *
  * Uses the M3u8Player in banner mode (hideControls, muted) and auto-plays
  * when scrolled into view via IntersectionObserver (matching the legacy
- * `initVideoViewportObserver`). The player is always mounted — no
- * click-to-load poster — exactly like the original Vue version.
+ * `initVideoViewportObserver`).
+ *
+ * `lazy` is deliberate and diverges from the legacy component: the player used
+ * to boot on mount, so every homepage visit pulled the master manifest, the
+ * variant manifests and the first segments (~13 requests, ~7.8s `load` event)
+ * even though this block sits several screens below the fold (2026-09-15
+ * re-test, 技术SEO-5). Nothing is fetched until the section is ~200px from the
+ * viewport, and the viewport observer below still drives play/pause on scroll.
  */
 export function EcosystemVideo() {
   const playerRef = React.useRef<M3u8PlayerHandle>(null);
@@ -64,6 +70,7 @@ export function EcosystemVideo() {
               muted
               hideControls
               autoplay={false}
+              lazy
             />
           </div>
         </div>

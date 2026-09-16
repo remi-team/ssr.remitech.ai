@@ -1,7 +1,7 @@
 import "server-only";
 
 import { TOKEN_CONFIG, HTTP_STATUS, BUSINESS_CODE } from "@/lib/api/config";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import type { WebsiteApiError } from "@/lib/api/types";
 
 /**
@@ -11,6 +11,41 @@ import type { WebsiteApiError } from "@/lib/api/types";
  * them. The client only learns auth state through the JSON body returned by
  * the BFF routes (e.g. `{ username, email, status }`).
  */
+
+/**
+ * Does this request arrive over TLS?
+ *
+ * `NODE_ENV` used to decide this, which is wrong for every staging deployment:
+ * SIT runs a production build behind an ingress that still serves plain HTTP,
+ * so `Secure` cookies were *rejected by the browser on login* — the user saw
+ * their name, the token never persisted, and `/api/auth/user` kept answering
+ * 401/400 (2026-09-15 re-test, 功能-2). Judge the transport instead of the
+ * build mode.
+ *
+ * `x-forwarded-proto` is what the ingress sets after TLS termination; the
+ * comma form covers a multi-hop proxy chain. When it is absent we fall back to
+ * the request URL / host, treating loopback as plain HTTP so local dev keeps
+ * working without certificates.
+ */
+async function requestIsSecure(): Promise<boolean> {
+  try {
+    const h = await headers();
+    const proto = h.get("x-forwarded-proto");
+    if (proto) {
+      const first = proto.split(",")[0]?.trim().toLowerCase();
+      if (first === "https") return true;
+      if (first === "http") return false;
+    }
+    const origin = h.get("origin") || h.get("referer");
+    if (origin) return origin.startsWith("https://");
+    const host = h.get("host") ?? "";
+    if (/^(localhost|127\.|\[::1\]|::1|0\.0\.0\.0)(:\d+)?$/i.test(host)) return false;
+    return true;
+  } catch {
+    // Outside a request context (rare, e.g. a build-time call) stay strict.
+    return process.env.NODE_ENV === "production";
+  }
+}
 
 /** Read the access token from the request cookies. */
 export async function getAccessToken(): Promise<string | null> {
@@ -29,7 +64,8 @@ export async function setTokenPair(accessToken?: string, refreshToken?: string):
   const store = await cookies();
   const base = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    // Per-request, not per-build: see `requestIsSecure`.
+    secure: await requestIsSecure(),
     sameSite: "lax" as const,
     path: "/",
     maxAge: TOKEN_CONFIG.COOKIE_MAX_AGE,

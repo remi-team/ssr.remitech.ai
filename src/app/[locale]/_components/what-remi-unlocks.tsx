@@ -21,6 +21,11 @@ function SmartImg({ src, alt, className }: { src: string; alt: string; className
     <img
       src={src}
       alt={alt}
+      // Every feature icon ships as 120×120 art and is rendered into a 60×60
+      // box; the attributes reserve that box before the bytes arrive so the
+      // section cannot reflow on load (2026-09-15 re-test, 技术SEO-6).
+      width={120}
+      height={120}
       className={className}
       loading="lazy"
       onError={(e) => {

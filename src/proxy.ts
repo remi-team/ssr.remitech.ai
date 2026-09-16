@@ -1,17 +1,21 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
+import { buildCsp, createCspNonce } from "@/config/csp";
 import { routing } from "@/i18n/routing";
 
 /**
- * Edge middleware: legacy-URL rescue, case normalisation and locale
- * negotiation. Runs before the App Router resolves any segment.
+ * Edge middleware: legacy-URL rescue, case normalisation, locale negotiation
+ * and the per-request Content-Security-Policy. Runs before the App Router
+ * resolves any segment.
  *
  * IMPORTANT — the matcher below excludes every path containing a dot
  * (`.*\\..*`), so `/sitemap.xml.gz`, `/foo.png` and `/icon.svg` never reach
  * this file. Those soft-404s are handled where they actually get resolved: the
  * `[locale]` layout rejects unknown locales with `notFound()`
- * (see `src/app/[locale]/layout.tsx`, QA BUG-05).
+ * (see `src/app/[locale]/layout.tsx`, QA BUG-05). Because no nonce is minted
+ * for them, `next.config.ts` answers those paths with the nonce-less CSP
+ * fallback (QA BUG-18).
  */
 
 /* ------------------------------------------------------------------ */
@@ -94,7 +98,7 @@ function normalizeSegmentCase(pathname: string): string | null {
 
 const intlMiddleware = createMiddleware(routing);
 
-export default function proxy(request: NextRequest) {
+function resolve(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Case normalisation — 301 so crawlers and browsers replace the old
@@ -121,6 +125,49 @@ export default function proxy(request: NextRequest) {
   }
 
   return intlMiddleware(request);
+}
+
+/**
+ * Staging guard. One image is promoted through every environment and
+ * `SITE_ENV` is injected at runtime by the ConfigMap, so this has to be read
+ * per request rather than captured at module scope — a build-time snapshot
+ * would freeze the value the CI machine happened to have and either leave SIT
+ * indexable or, far worse, mark production as `noindex` (same reasoning as
+ * `src/app/robots.ts`).
+ *
+ * Header-level `noindex` is the belt to the `<meta name="robots">` braces: it
+ * also covers responses that carry no HTML head at all, which is what keeps a
+ * staging domain from leaking into the index.
+ */
+const isProductionDeployment = () =>
+  (process.env.SITE_ENV ?? "sit") === "production";
+
+/**
+ * Attach the CSP carrying a nonce that only this request may use (QA BUG-18).
+ *
+ * Both halves are load-bearing and the order is not optional:
+ *  • the **request** header is what Next reads to nonce its own inline flight
+ *    scripts (`server/app-render/app-render.js` → `getScriptNonceFromHeader`);
+ *    it has to be set before `intlMiddleware` runs, because that call returns
+ *    `NextResponse.next({request: {headers}})` built from a clone of
+ *    `request.headers` and is what forwards them to the renderer.
+ *  • the **response** header is what the browser enforces. Writing only the
+ *    request header would leave the policy unset (and vice versa would block
+ *    every script Next just nonce'd).
+ *
+ * Redirects get the header too — they carry no executable body, but keeping
+ * one code path means no response can escape the policy by accident.
+ */
+export default function proxy(request: NextRequest) {
+  const policy = buildCsp(createCspNonce());
+  request.headers.set("content-security-policy", policy);
+
+  const response = resolve(request);
+  response.headers.set("Content-Security-Policy", policy);
+  if (!isProductionDeployment()) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  return response;
 }
 
 export const config = {

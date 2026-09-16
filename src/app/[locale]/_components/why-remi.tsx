@@ -166,6 +166,12 @@ export function WhyRemi() {
       <img
         src={IMAGES.whyRemi.bg}
         alt="Why Remi background"
+        // Intrinsic 3072×1956; `object-cover` in an absolutely positioned layer
+        // means the attributes only satisfy the aspect-ratio placeholder and
+        // stop the decorative layer from being fetched as a 0×0 box
+        // (2026-09-15 re-test, 技术SEO-6).
+        width={3072}
+        height={1956}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center mix-blend-multiply"
         loading="lazy"
         onError={(e) => {

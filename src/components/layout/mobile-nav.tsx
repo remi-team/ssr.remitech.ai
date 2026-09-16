@@ -135,7 +135,7 @@ export function MobileNav({
               className="flex h-[24px] w-[24px] items-center justify-center rounded-full text-[#29221D] transition-colors hover:bg-gray-100 hover:text-[#FF6900]"
               aria-label="Back to main menu"
             >
-              <img src="/images/icon-back.svg" alt="" aria-hidden="true" />
+              <img src="/images/icon-back.svg" alt="" aria-hidden="true" width={24} height={24} />
             </button>
             <h2 className="text-[16px] font-semibold text-[#69584E]">
               {t("Nav.solutions.label")}
@@ -146,7 +146,7 @@ export function MobileNav({
               className="flex h-[24px] w-[24px] items-center justify-center rounded-full transition-colors hover:bg-gray-100"
               aria-label="Close menu"
             >
-              <img src="/images/icon-close.svg" alt="" aria-hidden="true" />
+              <img src="/images/icon-close.svg" alt="" aria-hidden="true" width={24} height={24} />
             </button>
           </div>
           {/* Sub-menu items */}

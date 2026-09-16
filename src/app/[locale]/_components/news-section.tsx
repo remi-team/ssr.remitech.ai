@@ -59,6 +59,8 @@ export function NewsSection() {
           <img
             src={IMAGES.news.quote}
             alt="Quote icon"
+            width={152}
+            height={160}
             className="h-full w-full object-contain"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
@@ -115,6 +117,12 @@ export function NewsSection() {
                         alt={card.title}
                         loading="lazy"
                         decoding="async"
+                        // Covers come from the CMS with an unknown ratio, so the
+                        // card fixes the box in CSS (`object-cover`); the
+                        // attributes mirror that box to keep the placeholder
+                        // honest (2026-09-15 re-test, 技术SEO-6).
+                        width={640}
+                        height={380}
                         className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                       />
                     </div>
@@ -171,12 +179,20 @@ export function NewsSection() {
             <span className="relative ml-[8px] h-[32px] w-[32px]">
               <img
                 src="/images/icon-news-more.png"
-                alt="News more icon"
+                alt=""
+                aria-hidden="true"
+                width={64}
+                height={64}
                 className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 group-hover:opacity-0"
               />
+              {/* Hover-state twin of the icon above — same glyph, only visible
+                  while the pointer is over the link, so it is decorative. */}
               <img
                 src="/images/icon-news-more_hover.png"
-                alt="News more hover icon"
+                alt=""
+                aria-hidden="true"
+                width={64}
+                height={64}
                 className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               />
             </span>
