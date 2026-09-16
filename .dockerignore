@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# Docker build context allow-list-by-exclusion.
+#
+# Why this file exists: the Dockerfile runs `pnpm install --frozen-lockfile`
+# and THEN `COPY . .`. Without these rules a local `docker build .` (or any
+# context that is not a clean git clone) drops the host's macOS `node_modules`
+# on top of the Linux tree the image just installed — native binaries mismatch,
+# the standalone output is silently broken — and pushes ~8 GB of context to the
+# daemon. `.env` is excluded for the same reason it is git-ignored: the runtime
+# config belongs to the K8s ConfigMap, never to the image.
+#
+# CI/CD note: Jenkins clones a fresh checkout, so most of these are already
+# absent there; this file makes the image reproducible for local builds too.
+# ---------------------------------------------------------------------------
+
+# dependencies / build output (regenerated inside the builder stage)
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+
+# host-only runtime config — injected per environment by K8s
+.env
+.env.*
+
+# reports, scratch dirs and logs (never part of the app)
+upload
+test
+prompt
+skills
+*.log
+dev.log
+server.log
+
+# local tooling / agent artifacts
+.git
+.github
+.DS_Store
+.claude
+.arts/
+.codeartsdoer/
+.merkle-snapshot.json
+*.pid
+*.pem
+
+# process managers & editor/CI files not needed inside the image
+logs
+pidfile
+pid
+.pm2

@@ -20,8 +20,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3212
-          # 运行时配置：Jenkins 将运维注入的 .env 转为 ConfigMap，再由 K8s 注入环境变量
-          # 需包含：UPSTREAM_API_HOST / UPSTREAM_API_VERSION / UPSTREAM_SERVER_URL
+          # 运行时配置：镜像不带环境，变量由运维维护的 ConfigMap 在容器启动时注入。
+          # 必需：WEBSITE_API_SERVER_URL / WEBSITE_API_VERSION
+          # 环境开关：SITE_URL（对外 origin，影响 canonical/sitemap）、SITE_ENV（=production 才放开索引）
+          # 可选：WEBSITE_API_RSA_PUBLIC_KEY（后端密钥对变更时同步）
           envFrom:
             - configMapRef:
                 name: remi-frontend-ssr-configmap
