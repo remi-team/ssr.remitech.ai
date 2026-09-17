@@ -17,37 +17,21 @@ type Props = {
   params: Promise<{ locale: string; id: string }>;
 };
 
-/** ISR refresh for article pages (mirrors the news list cadence). */
-export const revalidate = 300;
-
 /**
- * Prerender every published article so the URLs listed in sitemap.xml
- * resolve to real static pages on first crawl.
+ * Request-dependent by design — do NOT re-add `revalidate` / `generateStaticParams`.
  *
- * `isValidArticleId` filters out the id-less LinkedIn records — see
- * `src/lib/news-id.ts` (QA BUG-04).
+ * Every render reads the visitor's cookies via `getAccessToken()` (awaited
+ * `cookies()` ⇒ `connection()`). With the previous `revalidate = 300` +
+ * build-time prerendering, Next recorded the per-id pages as fully static;
+ * at request time the cookie read awaited `connection()` and Next hard-500s
+ * the static→dynamic flip in production
+ * (SIT `/news/{403,400,399}` — "Page changed from static to dynamic at
+ * runtime, reason: connection", app-static-to-dynamic-error).
+ *
+ * Freshness is still covered at the edge: NEWS_CACHE in next.config.ts sets
+ * `s-maxage=300` for `/news*`, so the CDN keeps the 5-minute crawl cadence.
  */
-export async function generateStaticParams() {
-  try {
-    const [eventsRes, linkedinRes] = await Promise.all([
-      newsServerService.getEvents({ current: 1, size: 100 }),
-      newsServerService.getLinkedin({ current: 1, size: 100 }),
-    ]);
-    const ids = new Set<string>();
-    for (const res of [eventsRes, linkedinRes]) {
-      if (res.code !== BUSINESS_CODE.SUCCESS) continue;
-      for (const item of res.data?.records ?? []) {
-        const id = item.id == null ? "" : String(item.id);
-        if (isValidArticleId(id)) ids.add(id);
-      }
-    }
-    return routing.locales.flatMap((locale) =>
-      [...ids].map((id) => ({ locale, id })),
-    );
-  } catch {
-    return [];
-  }
-}
+export const dynamic = "force-dynamic";
 
 /**
  * News detail page — migrated from the legacy Vue `views/newsDetail/index.vue`.

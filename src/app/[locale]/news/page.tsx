@@ -30,8 +30,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildPageMetadata(validLocale, "news");
 }
 
-/** Refresh the server-rendered news list every 5 minutes (ISR). */
-export const revalidate = 300;
+/**
+ * Request-dependent by design — do NOT re-add `revalidate` (ISR).
+ *
+ * `loadInitialNews()` → `getAccessToken()` awaits `cookies()` on every render.
+ * With the previous `revalidate = 300`, the build prerendered an ISR shell and
+ * every runtime revalidation hit the same static→dynamic flip as the detail
+ * page ("Page changed from static to dynamic at runtime, reason: connection"),
+ * freezing the SIT list on the build-time snapshot. Edge freshness is handled
+ * by NEWS_CACHE `s-maxage=300` in next.config.ts instead.
+ */
+export const dynamic = "force-dynamic";
 
 /**
  * Prefetch the news lists server-side so the first HTML response contains the
