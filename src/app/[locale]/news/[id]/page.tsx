@@ -18,15 +18,20 @@ type Props = {
 };
 
 /**
- * Request-dependent by design — do NOT re-add `revalidate` / `generateStaticParams`.
+ * Keep this route server-rendered on demand — do NOT re-add `revalidate` /
+ * `generateStaticParams`.
  *
- * Every render reads the visitor's cookies via `getAccessToken()` (awaited
- * `cookies()` ⇒ `connection()`). With the previous `revalidate = 300` +
- * build-time prerendering, Next recorded the per-id pages as fully static;
- * at request time the cookie read awaited `connection()` and Next hard-500s
- * the static→dynamic flip in production
- * (SIT `/news/{403,400,399}` — "Page changed from static to dynamic at
- * runtime, reason: connection", app-static-to-dynamic-error).
+ * The global `src/app/not-found.tsx` fallback deliberately awaits
+ * `connection()` (the only way to keep dead-file 404s out of the Full Route
+ * Cache — 2026-09-15, 技术SEO-4). Next 16 folds that fallback into the
+ * runtime organisation of any statically recorded route, so with the previous
+ * `revalidate = 300` + build-time prerendering, every runtime touch of the
+ * not-found boundary (deleted article, unknown id like `/news/999999`, RSC
+ * payload serialisation) flipped the page static→dynamic and hard-500s in
+ * production (SIT `/news/{403,400,399}` — "Page changed from static to
+ * dynamic at runtime, reason: connection", app-static-to-dynamic-error).
+ * The news data fetch itself is cookie-free and would be ISR-safe; the
+ * conflict is structural, so this route stays dynamic.
  *
  * Freshness is still covered at the edge: NEWS_CACHE in next.config.ts sets
  * `s-maxage=300` for `/news*`, so the CDN keeps the 5-minute crawl cadence.

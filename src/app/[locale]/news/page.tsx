@@ -31,14 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /**
- * Request-dependent by design — do NOT re-add `revalidate` (ISR).
+ * Keep this route server-rendered on demand — do NOT re-add `revalidate` (ISR).
  *
- * `loadInitialNews()` → `getAccessToken()` awaits `cookies()` on every render.
- * With the previous `revalidate = 300`, the build prerendered an ISR shell and
- * every runtime revalidation hit the same static→dynamic flip as the detail
- * page ("Page changed from static to dynamic at runtime, reason: connection"),
- * freezing the SIT list on the build-time snapshot. Edge freshness is handled
- * by NEWS_CACHE `s-maxage=300` in next.config.ts instead.
+ * Same structural conflict as the detail page: the global not-found fallback
+ * awaits `connection()` (dead-file cache fix, 技术SEO-4), and Next 16 folds it
+ * into the runtime organisation of any statically recorded route — the ISR
+ * shell prerendered at build time hit the static→dynamic flip on every
+ * revalidation ("reason: connection"), freezing the SIT list on the
+ * build-time snapshot. Edge freshness is handled by NEWS_CACHE
+ * `s-maxage=300` in next.config.ts instead.
  */
 export const dynamic = "force-dynamic";
 
