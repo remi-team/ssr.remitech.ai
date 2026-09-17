@@ -85,6 +85,9 @@ export const authServerService = {
   async refreshToken(refreshToken: string): Promise<ApiResponse<LoginResult>> {
     return websiteApiClient.post<LoginResult>(WEBSITE_API_ENDPOINTS.AUTH.REFRESH, {
       body: { refresh_token: refreshToken },
+      // This *is* the renewal call — a 401 here must fail loudly rather than
+      // recurse into the client's own renew-and-replay branch.
+      allowRefresh: false,
     });
   },
 

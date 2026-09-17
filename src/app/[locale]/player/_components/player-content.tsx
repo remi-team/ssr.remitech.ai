@@ -176,9 +176,10 @@ export function PlayerContent({ initialId }: { initialId?: string }) {
           // API hands back. That URL is a public file on the legacy host
           // (`www.remitech.ai/<file>.mp4`) which answers `206` for anonymous
           // requests — putting it in the DOM leaks it to devtools, referrers and
-          // scrapers (2026-09-15 re-test, 功能-3). `/api/files/video/[id]` now
-          // requires the session cookie and proxies Range requests to the
-          // authenticated `/files/video/{id}` endpoint.
+          // scrapers (2026-09-15 re-test, 功能-3). `/api/files/video/[id]`
+          // requires the session cookie and streams Range requests through the
+          // authenticated file endpoint, falling back to a server-side proxy of
+          // this origin url — the url itself never reaches the DOM.
           //
           // `data.url` is still the availability signal: no url -> no stream.
           setVideoUrl(data.url ? `/api/files/video/${encodeURIComponent(String(currentVideo.id))}` : "");

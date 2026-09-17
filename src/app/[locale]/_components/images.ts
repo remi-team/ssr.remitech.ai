@@ -12,11 +12,19 @@
 
 export const IMAGES = {
   // --- Hero carousel slides (responsive: 768 / 1280 / 1536) ---
+  //
+  // `intrinsic768` is the real pixel size of that slide's `*_768@1x_compressed`
+  // file (read from the JPEG header, not from the filename). The four slides are
+  // NOT cropped to one ratio: 768-wide sources are 734 / 980 / 988 / 980 tall
+  // while every 1280/1536 source is ~734 tall, so a single hard-coded
+  // `width`/`height` on the shared `<img>` understates three of the four
+  // (2026-09-16 re-test, 已修好-7). Carrying the per-slide numbers here keeps
+  // them next to the asset they describe.
   hero: {
-    slide1: { image768: "/images/ba10_768", image1280: "/images/ba10_1280", image1536: "/images/ba10_1536" },
-    slide2: { image768: "/images/ba07_768", image1280: "/images/ba07_1280", image1536: "/images/ba07_1536" },
-    slide3: { image768: "/images/ba03_768", image1280: "/images/ba03_1280", image1536: "/images/ba03_1536" },
-    slide4: { image768: "/images/ba01_768", image1280: "/images/ba01_1280", image1536: "/images/ba01_1536" },
+    slide1: { image768: "/images/ba10_768", image1280: "/images/ba10_1280", image1536: "/images/ba10_1536", intrinsic768: { width: 768, height: 734 } },
+    slide2: { image768: "/images/ba07_768", image1280: "/images/ba07_1280", image1536: "/images/ba07_1536", intrinsic768: { width: 768, height: 980 } },
+    slide3: { image768: "/images/ba03_768", image1280: "/images/ba03_1280", image1536: "/images/ba03_1536", intrinsic768: { width: 768, height: 988 } },
+    slide4: { image768: "/images/ba01_768", image1280: "/images/ba01_1280", image1536: "/images/ba01_1536", intrinsic768: { width: 768, height: 980 } },
   },
 
   // --- What Remi Unlocks (4 feature icons) ---

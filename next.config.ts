@@ -37,15 +37,25 @@ const securityHeaders = [
  * Prerendered pages used to ship `s-maxage=31536000` with no
  * `stale-while-revalidate`, so a CDN edge could serve a month-old (up to
  * year-old) page with no mechanism to refresh it. `max-age=0` keeps browsers
- * honest, a short `s-maxage` bounds staleness, and a long `swr` window keeps
- * the origin load of the old 1-year TTL: the first request after expiry serves
- * the stale copy and revalidates in the background.
+ * honest, a short `s-maxage` bounds staleness, and `swr` keeps the origin off
+ * the critical path: the first request after expiry serves the stale copy and
+ * revalidates in the background.
+ *
+ * The `swr` windows are deliberately hours, not the days/weeks they used to be
+ * (2026-09-16 re-test, 上线前必须修-1). These rules are matched by *path* and
+ * carry no knowledge of the status code they end up describing — verified: a
+ * 500 on `/news/399` shipped `s-maxage=300, stale-while-revalidate=86400`, so
+ * one failed render was pinned to the edge for a day, and a homepage failure
+ * with the old 7-day `swr` could have survived a whole weekend. Staleness
+ * tolerance must be paid for in outage duration, because the header cannot be
+ * made 5xx-aware here; `docs/deployment.md` O-8① puts the hard "never cache a
+ * 5xx" rule on the CDN, and these values bound what a missed rule can do.
  */
 const STATIC_HTML_CACHE =
-  "public, max-age=0, s-maxage=3600, stale-while-revalidate=604800";
+  "public, max-age=0, s-maxage=3600, stale-while-revalidate=3600";
 /** Article list + detail revalidate every 5 minutes (see `revalidate = 300`). */
 const NEWS_CACHE =
-  "public, max-age=0, s-maxage=300, stale-while-revalidate=86400";
+  "public, max-age=0, s-maxage=300, stale-while-revalidate=1800";
 
 const nextConfig: NextConfig = {
   output: "standalone",

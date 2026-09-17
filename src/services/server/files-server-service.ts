@@ -76,12 +76,24 @@ export const filesServerService = {
   /**
    * Download a video chunk (Range). Returns the raw website API `Response` for
    * streaming. Supports resumable / chunked playback.
+   *
+   * Streams through `/files/download/{id}` — the authenticated, Range-aware
+   * file endpoint QA verified (restricted files: 200 logged-in, 401 logged-
+   * out). The dedicated `/files/video/{id}` stream endpoint is deliberately
+   * NOT used: SIT rejects even a valid Bearer token there (`A0230 Access
+   * Token Invalid`, 2026-09-16 re-test) and the legacy Vue player never
+   * consumed it either (it played the public origin url directly).
+   *
+   * `allowRefresh: false` lets the media route probe this endpoint without
+   * churning token rotation on every player retry; the session heartbeat
+   * lives in the chapter lookup instead.
    */
   async downloadVideoChunk(
     id: string,
     range: RangeOptions,
+    opts?: { allowRefresh?: boolean },
   ): Promise<Response> {
-    const url = `${WEBSITE_API_ENDPOINTS.FILES.VIDEO_DOWNLOAD}/${id}`;
+    const url = `${WEBSITE_API_ENDPOINTS.FILES.DOWNLOAD}/${id}`;
     const headers: Record<string, string> = {
       Accept: "application/octet-stream",
       "Accept-Ranges": "bytes",
@@ -96,16 +108,21 @@ export const filesServerService = {
       accessToken,
       raw: true,
       timeout: 120000,
+      allowRefresh: opts?.allowRefresh,
     });
     return (res.data as unknown as Response) ?? new Response(null, { status: 502 });
   },
 
   /**
    * HEAD request for video metadata (size, accept-ranges). Returns the raw
-   * service `Response` so the BFF can forward its headers.
+   * service `Response` so the BFF can forward its headers. Same endpoint
+   * rationale as `downloadVideoChunk`.
    */
-  async getVideoHead(id: string): Promise<Response> {
-    const url = `${WEBSITE_API_ENDPOINTS.FILES.VIDEO_DOWNLOAD}/${id}`;
+  async getVideoHead(
+    id: string,
+    opts?: { allowRefresh?: boolean },
+  ): Promise<Response> {
+    const url = `${WEBSITE_API_ENDPOINTS.FILES.DOWNLOAD}/${id}`;
     const headers: Record<string, string> = { Accept: "application/octet-stream" };
 
     const accessToken = await getAccessToken();
@@ -116,6 +133,7 @@ export const filesServerService = {
       accessToken,
       raw: true,
       timeout: 60000,
+      allowRefresh: opts?.allowRefresh,
     });
     return (res.data as unknown as Response) ?? new Response(null, { status: 502 });
   },

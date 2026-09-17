@@ -43,6 +43,8 @@ interface HeroSlide {
   image768?: string;
   image1280?: string;
   image1536?: string;
+  /** Real pixel size of the `*_768` source this slide falls back to. */
+  intrinsic768?: { width: number; height: number };
   tag: string;
   effect: SlideEffect;
 }
@@ -345,8 +347,18 @@ export function HeroCarousel() {
                     src={`${slide.image768}@1x_compressed.jpg`}
                     srcSet={`${slide.image768}@1x_compressed.jpg 1x, ${slide.image768}@2x_compressed.jpg 2x`}
                     alt={slide.tag}
-                    width={768}
-                    height={734}
+                    /*
+                     * Per-slide intrinsic size of the `*_768` source — the file
+                     * this element actually points at. The old shared 768x734
+                     * understated three of the four slides (2026-09-16 re-test,
+                     * 已修好-7). The pair is a hint only here: `.hero-slide-image-wrap img`
+                     * pins `width/height: 100%` with `object-fit: cover`, so the
+                     * box comes from the section and the ratio never drives
+                     * layout — which is also why the 1280/1536 sources being a
+                     * different ratio cannot be expressed on one `<img>`.
+                     */
+                    width={slide.intrinsic768?.width ?? 768}
+                    height={slide.intrinsic768?.height ?? 734}
                     loading={index < 2 ? "eager" : "lazy"}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     decoding="async"

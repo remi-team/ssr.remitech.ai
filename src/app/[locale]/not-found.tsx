@@ -58,6 +58,16 @@ export const metadata: Metadata = {
 };
 
 /**
+ * Copy used when the i18n layer itself is unavailable. Kept in sync with the
+ * `NotFound` namespace of `/messages/*.json`.
+ */
+const FALLBACK_COPY: Record<string, string> = {
+  title: "Page not found",
+  description: "The page you're looking for may have been moved or removed.",
+  back: "Back to home",
+};
+
+/**
  * A miss must never be cached: without this the 404 inherited the document
  * cache-control of whatever route pattern it was rendered under (a dead
  * `/news/{id}` was served from the edge for an hour), and a removed page kept
@@ -68,21 +78,31 @@ export const dynamic = "force-dynamic";
 /**
  * Locale-scoped 404 page.
  *
- * `params` may be undefined when this page is rendered outside a locale
- * segment, so we resolve the translator from the request context instead.
- * This keeps the page defensive without sacrificing i18n.
+ * `not-found` boundaries receive no `params`, so the translator is resolved
+ * from the request context; when there is none (global 404, or a boundary
+ * rendered outside the `[locale]` provider) we degrade to `FALLBACK_COPY`.
+ *
+ * The degradation has to survive *both* steps, not just `getTranslations()`:
+ * the previous shape assigned the fallback **object** to `t` and then called
+ * `t("title")`, so a single missing `NotFound` key — or any request-context
+ * loss — crashed the boundary with "t is not a function" and turned a
+ * legitimate 404 into a 500 (2026-09-16 re-test, 上线前必须修-1). Wrapping each
+ * lookup in its own guard keeps the dead-end page a dead-end page.
  */
 export default async function NotFound() {
-  let t;
+  const fallback = (key: string) => FALLBACK_COPY[key] ?? key;
+  let t: (key: string) => string = fallback;
   try {
-    t = await getTranslations("NotFound");
+    const translate = await getTranslations("NotFound");
+    t = (key: string) => {
+      try {
+        return translate(key);
+      } catch {
+        return fallback(key);
+      }
+    };
   } catch {
-    // Fallback when no intl context is available (e.g. global 404).
-    t = {
-      title: "Page not found",
-      description: "The page you're looking for may have been moved or removed.",
-      back: "Back to home",
-    } as const;
+    // No intl context available — `fallback` stays in effect.
   }
 
   return (
